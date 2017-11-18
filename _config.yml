@@ -2,10 +2,6 @@ repository: dwjbosman/dwjbosman.github.io
 
 theme: jekyll-theme-modernist
 
-#
-# This file contains configuration flags to customize your site
-#
-
 # Name of your site (displayed in the header)
 name: Your Name
 
@@ -25,12 +21,12 @@ footer-links:
   email:
   facebook:
   flickr:
-  github: dwjbosman/dwjbosman.github.io
+  github: dwjbosman/dwjbosman.github.com
   instagram:
   linkedin:
   pinterest:
   rss: # just type anything here for a working RSS icon
-  twitter: 
+  twitter: jekyllrb
   stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/
@@ -68,8 +64,8 @@ kramdown:
   input: GFM
   # Jekyll 3 and GitHub Pages now only support rouge for syntax highlighting
   syntax_highlighter: rouge
-  syntax_highlighter_opts:
-    # Use existing pygments syntax highlighting css
+  isyntax_highlighter_opts:
+  # Use existing pygments syntax highlighting css
     css_class: 'highlight'
 
 # Set the Sass partials directory, as we're using @imports
@@ -77,14 +73,14 @@ sass:
   style: :expanded # You might prefer to minify using :compressed
 
 # Use the following plug-ins
-gems:
+plugins:
   - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
 
 # Exclude these files from your production _site
 exclude:
-  - Gemfile
-  - Gemfile.lock
-  - LICENSE
-  - README.md
-  - CNAME
+#  - Gemfile
+#  - Gemfile.lock
+#  - LICENSE
+#  - README.md
+#  - CNAME
