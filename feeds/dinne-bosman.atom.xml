@@ -1,70 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Dinne Bosman's proffesional blog - Dinne Bosman</title><link href="https://dwjbosman.github.io/" rel="alternate"></link><link href="https://dwjbosman.github.io/feeds/dinne-bosman.atom.xml" rel="self"></link><id>https://dwjbosman.github.io/</id><updated>2017-11-19T20:03:25+01:00</updated><entry><title>Music and hacking : Instruments, Communities, Values</title><link href="https://dwjbosman.github.io/index.html" rel="alternate"></link><published>2017-11-19T20:03:25+01:00</published><updated>2017-11-19T20:03:25+01:00</updated><author><name>Dinne Bosman</name></author><id>tag:dwjbosman.github.io,2017-11-19:/index.html</id><summary type="html">&lt;h1&gt;International Conference&lt;/h1&gt;
-&lt;h2&gt;8-10 November, 2017&lt;/h2&gt;
-&lt;h3&gt;Musée du quai Branly – Jacques Chirac&lt;/h3&gt;
-&lt;h3&gt;Ircam – Centre Pompidou&lt;/h3&gt;
-&lt;p&gt;The “Music &amp;amp; Hacking: Instruments, Communities, Values” conference intends to look at musicians and technicians’ practices which – explicitly or implicitly – could be seen as musical hacking activities.
-Since the turn of the last century, computer coding and digital instruments continue to transform the aesthetic, ergonomic, communicational, and ethical dimensions of musical practices. These shifts are taking place in part under the banner of hacking, a notion which is primarily associated with the IT world. However, it has progressively infiltrated and structured a number of other fields, such as that of artistic creation. Hacker values include re-appropriation of mass-produced technical products and a focus on freely accessible communal know-how, as well as the pleasure of …&lt;/p&gt;</summary><content type="html">&lt;h1&gt;International Conference&lt;/h1&gt;
-&lt;h2&gt;8-10 November, 2017&lt;/h2&gt;
-&lt;h3&gt;Musée du quai Branly – Jacques Chirac&lt;/h3&gt;
-&lt;h3&gt;Ircam – Centre Pompidou&lt;/h3&gt;
-&lt;p&gt;The “Music &amp;amp; Hacking: Instruments, Communities, Values” conference intends to look at musicians and technicians’ practices which – explicitly or implicitly – could be seen as musical hacking activities.
-Since the turn of the last century, computer coding and digital instruments continue to transform the aesthetic, ergonomic, communicational, and ethical dimensions of musical practices. These shifts are taking place in part under the banner of hacking, a notion which is primarily associated with the IT world. However, it has progressively infiltrated and structured a number of other fields, such as that of artistic creation. Hacker values include re-appropriation of mass-produced technical products and a focus on freely accessible communal know-how, as well as the pleasure of serendipity, subversion, and manipulation. In sum, hacking is the foundation of a disparate, discreet form of social protest: a reaction to a normalized, globalized commercial and industrial culture.&lt;/p&gt;
-&lt;p&gt;The conference will focus on three general themes: organological hacking, creation and federation of musical communities through hacking, and the influence of hacker ethics on musical practices. At the end of the conference, a Music Hack Day will be organized on the premises of IRCAM, which will give us a chance to extend and test our reflections on musical hacking.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Music and Hacking 2017" src="https://dwjbosman.github.io/images/photo_hack_1024.jpg" /&gt;&lt;/p&gt;
-&lt;h1&gt;Topics&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Invention and subversion of instruments&lt;/li&gt;
-&lt;li&gt;Non-conformist instrumental practices&lt;/li&gt;
-&lt;li&gt;Hacking, organology, museology&lt;/li&gt;
-&lt;li&gt;DIY, circuit bending, and making&lt;/li&gt;
-&lt;li&gt;Squats, fab labs, and makerspaces&lt;/li&gt;
-&lt;li&gt;Hacking and socializations&lt;/li&gt;
-&lt;li&gt;Opportunity, serendipity, and innovation&lt;/li&gt;
-&lt;li&gt;Music and open source&lt;/li&gt;
-&lt;li&gt;Musical hacking and intellectual property&lt;/li&gt;
-&lt;li&gt;Hacker ethics and axiology&lt;/li&gt;
-&lt;li&gt;Coding and transcoding music&lt;/li&gt;
-&lt;li&gt;Musical hacking and the emergence of digital culture&lt;/li&gt;
-&lt;li&gt;Musical hacking and the history of information technologies&lt;/li&gt;
-&lt;li&gt;Musical hacking and digital art forms&lt;/li&gt;
-&lt;li&gt;Cultural industries and counter-cultures&lt;/li&gt;
-&lt;li&gt;Music Hack Days, tech providers, and web audio&lt;/li&gt;
-&lt;li&gt;Demoscene and derivations of hacking&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Proposals for demos, workshops or performances will be taken into consideration for inclusion in the concluding Music Hack Day.&lt;/p&gt;
-&lt;h1&gt;Program&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://dwjbosman.github.io/doc/colloque_music_hacking_12_10.pdf"&gt;Program PDF version&lt;/a&gt;&lt;/p&gt;
-&lt;h1&gt;Calendar&lt;/h1&gt;
-&lt;p&gt;Proposals (either in English or French) are due on May 15th, 2017, and should be sent to &lt;a href="mailto:musiquehacking2017@gmail.com"&gt;musiquehacking2017@gmail.com&lt;/a&gt;. Authors will be notified of their participation on July 1st, 2017 at the latest. Proposals, in .doc format, should include a title and an abstract of approximately 500 words, the author’s name and institutional affiliation, as well as a brief biography.&lt;/p&gt;
-&lt;h1&gt;Scientific committee&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Paul ADENOT (Mozilla)&lt;/li&gt;
-&lt;li&gt;Sébastien BROCA (CEMTI, Université Paris 8)&lt;/li&gt;
-&lt;li&gt;Nicolas COLLINS (School of the Art Institute of Chicago)&lt;/li&gt;
-&lt;li&gt;Joanna DEMERS (University of Southern California, Thorton School of Music)&lt;/li&gt;
-&lt;li&gt;Nicolas DONIN (APM, IRCAM)&lt;/li&gt;
-&lt;li&gt;Christine GUILLEBAUD (CREM, Université Paris Ouest Nanterre)&lt;/li&gt;
-&lt;li&gt;Michel LALLEMENT (LISE, CNAM)&lt;/li&gt;
-&lt;li&gt;Paul LAMERE (Spotify)&lt;/li&gt;
-&lt;li&gt;Camille PALOQUE-BERGÈS (HT2S, CNAM)&lt;/li&gt;
-&lt;li&gt;Jimena ROYO-LETELIER (Deezer)&lt;/li&gt;
-&lt;li&gt;Norbert SCHNELL (ISMM, IRCAM)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Organizing committee&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Baptiste BACOT (EHESS/IRCAM)&lt;/li&gt;
-&lt;li&gt;Clément CANONNE (APM, IRCAM)&lt;/li&gt;
-&lt;li&gt;Frédéric KECK (Musée du Quai Branly)&lt;/li&gt;
-&lt;li&gt;Guillaume PELLERIN (APM, IRCAM)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Partners&lt;/h1&gt;
-&lt;p&gt;&lt;img alt="Musée du Quai Branly" src="http://www.quaibranly.fr/typo3conf/ext/mqb_base/Resources/Public/Montage/Desktop/img/logo.png" width="150px"&gt;
-&lt;img alt="Ircam" src="https://www.ircam.fr/media/uploads/images/logo/logo-ircam.png" width="150px"&gt;
-&lt;img alt="CNAM" src="https://upload.wikimedia.org/wikipedia/commons/6/66/Logo_cnam.gif" width="150px"&gt;
-&lt;img alt="Labex CAP" src="http://labexcap.fr/wp-content/themes/labex-cap/img/logo-labex-cap.svg" width="150px"&gt;
-&lt;img alt="Deezer" src="https://upload.wikimedia.org/wikipedia/fr/thumb/0/00/Deezer_logo.png/640px-Deezer_logo.png" width="150px"&gt;&lt;/p&gt;
-&lt;h1&gt;Contact&lt;/h1&gt;
-&lt;p&gt;&lt;a href="mailto:musiquehacking2017@gmail.com"&gt;musiquehacking2017@gmail.com&lt;/a&gt;&lt;/p&gt;
-&lt;h1&gt;Documentation&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://dwjbosman.github.io/doc/MusicAndHacking-2017_Call.pdf"&gt;PDF version / Press release&lt;/a&gt;&lt;/p&gt;</content></entry></feed>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Dinne Bosman's proffesional blog - Dinne Bosman</title><link href="https://dwjbosman.github.io/" rel="alternate"></link><link href="https://dwjbosman.github.io/feeds/dinne-bosman.atom.xml" rel="self"></link><id>https://dwjbosman.github.io/</id><updated>2017-11-19T21:07:06+01:00</updated><entry><title>First Post</title><link href="https://dwjbosman.github.io/first-post.html" rel="alternate"></link><published>2017-11-19T21:07:06+01:00</published><updated>2017-11-19T21:07:06+01:00</updated><author><name>Dinne Bosman</name></author><id>tag:dwjbosman.github.io,2017-11-19:/first-post.html</id><summary type="html">&lt;p&gt;Title: First Post
+Date: 2017-11-19 22:00
+Tags: pelican, publishing
+Slug: fist-post
+Authors: Dinne Bosman
+Summary: My first post&lt;/p&gt;
+&lt;h2&gt;First blog post&lt;/h2&gt;
+&lt;p&gt;This is my first blog post using Pelican. More to come....&lt;/p&gt;</summary><content type="html">&lt;p&gt;Title: First Post
+Date: 2017-11-19 22:00
+Tags: pelican, publishing
+Slug: fist-post
+Authors: Dinne Bosman
+Summary: My first post&lt;/p&gt;
+&lt;h2&gt;First blog post&lt;/h2&gt;
+&lt;p&gt;This is my first blog post using Pelican. More to come....&lt;/p&gt;</content></entry></feed>

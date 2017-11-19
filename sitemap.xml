@@ -5,49 +5,49 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://dwjbosman.github.io/</loc>
-<lastmod>2017-11-19T20:45:22-00:00</lastmod>
+<lastmod>2017-11-19T21:20:39-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/archives.html</loc>
-<lastmod>2017-11-19T20:45:22-00:00</lastmod>
+<lastmod>2017-11-19T21:20:39-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/tags.html</loc>
-<lastmod>2017-11-19T20:45:22-00:00</lastmod>
+<lastmod>2017-11-19T21:20:39-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/categories.html</loc>
-<lastmod>2017-11-19T20:45:22-00:00</lastmod>
+<lastmod>2017-11-19T21:20:39-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://dwjbosman.github.io/</loc>
-<lastmod>2017-11-19T20:03:25+01:00</lastmod>
+<loc>https://dwjbosman.github.io/first-post.html</loc>
+<lastmod>2017-11-19T21:07:06+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://dwjbosman.github.io/category/home.html</loc>
-<lastmod>2017-11-19T20:03:25+00:09</lastmod>
+<loc>https://dwjbosman.github.io/category/articles.html</loc>
+<lastmod>2017-11-19T21:07:06+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/author/dinne-bosman.html</loc>
-<lastmod>2017-11-19T20:03:25+00:09</lastmod>
+<lastmod>2017-11-19T21:07:06+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

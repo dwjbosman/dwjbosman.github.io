@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>Dinne Bosman's proffesional blog - Dinne Bosman</title><link>https://dwjbosman.github.io/</link><description></description><lastBuildDate>Sun, 19 Nov 2017 20:03:25 +0100</lastBuildDate><item><title>Music and hacking : Instruments, Communities, Values</title><link>https://dwjbosman.github.io/index.html</link><description>&lt;h1&gt;International Conference&lt;/h1&gt;
-&lt;h2&gt;8-10 November, 2017&lt;/h2&gt;
-&lt;h3&gt;Musée du quai Branly – Jacques Chirac&lt;/h3&gt;
-&lt;h3&gt;Ircam – Centre Pompidou&lt;/h3&gt;
-&lt;p&gt;The “Music &amp;amp; Hacking: Instruments, Communities, Values” conference intends to look at musicians and technicians’ practices which – explicitly or implicitly – could be seen as musical hacking activities.
-Since the turn of the last century, computer coding and digital instruments continue to transform the aesthetic, ergonomic, communicational, and ethical dimensions of musical practices. These shifts are taking place in part under the banner of hacking, a notion which is primarily associated with the IT world. However, it has progressively infiltrated and structured a number of other fields, such as that of artistic creation. Hacker values include re-appropriation of mass-produced technical products and a focus on freely accessible communal know-how, as well as the pleasure of …&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Dinne Bosman</dc:creator><pubDate>Sun, 19 Nov 2017 20:03:25 +0100</pubDate><guid isPermaLink="false">tag:dwjbosman.github.io,2017-11-19:/index.html</guid></item></channel></rss>
+<rss version="2.0"><channel><title>Dinne Bosman's proffesional blog - Dinne Bosman</title><link>https://dwjbosman.github.io/</link><description></description><lastBuildDate>Sun, 19 Nov 2017 21:07:06 +0100</lastBuildDate><item><title>First Post</title><link>https://dwjbosman.github.io/first-post.html</link><description>&lt;p&gt;Title: First Post
+Date: 2017-11-19 22:00
+Tags: pelican, publishing
+Slug: fist-post
+Authors: Dinne Bosman
+Summary: My first post&lt;/p&gt;
+&lt;h2&gt;First blog post&lt;/h2&gt;
+&lt;p&gt;This is my first blog post using Pelican. More to come....&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Dinne Bosman</dc:creator><pubDate>Sun, 19 Nov 2017 21:07:06 +0100</pubDate><guid isPermaLink="false">tag:dwjbosman.github.io,2017-11-19:/first-post.html</guid></item></channel></rss>
