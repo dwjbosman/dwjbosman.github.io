@@ -5,49 +5,70 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://dwjbosman.github.io/</loc>
-<lastmod>2017-11-19T21:20:39-00:00</lastmod>
+<lastmod>2017-11-19T22:07:05-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/archives.html</loc>
-<lastmod>2017-11-19T21:20:39-00:00</lastmod>
+<lastmod>2017-11-19T22:07:05-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/tags.html</loc>
-<lastmod>2017-11-19T21:20:39-00:00</lastmod>
+<lastmod>2017-11-19T22:07:05-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/categories.html</loc>
-<lastmod>2017-11-19T21:20:39-00:00</lastmod>
+<lastmod>2017-11-19T22:07:05-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://dwjbosman.github.io/first-post.html</loc>
-<lastmod>2017-11-19T21:07:06+01:00</lastmod>
+<loc>https://dwjbosman.github.io/2017/fist-post.html</loc>
+<lastmod>2017-11-19T22:00:00+01:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://dwjbosman.github.io/2017/a-notebook.html</loc>
+<lastmod>2017-11-19T21:35:38+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/category/articles.html</loc>
-<lastmod>2017-11-19T21:07:06+00:09</lastmod>
+<lastmod>2017-11-19T22:00:00+00:09</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://dwjbosman.github.io/tag/pelican.html</loc>
+<lastmod>2017-11-19T22:00:00+00:09</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://dwjbosman.github.io/tag/publishing.html</loc>
+<lastmod>2017-11-19T22:00:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://dwjbosman.github.io/author/dinne-bosman.html</loc>
-<lastmod>2017-11-19T21:07:06+00:09</lastmod>
+<lastmod>2017-11-19T22:00:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
