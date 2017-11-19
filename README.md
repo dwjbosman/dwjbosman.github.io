@@ -1,2 +1,0 @@
-# planetbosman
-My Blog
