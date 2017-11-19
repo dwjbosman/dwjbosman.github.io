@@ -4,63 +4,63 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>http://dwjbosman.github.io/</loc>
-<lastmod>2017-11-19T20:18:29-00:00</lastmod>
+<loc>https://dwjbosman.github.io/</loc>
+<lastmod>2017-11-19T20:23:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/archives.html</loc>
-<lastmod>2017-11-19T20:18:29-00:00</lastmod>
+<loc>https://dwjbosman.github.io/archives.html</loc>
+<lastmod>2017-11-19T20:23:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/tags.html</loc>
-<lastmod>2017-11-19T20:18:29-00:00</lastmod>
+<loc>https://dwjbosman.github.io/tags.html</loc>
+<lastmod>2017-11-19T20:23:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/categories.html</loc>
-<lastmod>2017-11-19T20:18:29-00:00</lastmod>
+<loc>https://dwjbosman.github.io/categories.html</loc>
+<lastmod>2017-11-19T20:23:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/pages/musichackday-ircam.html</loc>
+<loc>https://dwjbosman.github.io/pages/musichackday-ircam.html</loc>
 <lastmod>2017-11-19T20:03:25+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/</loc>
+<loc>https://dwjbosman.github.io/</loc>
 <lastmod>2017-11-19T20:03:25+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/category/home.html</loc>
+<loc>https://dwjbosman.github.io/category/home.html</loc>
 <lastmod>2017-11-19T20:03:25+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/author/dinne-bosman.html</loc>
+<loc>https://dwjbosman.github.io/author/dinne-bosman.html</loc>
 <lastmod>2017-11-19T20:03:25+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://dwjbosman.github.io/fr/index.html</loc>
+<loc>https://dwjbosman.github.io/fr/index.html</loc>
 <lastmod>2017-11-19T20:03:25+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
