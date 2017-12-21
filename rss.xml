@@ -1,4 +1,78 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's professional blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s professional blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Fri, 08 Dec 2017 21:00:48 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Real Time sound synthesis with Jupyter]]></title><description><![CDATA[This notebook demonstrates using WebAudio API and Web Sockets to transfer audio generated with Python/Numpy to Jupyters notebook Web…]]></description><link>https://dwjbosman.github.io/real-time-sound-synthesis-with-jupyter</link><guid isPermaLink="false">https://dwjbosman.github.io/real-time-sound-synthesis-with-jupyter</guid><category><![CDATA[Audio]]></category><category><![CDATA[Sound]]></category><category><![CDATA[Jupyter]]></category><category><![CDATA[Javascript]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sun, 03 Dec 2017 12:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This notebook demonstrates using WebAudio API and Web Sockets to transfer audio generated with Python/Numpy to Jupyters notebook Web frontend. The notebook can be downloaded from my &lt;a href=&quot;https://raw.githubusercontent.com/dwjbosman/tensorflow-experiments/master/Sound_Web2Jupyter.ipynb&quot;&gt;Github repository&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's professional blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s professional blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Thu, 21 Dec 2017 08:05:00 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Generating text using an LSTM neural network]]></title><description><![CDATA[Some time ago I read Karpathy's  article  on LSTM networks and text generation. The idea that AI could be able to generate a novel was very…]]></description><link>https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</link><guid isPermaLink="false">https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</guid><category><![CDATA[Artificial Intelligence]]></category><category><![CDATA[LSTM]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Mon, 18 Dec 2017 20:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Some time ago I read Karpathy&apos;s &lt;a href=&quot;http://karpathy.github.io/2015/05/21/rnn-effectiveness/&quot;&gt;article&lt;/a&gt; on LSTM networks and text generation. The idea that AI could be able to generate a novel was very intreaging. Finally I had some spare time to test this idea.&lt;/p&gt;
+&lt;p&gt;I used the following software:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;nvidia-docker : A docker environment that allows the GPU to be used for CUDA.&lt;/li&gt;
+&lt;li&gt;gcr.io/tensorflow/tensorflow docker image for Tensorflow, Jupyter and Python 3&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/sfailsthy/char-rnn-tensorflow&quot;&gt;https://github.com/sfailsthy/char-rnn-tensorflow&lt;/a&gt; implementation of CharNN from the previous mentioned article. It&apos;s a very clean and readable implementation. It comes complete with the Shakespeare generator and Kernel source code generator examples.&lt;/li&gt;
+&lt;li&gt;My goal was to generate a Dutch novel. Some &lt;a href=&quot;http://ebook.gratis-downloaden.nu/&quot;&gt;Dutch novels&lt;/a&gt; can be downloaded for free.&lt;/li&gt;
+&lt;li&gt;ebook-convert, part of the Ubuntu Calibre package.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As a source I downloaded a number of free Dutch ebooks in .epub format.  Next I used ebook-convert to convert the ebook to raw ascii text:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;ebook-convert book.epub book.txt --txt-output-encoding=ascii --asciiize&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;It seemed reasonable to train on a text file which would be similar in size to the Shakespeare example. In total I concatenated six different e-books in one big text file of  about 3 megabytes, containing 500000 words. I started training the network:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;python3 train.py --input_file data/bigtextfile.txt --name bigtextfile --num_steps 100 --num_seqs 1000  --learning_rate 0.001 --max_steps 40000 --num_layers 6 --lstm_size 150&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The parameters control the following options:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1000 examples per batch&lt;/li&gt;
+&lt;li&gt;100 characters for the recurrent neural network roll back&lt;/li&gt;
+&lt;li&gt;40000 iterations&lt;/li&gt;
+&lt;li&gt;6 LSTM layers with each layer containing 150 cells.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;My laptop has a GTX-1060 GPU which is able to process about 0.6 batches per second. After 40000 iterations it produced the following results (in Dutch ....):&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;python3 sample.py --converter_path bigtextfile/converter.pkl --checkpoint_path bigtextfile/model/ --max_length 2000  --lstm_size=150 --num_layers=6 --start_string=&quot;Het was een prachtig idee, &quot;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;pre style=&apos;white-space:pre-wrap; word-wrap:break-word;color:green&apos;&gt;Het was een prachtig idee, maar het was nooit en die minder honderd had hij een keurige gedachte dat hij natuurlijk het enige want ze keek om een gedachte te versloten.&apos;
+
+	&apos;Ik ben een schilderen. Het zou niet zo vinden.&apos;
+
+	&apos;Natuurlijk.&apos; In haar bed moet ik de gezicht van de schoon keerde.
+
+	&apos;We zijn een vruchten,&apos; zei ik. &apos;De benen was een geluidspol tegen me tijdens het gebeurde, meisje en eindelijk die dit was! Waarom hij het hield voor het grote volgende bank. Iedere kast van een schor kan ik met ze ook ongelooflijk zijn!&apos;
+
+	&apos;Je zal je niet voor de meesten voor dat het mooisten met die gevoel ververtellen, het was in mij naar het scheemene goed veel verder en heerlijk, maar ik heb het voor het maal van het steen, maar dat is hoe doet je niet? Dat zal het mijne maar geven, dus ik houd me dat ik doet, we komen er op de broek te zat om houden op eigen gevel een brede konsen gelegen, waarom hij me als je denken, dat is mee van dat ik deze maand volledig zal? Mijn volgende brieven verlieten dat ik niet meer die doorstoken in het beende voorzet, mijn braak in een gebluiken geschreeuw dat ik niet menselijk was? De bemanning werd geleden, met zelf voor het stem van het blandende boek.
+
+	&apos;Ja. Hij wordt die man de verhalen voor het schip weer angst. En hoe kan ze elke geval. Ik was niet meer,&apos; zei ik open. &apos;Ik was niet maar op het school.&apos;
+
+	&apos;Ik zou me een strakke boot van een kans veel beter met elkaar vertellen dat ik nooit had opgewerkt, weet jij wat het weet na hem verslecht op dat mannen worden,&apos; briek ze. &apos;Wat weet je dat wij nog wel eens gevallen?&apos; Hij boog over hem toen ik mijn hand gebaarde van mijn verhingen. &apos;Dat zal ik maken wel dat je me niet mijn verhistiger voor je dat zijn wordt, maar in zeker voor mijn hoofd.&apos;
+
+	&apos;Die is dit met de bal van de schaal.&apos; Ik sloot mijn hoofd.
+
+	&apos;Ik?&apos; room ik terriel me naar boven.
+
+	Dan geven ik niet meer daar van haar ontdikte. Dat is niet alleen dat de stadper op zijn gezond bloedend was. Ik bedoel het nooit. Ik was een vriendelijk tijd dat ik nog meer 
+&lt;/pre&gt;
+&lt;p&gt;The results are already quite nice. Especially the fact that the network is able to correctly use symbols like quotes. Also interesting are the fictional Dutch sounding words it sometimes uses.&lt;/p&gt;
+&lt;p&gt;After another night of training the network generates the following text after 83000 iterations:&lt;/p&gt;
+&lt;pre style=&apos;white-space:pre-wrap; word-wrap:break-word;color:green&apos;&gt;Waarom ben ik de verschillende kleeden.
+
+	Hij had haar ging vastgemaakt.
+
+	Het was niets vast. Ik was even erover dat hij nu een voorbeeld was op de straat.
+
+	&apos;Ik zei het niet.&apos;
+
+	Hij stopte en duwde mijn hele slanke verdriet. Ik was een kronder tegenover het gebaar van het bootje.
+
+	Een stol voelde me naar hem gelukkig af en die ze over mijn huid volgde. &apos;Wat is het verbijstering,&apos; voegde ik hem, toen ik hem nog niet was. &apos;Het was de kleine van de moesten op de vader, dat ik hier erop. Deze brandstelling heeft me natuurlijk ook meer tegen me eens van de kans van zijn gedoop, zo heen geen gedoe verschilte vingers dat ik niet missrook was. En heb ik hem onder die boot opgeslagen dat zij niet gelaten komt, want de strofe voor die verwachting van die mensen. Maar doel dat wat je helemaal niet was, zal ik die dagen op zijn bed van de bedenking, word je het nog een boek van de stoel te bennepte. Het werkte haar niet al die hoofden en daar had ik dit er nog mijn beslaten gehad. Hij keek hem over een vreemde van de grond toen ik nog niet zich vooral had. De brief van de broeder draaide me naar de stremen. Dan stond de kleine gloed voor haar.
+
+&apos;Waarom zei jij nog niet.&apos;
+
+&apos;Je mag me niet mien herstelde boeken voordat door metaal van je mee gaat.&apos;
+
+&apos;Je zou duidelijk met de boeren wel veel bij maten om te gaan en de donkere misschien is over mijn geval mogen, ze ging een snoek. De moordenaar is,&apos; zei hij.
+
+&apos;Wat is de snel van mij.&apos;
+
+De stuks voelde zijn schouder. &apos;Waarom werkte je nu niet maar nog wel goed?&apos;
+
+&apos;Waarom was er nog even voor het schip dit in deel van je moet horen het voor mijn man over mij maar!&quot; vroeg hij. &apos;Dus de straf gebeurd het mooier verder dat hij het niet meer, dat ik nou niet weg een bar er van de moeder zou weten. De kamer vindt het deed. Help die nog maar om een van de vreemde sterm een goed gedachten gezien, hard om eens een blik. Ik begrijp niet dat het woonde vissen was, maar heeft een dag om me aan het sprakken te verslagen, meer maar nog niet meer te vrienden. 
+&lt;/pre&gt;
+&lt;p&gt;The grammar is getting a bit better. Also I can now see that there is a e book about football in the training set :) Using different priming sequences I hoped to provoke more semantic understandable behaviour. For example I wanted the network to complete a starting phrase &quot;colors such as &quot; with a correct color. But I had no luck get any particular result.  I&apos;m planning on testing different training parameters to see if I can get better results.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Real Time sound synthesis with Jupyter]]></title><description><![CDATA[This notebook demonstrates using WebAudio API and Web Sockets to transfer audio generated with Python/Numpy to Jupyters notebook Web…]]></description><link>https://dwjbosman.github.io/real-time-sound-synthesis-with-jupyter</link><guid isPermaLink="false">https://dwjbosman.github.io/real-time-sound-synthesis-with-jupyter</guid><category><![CDATA[Audio]]></category><category><![CDATA[Sound]]></category><category><![CDATA[Jupyter]]></category><category><![CDATA[Javascript]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sun, 03 Dec 2017 12:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This notebook demonstrates using WebAudio API and Web Sockets to transfer audio generated with Python/Numpy to Jupyters notebook Web frontend. The notebook can be downloaded from my &lt;a href=&quot;https://raw.githubusercontent.com/dwjbosman/tensorflow-experiments/master/Sound_Web2Jupyter.ipynb&quot;&gt;Github repository&lt;/a&gt;.&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
       &lt;pre class=&quot;language-bash&quot;&gt;&lt;code&gt;%%bash 
 &lt;span class=&quot;token comment&quot;&gt;#Install support for websockets&lt;/span&gt;

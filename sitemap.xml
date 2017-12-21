@@ -4,6 +4,7 @@
 <url> <loc>https://dwjbosman.github.io/first-post</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/real-time-sound-synthesis-with-jupyter</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/lstm-neural-network-for-sequence-learning</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/github/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/blog/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/audio/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
