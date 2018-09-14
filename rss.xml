@@ -1,4 +1,303 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's professional blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s professional blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Fri, 22 Dec 2017 19:19:33 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Generating text using an LSTM neural network]]></title><description><![CDATA[Some time ago I read Karpathy's  article  on LSTM networks and text generation. The idea that AI could be able to generate a novel was very…]]></description><link>https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</link><guid isPermaLink="false">https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</guid><category><![CDATA[Artificial Intelligence]]></category><category><![CDATA[LSTM]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Mon, 18 Dec 2017 20:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Some time ago I read Karpathy&apos;s &lt;a href=&quot;http://karpathy.github.io/2015/05/21/rnn-effectiveness/&quot;&gt;article&lt;/a&gt; on LSTM networks and text generation. The idea that AI could be able to generate a novel was very intreaging. Finally I had some spare time to test this idea.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's professional blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s professional blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Fri, 14 Sep 2018 21:50:07 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[VHDL i2s transmitter]]></title><description><![CDATA[This summer I have been reading a book on VHDL 2008: "Effective Coding with VHDL" from Ricardo Jasinski. Although not for beginners I can…]]></description><link>https://dwjbosman.github.io/vhdl-i-2-s-transmitter</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-i-2-s-transmitter</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Fri, 14 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;script data-my-script=&quot;&quot; type=&quot;text/javascript&quot;&gt;requirejs.config({paths: { &apos;plotly&apos;: [&apos;https://cdn.plot.ly/plotly-latest.min&apos;]},});if(!window.Plotly) {{require([&apos;plotly&apos;],function(plotly) {window.Plotly=plotly;});}}&lt;/script&gt;
+&lt;p&gt;This summer I have been reading a book on VHDL 2008: &quot;Effective Coding with VHDL&quot; from Ricardo Jasinski. Although not for beginners I can recommend this book to anyone with some knowledge of FPGA&apos;s and general programming skills. To get some practical experience I obtained two dev kits:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;a href=&quot;https://reference.digilentinc.com/_media/zedboard:zedboard_ug.pdf&quot;&gt;Zedboard&lt;/a&gt; dev kit containing an Xilinx Zync &lt;/li&gt;
+&lt;li&gt;A &lt;a href=&quot;https://reference.digilentinc.com/_media/nexys4-ddr:nexys4ddr_rm.pdf&quot;&gt;Nexys4-DDR&lt;/a&gt; with Xylinx Artix-7 from Digilent &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Digilent also sells PMOD modules which are extension modules containing specialized IO chips. I bought the &lt;a href=&quot;https://reference.digilentinc.com/reference/pmod/pmodi2s2/reference-manual&quot;&gt;I2S2 DA/AD board&lt;/a&gt; with I2S interface. It can sample as well as playback audio wave data via a simple I2S protocol. It is based on the &lt;a href=&quot;https://www.cirrus.com/products/cs4344-45-48/&quot;&gt;CS4344&lt;/a&gt; and CS5343 chips from Cypress. In this article I focus on the CS4344 DA converter.&lt;/p&gt;
+&lt;p&gt;Using the I2S board is relatively simple when compared with for example the audio chip embedded on the Zedboard. That chip supports a complex signal path with many registers. Setting one of the registers to a wrong value will quickly result in no audio output. Debugging would to take a lot of effort for a first project. The CS4344 however is very simple. It has an I2S interface and no registers to set. Even its datasheet is short :) I can simulate the VHDL on fore hand before flashing and check the output I2S waveform. If that is correct the audio chip will produce sound.&lt;/p&gt;
+&lt;p&gt;The roadmap of my project is as follows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;First produce a square wave with a specific frequency.&lt;/li&gt;
+&lt;li&gt;Produce a single sine wave with a specific frequency.&lt;/li&gt;
+&lt;li&gt;Implement I2S AD reception and loopback to the DA output.&lt;/li&gt;
+&lt;li&gt;Implement an additive synthesis engine based on a bandwidth enhanced sine model. There is an interesting course on Coursera on this topic: &lt;a href=&quot;https://www.coursera.org/learn/audio-signal-processing/home/welcome&quot;&gt;https://www.coursera.org/learn/audio-signal-processing/home/welcome&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Control the synthesis parameters from a soft core.&lt;/li&gt;
+&lt;li&gt;Run Linux (Yocto) on a soft core and control the synthesis engine with a Linux device driver.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So I have a long way to go. In this article I will focus on step 1.&lt;/p&gt;
+&lt;h1 id=&quot;i2s&quot;&gt;&lt;a href=&quot;#i2s&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;I2S&lt;/h1&gt;
+&lt;p&gt;How does I2S work? Have a look at the following schematic:&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f755b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 401px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 38.90274314214464%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAAsSAAALEgHS3X78AAABHElEQVQY022Q2VaDQBBE8/8/5YlGX8ETTSJbgMzKMqwBwhYLguiD/XCZUzPV1fTmPlff9/+ybdtxHIdh+Mv7T224CBgXluWAtg1y2z4LGYBcSOig6/mgN1GAbdctZjSTMsiyHFXVdZ4XVfVgVRTF9QqWYBTFcayix0cli9m/kLIsGeNJkuACZ9zOnM5hGIKXC0HrVUff32RIaZrCLIRUSkkp8QJEDKU0ngvp8OPlNOBq5lxgGMMwXdc7nb40Td8+vyLq83AkhGj6O2Nsv/84HI4vuzdd15+2OwQs5vs4mJZDKcvysq5rLBn7BLMsNUwritWqNE0D+p6P1irNJjMGw4S+TxznnMwSqrndCKVCCNtx8asPses6rJZQturfCze/rd9wDgcAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;I2S protocol&quot;
+        title=&quot;I2S protocol&quot;
+        src=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f755b.png&quot;
+        srcset=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-ed329.png 300w,
+/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f755b.png 401w&quot;
+        sizes=&quot;(max-width: 401px) 100vw, 401px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Note that the CS4344 datasheet uses LRCK as WS and SDIN as SD. Furthermore it uses an extra clock signal MCLK. In my FPGA design I use the Xilinx Clock wizard to generate MCLK. The other signals are generated by the FPGA i2s_sender component introduced in this article.&lt;/p&gt;
+&lt;h2 id=&quot;parameters&quot;&gt;&lt;a href=&quot;#parameters&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;parameters&lt;/h2&gt;
+&lt;p&gt;The CS4344 datasheet shows a few examples of different clock parameters.&lt;/p&gt;
+&lt;p&gt;First I defined a package for some constants:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    package types_pkg is    
+        constant MCLK_FREQ : integer := 18432000; in Hz
+        -- 48Khz sample rate
+        constant LRCK_FREQ : integer := 48000; -- MCLK/384
+        --24 bits per LRCK phase (low = left channel, high = right channel_
+        constant SCLK_FREQ : integer := LRCK_FREQ*48;
+        constant SAMPLE_WIDTH : integer := 24;
+
+        subtype sample_t is signed(SAMPLE_WIDTH-1 downto 0);
+    end;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2 id=&quot;i2s-interface&quot;&gt;&lt;a href=&quot;#i2s-interface&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;i2s interface&lt;/h2&gt;
+&lt;p&gt;The interface of the i2s_sender is as follows:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    entity i2s_sender is
+        --wave_x_in are sampled at the rising edge of MCLK
+        Port ( 
+               resetn : in std_logic;
+               MCLK_in : in std_logic;
+               LRCK_out : out std_logic;
+               SCLK_out : out std_logic;
+               SDIN_out : out std_logic;
+               wave_left_in : in sample_t; 
+               wave_right_in : in sample_t
+        );
+    end i2s_sender;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The LRCK, SCLK signal and SDIN signals will be fed to the CS4344 chip. The wave_in samples must be generated by some other FPGA component.&lt;/p&gt;
+&lt;p&gt;Next the logic of the i2s_sender. There are two processes. One process generates the required clocks LRCK and SCLK from MCLK. The other process generates SDIN based on SCLK.&lt;/p&gt;
+&lt;h2 id=&quot;generation-of-the-clocks&quot;&gt;&lt;a href=&quot;#generation-of-the-clocks&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Generation of the clocks&lt;/h2&gt;
+&lt;h3 id=&quot;clock-dividing&quot;&gt;&lt;a href=&quot;#clock-dividing&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Clock dividing&lt;/h3&gt;
+&lt;p&gt;The clocks are generated by dividing (counting the number edges of) MCLK.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;--Change level every _DIV ticks of MCLK
+constant LRCK_DIV : integer := (MCLK_FREQ / (LRCK_FREQ*2)) -1; -- 384/2 -1 = 161
+constant SCLK_DIV : integer := (MCLK_FREQ / (SCLK_FREQ*2)) -1; 
+
+--types for various counters
+subtype div_LRCK_t  is integer range 0 to LRCK_DIV; 
+subtype div_SCLK_t  is integer range 0 to SCLK_DIV; 
+
+--count the number of MCLK ticks before toggling LRCK    
+signal LRCK_cnt : div_LRCK_t;
+--count the number of MCLK ticks before toggling SCLK
+signal SCLK_cnt : div_SCLK_t;
+
+--count the number of SCLK periods after LRCK went low
+signal SDIN_cnt : integer range 0 to (SAMPLE_WIDTH*2-1);
+    
+--wave_x_in are sampled at the rising edge of MCLK
+signal wave_left : sample_t := (others =&gt; &apos;0&apos;);
+signal wave_right: sample_t := (others =&gt; &apos;0&apos;);  
+      
+signal shift_reg: std_logic_vector(SAMPLE_WIDTH-1 downto 0);&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3 id=&quot;counters&quot;&gt;&lt;a href=&quot;#counters&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Counters&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;     if MCLK_in&apos;event and MCLK_in = &apos;1&apos; then -- Rising clock edge
+        -- MCLK == 18.4320 Mhz
+        -- LRCK = MCLK / 384 = 48khz = Fs
+        -- SCLK = 48 * Fs = MCLK/8
+        if LRCK_cnt = LRCK_DIV then
+            LRCK_cnt &lt;=0;
+            if LRCK_out = &apos;1&apos; then
+                --falling edge
+                --assert: SCLK will go low
+                LRCK_out &lt;= &apos;0&apos;;
+                SDIN_cnt &lt;= 0;
+            else
+                -- rising edge
+                --assert: SCLK will go low
+                LRCK_out &lt;= &apos;1&apos;;
+                SDIN_cnt &lt;= SAMPLE_WIDTH;
+            end if;
+        else
+            if (SCLK_cnt = SCLK_DIV) and (SCLK_out=&apos;1&apos;) then
+                --SCLK will go low
+                SDIN_cnt &lt;= SDIN_cnt + 1;
+            end if;                            
+            LRCK_cnt &lt;= LRCK_cnt + 1;  
+        end if;
+        
+        if SCLK_cnt = SCLK_DIV then
+            SCLK_cnt &lt;=0;
+            SCLK_out &lt;= not SCLK_out;
+        else
+            SCLK_cnt &lt;= SCLK_cnt + 1;  
+        end if;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2 id=&quot;generation-of-the-sdin-signal&quot;&gt;&lt;a href=&quot;#generation-of-the-sdin-signal&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Generation of the SDIN signal&lt;/h2&gt;
+&lt;p&gt;The SDIN signal contains the bits of the input wave signal. One bit is shifted out every SCLK clock. The left sample should be shifted out when LRCK is low. The right sample is shifted out when LRCK is high. A first approach was to create a process that acts both on the rising edge of LRCK as well as the falling edge. This doesn&apos;t work however as flip flops which are used to implement the design cannot trigger on both clock edges. As a solution I now count the number of SCLK clocks after the falling edge of LRCK. &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;SCLK_cnt = 1..25 outputs the left sample&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SCLK_cnt = 25..48 outputs the right sample&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The last bit of the right channel sample is shifted out at SCLK_cnt=0&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The shifted out bit is sampled by the CS4344 at the rising edge of SCLK&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;if SCLK_out&apos;event and SCLK_out = &apos;0&apos; then -- Falling clock edge                
+        if SDIN_cnt=0 then
+            -- load shift register
+            shift_reg &lt;= std_logic_vector(wave_left); 
+        elsif SDIN_cnt=24 then
+            shift_reg &lt;= std_logic_vector(wave_right);
+        else 
+            shift_reg &lt;= shift_reg(shift_reg&apos;HIGH-1 downto 0) &amp; &apos;0&apos;;
+        end if;
+        SDIN_out &lt;= shift_reg(shift_reg&apos;HIGH);
+end if;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;top-level-component&quot;&gt;&lt;a href=&quot;#top-level-component&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Top level component&lt;/h2&gt;
+&lt;p&gt;For testing the top level component connects a square waveform generator to the i2s&lt;em&gt;sender. The i2s&lt;/em&gt;sender output is connected to the FPGA output pins. If the PMOD modules is plugged into the JA port. The following contraints can be used for the Nexys 4 DDR dev kit.&lt;/p&gt;
+&lt;p&gt;  set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN C17 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports MCLK&lt;/em&gt;out]
+set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN D18 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports LRCK&lt;/em&gt;out]
+set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN E18 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports SCLK&lt;/em&gt;out]
+set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN G17 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports SDIN&lt;/em&gt;out]&lt;/p&gt;
+&lt;h2 id=&quot;debugging&quot;&gt;&lt;a href=&quot;#debugging&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Debugging&lt;/h2&gt;
+&lt;p&gt;During simulation it is helpfull to print out all the calculated values to make sure that they are correct. It is also possible to view them in Vivado simulation objects pane. I added the following to i2s&lt;em&gt;sender to print out the values.
+&lt;br&gt;
+debug : process (dummy) is
+begin
+--print the dividers when in simulation mode
+report &quot;MCLK&lt;/em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(MCLK&lt;em&gt;FREQ);
+report &quot;LRCK&lt;/em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(LRCK&lt;em&gt;FREQ);
+report &quot;SCLK&lt;/em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(SCLK&lt;em&gt;FREQ);
+report &quot;SAMPLE&lt;/em&gt;WIDTH &quot; &amp;#x26; integer&apos;image(SAMPLE_WIDTH);&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    report &quot;LRCK_DIV&quot; &amp; integer&apos;image(LRCK_DIV);
+    report &quot;SCLK_DIV&quot; &amp; integer&apos;image(SCLK_DIV);
+end process;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;During development at some point the simulation signal output seemed correct. However after synthesis no audio was output. A first debug approach was to count the number of eg. SCLK edges and connect that counter to the LEDs of the development kit. By setting the width of the counter correctly and displaying the most significant bits of the counter I was able to check if for example LRCK was indeed toggling at 48 kHz. &lt;/p&gt;
+&lt;p&gt;Another approach is to add an ILA debug core to your design and connect the output pins of the designed component to the debug core. This way you can see if the synthesized design on the FPGA behaves as expected.&lt;/p&gt;
+&lt;p&gt;In order to test the component I created a simple square waveform generator that generates a left channel signal at 440 Hz and a right channel signal at 880 Hz. This generator was hooked up to the i2s_sender.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;resetn &lt;= &apos;0&apos;, &apos;1&apos; after 100ns;
+clock &lt;= not clock after 10 ns;
+MCLK &lt;= not MCLK after 54.253472222222 ns; -- 18.4320 Mhz
+
+sqwv : entity work.square_wave
+    port map (
+     resetn =&gt; resetn,
+     MCLK_in =&gt; MCLK,
+     wave_left_out =&gt; wave_left,
+     wave_right_out =&gt; wave_right
+    );
+         
+i2s : entity work.i2s_sender
+        port map (
+        MCLK_in =&gt; MCLK,
+        resetn =&gt; resetn,
+        LRCK_out =&gt; LRCK,
+        SCLK_out =&gt; SCLK,
+        SDIN_out =&gt; SDIN,
+        wave_left_in =&gt; wave_left,
+        wave_right_in =&gt; wave_right
+        );    &lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;Below outputs of the I2S waveform at the start of a new LRCK cycle (left channel) and starting at the rising edge of LRCK (right channel).&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-5fc45.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 22.455679579776756%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAIAAAABPYjBAAAACXBIWXMAAAsSAAALEgHS3X78AAAAvUlEQVQI102ITQuCQBRF31xqmpmlGCRpOQZaEJH0RRC0SguF2rRo0bIIimjV7++FLYLL4dxD19v98XwV573KVSNrMM3OVM7TW82uMlW5zr9XbiR78T7QZLGaL9f91RgjIAUNCUNgCsSgKSEBJuDy7SkwAGagHmGO/FJSq+X5bd+LPJEIEQsKSDRFNXLJWTju0pVWsv93ZnYsKLRR2LW+9WVHGmtqQU1bXQ/q7DKQJjLOwOGrw19kqq7i5afyAxBHGPSxDRwlAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;LRCK left channel&quot;
+        title=&quot;LRCK left channel&quot;
+        src=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-abe1c.png&quot;
+        srcset=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-10046.png 300w,
+/static/lrck1-09e17902d487e0a568fedf5370d484a4-3c4a3.png 600w,
+/static/lrck1-09e17902d487e0a568fedf5370d484a4-abe1c.png 1200w,
+/static/lrck1-09e17902d487e0a568fedf5370d484a4-5fc45.png 1523w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-5fc45.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 21.273801707156927%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAIAAAABPYjBAAAACXBIWXMAAAsSAAALEgHS3X78AAAAzklEQVQI1yXKzWrCQBQF4DsHY2YiSiD+NWasTkwU1JHQSEupCyldFeMruHEjgthFF4KrvnjvIBwOH/dcuvz83u5/x+tZVlJVSu6kv/MZwT54mO/OlTPnYZ7KU0lpPsum82w5pxVhBiyAJSgnrIES+AK9ELbAO/AB2hBegU832YOlXr+fDBL9rKlNoiPQBbfzkxC5CNdh9BYpq9gcGpF76AoxFfbbUqKH6diYiWmMGnIoW6bla79pmtxKq3pcD7OQ4Q087lpck4n0Yo+72Bb/nyUZNqEIECEAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;LRCK right channel&quot;
+        title=&quot;LRCK right channel&quot;
+        src=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-abe1c.png&quot;
+        srcset=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-10046.png 300w,
+/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-3c4a3.png 600w,
+/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-abe1c.png 1200w,
+/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-5fc45.png 1523w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;&lt;a href=&quot;#conclusion&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Some things I noticed while experimenting with VHDL 2008 and Xilinx Vivado:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lack of support of some VHDL 2008 features in Vivado.&lt;/li&gt;
+&lt;li&gt;Vivado spews out a large number of warnings. It&apos;s not easy to see which warnings are important and which are not.&lt;/li&gt;
+&lt;li&gt;Eventhough simulation is running fine the synthesized result can still be wrong.&lt;/li&gt;
+&lt;li&gt;The Cypress CS4344 datasheet&apos;s I2S waveform specification is not very clear. It does not show that the last bit of the previous sample is clocked in at the first rising SCLK after LRCK phase change.&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Generating text using an LSTM neural network]]></title><description><![CDATA[Some time ago I read Karpathy's  article  on LSTM networks and text generation. The idea that AI could be able to generate a novel was very…]]></description><link>https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</link><guid isPermaLink="false">https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</guid><category><![CDATA[Artificial Intelligence]]></category><category><![CDATA[LSTM]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Mon, 18 Dec 2017 20:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Some time ago I read Karpathy&apos;s &lt;a href=&quot;http://karpathy.github.io/2015/05/21/rnn-effectiveness/&quot;&gt;article&lt;/a&gt; on LSTM networks and text generation. The idea that AI could be able to generate a novel was very intreaging. Finally I had some spare time to test this idea.&lt;/p&gt;
 &lt;p&gt;I used the following software:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;nvidia-docker : A docker environment that allows the GPU to be used for CUDA.&lt;/li&gt;

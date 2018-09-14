@@ -1,5 +1,9 @@
 {
   "assetsByChunkName": {
+    "path---categories-hardware": [
+      "path---categories-hardware-e24437c56a20cbca3fb4.js",
+      "path---categories-hardware-e24437c56a20cbca3fb4.js.map"
+    ],
     "path---tags-blog": [
       "path---tags-blog-e6feb522c1ce480075a7.js",
       "path---tags-blog-e6feb522c1ce480075a7.js.map"
@@ -44,13 +48,21 @@
       "component---node-modules-gatsby-plugin-offline-app-shell-js-5c4c5a0f7af9dc69d6d7.js",
       "component---node-modules-gatsby-plugin-offline-app-shell-js-5c4c5a0f7af9dc69d6d7.js.map"
     ],
+    "path---tags-vhdl-fpga-dsp": [
+      "path---tags-vhdl-fpga-dsp-d5eca947c0648a80dd21.js",
+      "path---tags-vhdl-fpga-dsp-d5eca947c0648a80dd21.js.map"
+    ],
     "component---src-templates-category-jsx": [
       "component---src-templates-category-jsx-04a9496049863016d7c6.js",
       "component---src-templates-category-jsx-04a9496049863016d7c6.js.map"
     ],
+    "path---vhdl-i-2-s-transmitter": [
+      "path---vhdl-i-2-s-transmitter-0096207c3ccaae6be311.js",
+      "path---vhdl-i-2-s-transmitter-0096207c3ccaae6be311.js.map"
+    ],
     "path---index": [
-      "path---index-c76ec76005da71f12455.js",
-      "path---index-c76ec76005da71f12455.js.map"
+      "path---index-ff3fed96a9b63a4dbcf2.js",
+      "path---index-ff3fed96a9b63a4dbcf2.js.map"
     ],
     "component---src-pages-about-jsx": [
       "component---src-pages-about-jsx-ad03a97f9d94d9bb3877.js",
@@ -95,9 +107,9 @@
       "component---src-pages-index-jsx-5cd3e3488ba2b0d716bd.js.map"
     ],
     "app": [
-      "app-5f47cf28a43c7faa9abf.js",
+      "app-e3ba2af93e54e5a28443.js",
       "build-js-styles.css",
-      "app-5f47cf28a43c7faa9abf.js.map",
+      "app-e3ba2af93e54e5a28443.js.map",
       "build-js-styles.css.map"
     ],
     "path---categories-jupyter": [
