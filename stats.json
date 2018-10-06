@@ -1,9 +1,5 @@
 {
   "assetsByChunkName": {
-    "path---categories-hardware": [
-      "path---categories-hardware-1e4285edbd870e1802bf.js",
-      "path---categories-hardware-1e4285edbd870e1802bf.js.map"
-    ],
     "path---tags-blog": [
       "path---tags-blog-e6feb522c1ce480075a7.js",
       "path---tags-blog-e6feb522c1ce480075a7.js.map"
@@ -15,6 +11,10 @@
     "path---categories-blaat": [
       "path---categories-blaat-69d742714b9a4417c8d7.js",
       "path---categories-blaat-69d742714b9a4417c8d7.js.map"
+    ],
+    "path---vhdl-sine-wave-oscillator": [
+      "path---vhdl-sine-wave-oscillator-12cd9521d2d565fdd874.js",
+      "path---vhdl-sine-wave-oscillator-12cd9521d2d565fdd874.js.map"
     ],
     "path---": [
       "path----557518bd178906f8d58a.js",
@@ -49,20 +49,20 @@
       "component---node-modules-gatsby-plugin-offline-app-shell-js-5c4c5a0f7af9dc69d6d7.js.map"
     ],
     "path---tags-vhdl-fpga-dsp": [
-      "path---tags-vhdl-fpga-dsp-a889bd7bece05b8cf390.js",
-      "path---tags-vhdl-fpga-dsp-a889bd7bece05b8cf390.js.map"
+      "path---tags-vhdl-fpga-dsp-54f62971d05dba132880.js",
+      "path---tags-vhdl-fpga-dsp-54f62971d05dba132880.js.map"
     ],
     "component---src-templates-category-jsx": [
       "component---src-templates-category-jsx-04a9496049863016d7c6.js",
       "component---src-templates-category-jsx-04a9496049863016d7c6.js.map"
     ],
     "path---vhdl-i-2-s-transmitter": [
-      "path---vhdl-i-2-s-transmitter-3be1310b29f6aa55509b.js",
-      "path---vhdl-i-2-s-transmitter-3be1310b29f6aa55509b.js.map"
+      "path---vhdl-i-2-s-transmitter-5dcc80b4f7a5bb48e71f.js",
+      "path---vhdl-i-2-s-transmitter-5dcc80b4f7a5bb48e71f.js.map"
     ],
     "path---index": [
-      "path---index-89eec6165df716bebd70.js",
-      "path---index-89eec6165df716bebd70.js.map"
+      "path---index-08422affd66f66c09b71.js",
+      "path---index-08422affd66f66c09b71.js.map"
     ],
     "component---src-pages-about-jsx": [
       "component---src-pages-about-jsx-ad03a97f9d94d9bb3877.js",
@@ -81,10 +81,14 @@
       "path---tags-audio-7cfffbef57fb597d2291.js.map"
     ],
     "commons": [
-      "commons-a948eb06d8f0ed69ba90.js",
+      "commons-d9f717f2c7dd22daba78.js",
       "build-js-styles.css",
-      "commons-a948eb06d8f0ed69ba90.js.map",
+      "commons-d9f717f2c7dd22daba78.js.map",
       "build-js-styles.css.map"
+    ],
+    "path---categories-fpga": [
+      "path---categories-fpga-12b1c4d7ac5ae02ca487.js",
+      "path---categories-fpga-12b1c4d7ac5ae02ca487.js.map"
     ],
     "component---src-templates-tag-jsx": [
       "component---src-templates-tag-jsx-aaa311d3d699ffd762ea.js",
@@ -107,9 +111,9 @@
       "component---src-pages-index-jsx-5cd3e3488ba2b0d716bd.js.map"
     ],
     "app": [
-      "app-e3ba2af93e54e5a28443.js",
+      "app-071454487b3aed365e53.js",
       "build-js-styles.css",
-      "app-e3ba2af93e54e5a28443.js.map",
+      "app-071454487b3aed365e53.js.map",
       "build-js-styles.css.map"
     ],
     "path---categories-jupyter": [

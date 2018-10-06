@@ -1,4 +1,307 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's professional blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s professional blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Sat, 15 Sep 2018 22:28:14 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[VHDL i2s transmitter]]></title><description><![CDATA[This summer I have been reading a book on VHDL 2008: "Effective Coding with VHDL" from Ricardo Jasinski. Although not for beginners I can…]]></description><link>https://dwjbosman.github.io/vhdl-i-2-s-transmitter</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-i-2-s-transmitter</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Fri, 14 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This summer I have been reading a book on VHDL 2008: &quot;Effective Coding with VHDL&quot; from Ricardo Jasinski. Although not for beginners I can recommend this book to anyone with some knowledge of FPGA&apos;s and general programming skills. To get some practical experience I obtained two dev kits:  &lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Sat, 06 Oct 2018 00:05:19 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[VHDL sine wave oscillator]]></title><description><![CDATA[In my last  article  a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to…]]></description><link>https://dwjbosman.github.io/vhdl-sine-wave-oscillator</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-sine-wave-oscillator</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sat, 22 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/vhdl-i-2-s-transmitter&quot;&gt;article&lt;/a&gt; a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to develop an additive synthesis engine. In this article the goal is being able to generate a sine wave.&lt;/p&gt;
+&lt;p&gt;As a starting point I use this &lt;a href=&quot;https://github.com/jorisvr/vhdl_sincos_gen&quot;&gt;VHDL sine generator&lt;/a&gt; sub component. This generator is nicely parametrized. You can specify the number of bits in the output resolution as well as the phase input.&lt;/p&gt;
+&lt;p&gt;The additive synthesis engine which is to be developed needs to be able to control the frequency of the oscillator. I am not sure yet on the required frequency resolution. I will pick a reasonable number and keep the formulas general so that the value can be easily changed later. The challenge in the development of this oscillator is to implement the following features:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Configurable design parameter &apos;frequency resolution&apos; which allows specifying how precisely the frequency can be controlled.&lt;/li&gt;
+&lt;li&gt;Real time configurable parameter &apos;frequency&apos;, value between 1 Hz and half the sample rate. &lt;/li&gt;
+&lt;li&gt;No floating point&lt;/li&gt;
+&lt;li&gt;No general divisions&lt;/li&gt;
+&lt;li&gt;Where possible use bit shifts to do multiplication / division.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;phase-step&quot;&gt;&lt;a href=&quot;#phase-step&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Phase step&lt;/h1&gt;
+&lt;h2 id=&quot;theory&quot;&gt;&lt;a href=&quot;#theory&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Theory&lt;/h2&gt;
+&lt;p&gt;The used sine wave generator sub component has two design parameters:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Amplitude resolution: 24 bit&lt;/li&gt;
+&lt;li&gt;Phase space size. This value has to be a power of two and determines the phase resolution as well as frequency resolution. Given a target frequency resolution the minimum required phase space bit width can be determined. &lt;/li&gt;
+&lt;li&gt;Each sample a small step will be made to advance the phase of the sine. This phase step is a rational number and can be represented by a numerator and divisor. The algorithm will calculate the divisor and numerator.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Step three has to be performed whenever the frequency is changed while the design is &apos;running&apos;. Step two can be performed design-time. The next steps calculate the static design-time parameters. In the formulas below I use &apos;-&gt;&apos; to show its value given a sample rate and target frequency resolution.&lt;/p&gt;
+&lt;h3 id=&quot;design-time-constants&quot;&gt;&lt;a href=&quot;#design-time-constants&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Design time constants&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;Frequency resolution: 
+target_frequency_resolution = 0.01 Hz
+
+Sample Rate:          
+sample_rate       = 48000 Hz
+max_frequency     = sample_rate / 2    
+nax_frequency    -&gt; 24000 Hz
+Phase space size:
+phase_space_size  = sample_rate / target_frequency_resolution 
+phase_space_size -&gt; 4800000&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The sine generator sub component requires the phase space to be a power of two. As &apos;P&apos; is the minimum required phase space size it is required to round up.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;Power of 2 phase space size: 
+power2_phase_space_bits =  ceiling(log(phase_space_size) / log(2))      
+power2_phase_space_bits -&gt; 23 bits
+power2_phase_space_size -&gt; 2^23 -&gt; 8388608&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;This results in a slightly better frequency resolution:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;Desired frequency resolution:
+target_frequency_resolution = 0.01 Hz
+
+Quantized frequency resolution:
+quantized_frequency_resolution =  sample_rate / power2_phase_space_size
+quantized_frequency_resolution -&gt; 0.0057220459&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The reciprocal of the frequency resolution is the phase step. At each played back sample at 48 kHz sample rate the phase is increased by the phase step.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;Phase step:
+phase_step  = 1 / quantized_frequency_resolution
+phase_step -&gt; 174.7626666667
+phase_step_bits = log2(phase_step)
+phase_step_bits = 7.449 bits
+assert: sample_rate * phase_step == power2_phase_space_size&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The phase step needs to be rounded to a power of two so that it can be easily used in integer division and multiplication. It is possible to round down if the resulting frequency resolution is still above the target. If not round up:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;power2_phase_step_bits =  floor(log(phase_step)/log(2))      
+power2_phase_step_bits -&gt; 7 bits
+power2_phase_step      -&gt; 128
+frequency resolution would be: 1/128 -&gt; 0.0078125
+
+power2_phase_step_bits =  ceil(log(phase_step)/log(2))      
+power2_phase_step_bits -&gt; 8 bits
+power2_phase_step      -&gt; 256
+frequency resolution would be: 1/256 -&gt; 0.00390625&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;With 7 bits the frequency resolution is still above the target. At run-time the frequency of the oscillator can be set by as an integer value by multiplying the target frequency with the scaling factor. For example to get 440 Hz, the frequency parameter of the oscillator will be set to 440 * 128 = 56320.&lt;/p&gt;
+&lt;p&gt;The combinations of the sample_rate and power2_phase_space_size vales imply a non-integer phase_step value (174.76...). The phase_step value needs to be scaled up to keep accuracy when using it in division. To determine the number of bits in the scaling factor first the determine the maximum error introduced by quantisation. &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;scaled_phase_step          = trunc(phase_step * phase_step_scaling_factor)
+quantised_phase_step_error = phase_step - scaled_phase_step / phase_step_scaling_factor 
+maximum_phase_error        = maximum_frequency * quantised_phase_step_error&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;This maximum_error must be below 1. So the quantised_phase_step_error must be lower then:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;max_quantised_phase_step_error       = 1 / maximum_frequency
+max_quantised_phase_step_error      -&gt; 0.00004166...
+max_quantised_phase_step_error_bits -&gt; 14.5507... bits&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;This implies the required number of bits in the scaled phase step:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;scaled_phase_step_bits          = ceiling( phase_step_bits + max_quantised_phase_step_error_bits)
+scaled_phase_step_bits         -&gt; 22&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;For the phase step scaling factor there are two options. Choose the lowest number of bits that still results in an error lower than one.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_scaling_factor_bits  = ceiling ( max_quantised_phase_step_error_bits ) 
+phase_step_scaling_factor_bits -&gt; 15
+phase_step_scaling_factor      -&gt; 2^15 -&gt; 32768
+scaled_phase_step               = trunc(phase_step * phase_step_scaling_factor)
+scaled_phase_step              -&gt; 5726623
+
+phase_step_error  = phase_step - scaled_phase_step / phase_step_scaling_factor 
+phase_step_error -&gt; 0.000001871744786
+
+max_error         = maximum_frequency * phase_step_error 
+max_error        -&gt; 0.04492187486 must be &lt;1&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;Or&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_scaling_factor_bits  = floor ( max_quantised_phase_step_error_bits ) 
+phase_step_scaling_factor_bits -&gt; 14
+phase_step_scaling_factor      -&gt; 2^14 -&gt; 16384
+scaled_phase_step               = trunc(phase_step * phase_step_scaling_factor)
+scaled_phase_step              -&gt; 2863311
+
+phase_step_error  = phase_step - scaled_phase_step / phase_step_scaling_factor 
+phase_step_error -&gt; 0.00003238932291
+
+max_error         = maximum_frequency * phase_step_error 
+max_error        -&gt; 0.7773437499 must be &lt;1&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;So 14 bits can be used for the phase step scaling factor.&lt;/p&gt;
+&lt;h3 id=&quot;run-time-parameters&quot;&gt;&lt;a href=&quot;#run-time-parameters&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Run time parameters&lt;/h3&gt;
+&lt;p&gt;Let&apos;s say the frequency to generate is 440.0078125 Hz. Then the input scaled frequency would be:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;frequency_scaled = frequency * power2_phase_step
+frequency_scaled -&gt; 56321&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;If it would be possible to use floating point arithmetic the phase step would be:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_fp  = ( power2_phase_space_size / sample_rate ) * frequency&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;or rewritten:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_fp -&gt; ( power2_phase_space_size * frequency ) / sample_rate
+phase_step_fp -&gt; 76896.93867&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The integer version of phase_step_fp consists of phase_step_decimal and phase_step_numerator. Phase_step_decimal will give the decimal part (in the example 76895) while the fraction (0.57333...) will be specified as a numerator, divisor pair (a rational number). The decimal part is calculated as follows:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;scaled_phase  = frequency_scaled * scaled_phase_step
+scaled_phase -&gt; 161264538831
+
+decimal_divider_bits  = power2_phase_step_bits + phase_step_scaling_bits
+decimal_divider_bits -&gt; 21
+phase_step_decimal    = shift_right ( scaled_phase, decimal_deivider_bits)
+phase_step_decimal   -&gt; 76896&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;Generally the phase_step_decimal will equal the decimal part of the phase_step_fp. In corner cases when the fractional part of phase_step_fp is near zero the decimal part will be off by one. For example with a scaled frequency of 440573 (3441.97 Hz) the actual phase step will be 601529.0027. However the quantised phase step will be floor(601528.8912) = 601528 which is off by one. &lt;/p&gt;
+&lt;p&gt;Now the fractional part is calculated as a rational value. The value consists of a numerator and divisor.  Recall the calculation of phase_step_fp:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_fp -&gt; ( power2_phase_space_size * frequency ) / sample_rate&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;This value can be converted to a rational number:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_divisor  = sample_rate
+phase_step_divisor -&gt; 48000
+
+using frequency_scaled (an integer value) instead of the floating point frequency:
+
+phase_step_numerator_incl_decimal  = ( power2_phase_space_size * frequency_scaled ) / power2_phase_step
+phase_step_numerator_incl_decimal  = shift_right ( power2_phase_space_size * frequency_scaled, power2_phase_step_bits)
+phase_step_numerator_incl_decimal -&gt; 3691053056&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;The fact that phase_step_fp is larger than one implies that the numerator is larger than the divisor. To get the fractional part without the decimal part the decimal value is subtracted:
+&lt;br&gt;
+phase&lt;em&gt;step&lt;/em&gt;numerator  = phase&lt;em&gt;step&lt;/em&gt;numerator&lt;em&gt;incl&lt;/em&gt;decimal - phase&lt;em&gt;step&lt;/em&gt;decimal * sample&lt;em&gt;rate
+phase&lt;/em&gt;step_numerator -&gt; 45056&lt;/p&gt;
+&lt;p&gt;Assert that the rational number is indeed the fractional part of phase_step_fp:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;phase_step_fp -&gt; 76896.93867
+phase_step_numerator / phase_step_divisor -&gt; 0.93867&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;In the earlier described corner cases it could be that the numerator is still larger than the divider after subtraction of the decimal part. It will however always be smaller than 2 * divider. So when the numerator is larger than the divider it is possible to simply subtract the divider once to get the numerator corresponding to the fractional part. In that case the phase_step_decimal value is increased by one.&lt;/p&gt;
+&lt;p&gt;The sine &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1zl4uNqo22D30khxiX1On5RydeTHjTQGgfvHI6CXL8H8/edit?usp=sharing&quot;&gt;phase step&lt;/a&gt;  calculations in this section can also be found on Google sheets.&lt;/p&gt;
+&lt;h1 id=&quot;vhdl-design&quot;&gt;&lt;a href=&quot;#vhdl-design&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;VHDL Design&lt;/h1&gt;
+&lt;p&gt;In this article I focus on generating a single sine wave. The following will be tested:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Setting the sine generator to a certain frequency.&lt;/li&gt;
+&lt;li&gt;Updating the frequency : This should not introduce noticeable audio &apos;glitches&apos;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The top level design simply connects an oscillator (the sine_wave component) to the I2S_sender. Two buttons enable toggling sine wave frequency. The sine_wave component takes a frequency as its input and presents the sine wave samples at its output.&lt;/p&gt;
+&lt;h2 id=&quot;interface&quot;&gt;&lt;a href=&quot;#interface&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Interface&lt;/h2&gt;
+&lt;p&gt;The sine wave generator has the following interface:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;entity sine_wave is
+    Port ( resetn : std_logic;
+           MCLK_in : in std_logic; -- Master clock of the I2S Sender
+           
+           freq_in_ce: in std_logic; -- if &apos;1&apos; freq_in will be sampled on rising edge
+           freq_in: in frequency_t; -- the scaled frequency of the sine
+
+           wave_out : out sample_t -- the generated output samples
+           );
+end sine_wave;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2 id=&quot;architecture&quot;&gt;&lt;a href=&quot;#architecture&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Architecture&lt;/h2&gt;
+&lt;p&gt;The architecture consists of the sincos generator sub component and three processes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Calculating the sample clock. Each tick the sine phase will need to be updated.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Accepting new frequency updates and update the phase step value. Calculating the phase step value is accomplished through a procedure&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;procedure Calculate_Phase_Step(
+    constant frequency_scaled: in frequency_t;
+    variable phase_step: out phase_step_t) &lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate sine samples by advancing the phase with the phase step. The phase value is presented to the sincos generator sub component. Updating the phase is again accomplished with a procedure. The implementation will use the decimal phase step and fractional phase step values. Each sample the phase will be increased with the decimal part: phase&lt;em&gt;step&lt;/em&gt;decimal. Each sample the phase&lt;em&gt;step&lt;/em&gt;numerator will be added to a counter. When the counter value is above the phase&lt;em&gt;step&lt;/em&gt;divisor (the sample rate) value the phase will be advanced by one and the counter is decreased by the divisor.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;type phase_step_t is record 
+    decimal : phase_step_decimal_t;
+    fraction : phase_step_fraction_t; -- fractional / sample_rate
+end record;
+
+type phase_state_t is record
+    step : phase_step_t;
+    -- the decimal part, added each step
+    current: phase_t; 
+    -- the fractional part, if it overflows (above sample_rate)
+    -- then the it is reset and current is increased by one
+    current_fraction: phase_fraction_t; 
+end record;
+        
+procedure Advance_Phase(
+    variable phase: inout phase_state_t)&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;testing&quot;&gt;&lt;a href=&quot;#testing&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Testing&lt;/h2&gt;
+&lt;p&gt;Two testbenches have been setup.&lt;/p&gt;
+&lt;h3 id=&quot;testing-phase-step-calculation&quot;&gt;&lt;a href=&quot;#testing-phase-step-calculation&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Testing phase step calculation.&lt;/h3&gt;
+&lt;p&gt;The &apos;sine_sim&apos; tests the calculation of the design time constants and calculating the phase step decimal and fractional values. This is fairly simple: &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;calculate the real phase step using standard floating point arithmetic.&lt;/li&gt;
+&lt;li&gt;calculate the same value using the phase step calculation algorithm.&lt;/li&gt;
+&lt;li&gt;compare the values: if the difference is too large report an error.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The phase step will be added to the phase each time a sample is generated. A test is performed to check that the phase is updated correctly:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Advance the phase a number of times.&lt;/li&gt;
+&lt;li&gt;Update a version of the phase given the phase step as a floating point value.&lt;/li&gt;
+&lt;li&gt;Update a version of the phase given the phase step as a decimal and fractional part.&lt;/li&gt;
+&lt;li&gt;Each iteration compare if the difference between both both version of the phase is small.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;testing-the-sine-wave-generator&quot;&gt;&lt;a href=&quot;#testing-the-sine-wave-generator&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Testing the sine wave generator&lt;/h3&gt;
+&lt;p&gt;The simulation sets up a sine wave generator and configures its frequency to 440 Hz. The output samples are shown in Vivado&apos;s wave view. You can configure the way a signal is presented in the wave view. By showing the wave output as an analog signal with radix &apos;signed decimal&apos; a nice sine wave is readily visible. Two markers were added to check the frequency of the sine wave. The check indeed shows that the sine wave has a frequency of 440 Hz.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-31b0a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1079px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 31.60333642261353%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAABEUlEQVQY01WLy06DUBCGh5yDwOHSoEDrxrIxfRyNFomlXiK1VNNGEpO6QNs3NQYFCgW0MXEthzaNTiZf/vlmBl7DNIyyMFpGi/ztI4vT8j3Jq5wsv5K0jBdFnBRJ9lmufuK0qLZZvsrL73XDg/84nT4Fzy+2bR8dn1iWddrtBoEzm194Xu/sf9nnPWcy709m6xGcy+vqvX/lqkOVd/nGfUMYCPs+ZZXFoajcKfJIljyJjp6m+3pl1DE9hoO22TnsmG2THbCMy8ANVCQj2Oa/FMZ76BZtDbDsjmEYmqbxKo9kBDIgFZEmJUhADakp1maXUCobDxzHtZotQzdkmccCBgYwxoRQAgJq2Jq4NiyhhI3/BUcRZQVHd0cfAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;440 Hz sine wave&quot;
+        title=&quot;440 Hz sine wave&quot;
+        src=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-31b0a.png&quot;
+        srcset=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-f77c2.png 300w,
+/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-c0f67.png 600w,
+/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-31b0a.png 1079w&quot;
+        sizes=&quot;(max-width: 1079px) 100vw, 1079px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;h1 id=&quot;final-thoughts&quot;&gt;&lt;a href=&quot;#final-thoughts&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Final thoughts&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;It would be interesting to check if the fixed point value types in VHDL 2008 could simplify things. Getting the fixed point package working in Vivado seemed a hassle.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Using an embedded bit scope (Xilinx ila) helped in finding a bug in the i2s_sender. It was simulating correctly, but synthesized with an bug. One of the steps setting up an ila is marking signals to be debugged with an attribute &apos;mark_debug&apos;. I was able to enable and disable debugging using a generic variable:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;attribute mark_debug of signal_name : signal is boolean&apos;image(debug_generic_var)&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In VHDL setting a constant to a value given a condition is not straight forward. You can use a function to return a value based on a condition and use that function to set the constant:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;function sel(Cond: BOOLEAN; If_True, If_False: real) return real is
+begin
+   if (Cond = TRUE) then
+       return(If_True);
+   else
+       return(If_False);
+   end if;
+end function sel; 
+
+constant X : real := sel( TRUE, 1.0, 2.0); -- will set X to 1.0 &lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The VHDL code can be found in the &lt;a href=&quot;https://github.com/dwjbosman/I2S_sender&quot;&gt;i2s_sender&lt;/a&gt; repository.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[VHDL i2s transmitter]]></title><description><![CDATA[This summer I have been reading a book on VHDL 2008: "Effective Coding with VHDL" from Ricardo Jasinski. Although not for beginners I can…]]></description><link>https://dwjbosman.github.io/vhdl-i-2-s-transmitter</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-i-2-s-transmitter</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Fri, 14 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This summer I have been reading a book on VHDL 2008: &quot;Effective Coding with VHDL&quot; from Ricardo Jasinski. Although not for beginners I can recommend this book to anyone with some knowledge of FPGA&apos;s and general programming skills. To get some practical experience I obtained two dev kits:  &lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;A &lt;a href=&quot;https://reference.digilentinc.com/_media/zedboard:zedboard_ug.pdf&quot;&gt;Zedboard&lt;/a&gt; dev kit containing an Xilinx Zync &lt;/li&gt;
 &lt;li&gt;A &lt;a href=&quot;https://reference.digilentinc.com/_media/nexys4-ddr:nexys4ddr_rm.pdf&quot;&gt;Nexys4-DDR&lt;/a&gt; with Xylinx Artix-7 from Digilent &lt;/li&gt;
@@ -112,6 +415,7 @@ signal shift_reg: std_logic_vector(SAMPLE_WIDTH-1 downto 0);&lt;/code&gt;&lt;/pr
       &lt;/div&gt;
 &lt;h3 id=&quot;counters&quot;&gt;&lt;a href=&quot;#counters&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Counters&lt;/h3&gt;
 &lt;p&gt;The counters are relatively simple. The count up to the divider value and then toggle a clock. Furthermore the moment LRCK toggles is also used to set the position of SDIN to either 0 or SAMPLE_WIDTH (24).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;6-10-2018: There is a bug in the code below that allows it be simulated correctly. Synthesis however results in a bit shift, resulting in garbled audio output. The updated code is in the i2s_sender repo&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
       &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;     if MCLK_in&apos;event and MCLK_in = &apos;1&apos; then -- Rising clock edge
         -- MCLK == 18.4320 Mhz
@@ -175,21 +479,23 @@ end if;&lt;/code&gt;&lt;/pre&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;top-level-component&quot;&gt;&lt;a href=&quot;#top-level-component&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Top level component&lt;/h2&gt;
-&lt;p&gt;For testing the top level component connects a square waveform generator to the i2s&lt;em&gt;sender. The i2s&lt;/em&gt;sender output is connected to the FPGA output pins. If the PMOD modules is plugged into the JA port. The following contraints can be used for the Nexys 4 DDR dev kit.&lt;/p&gt;
-&lt;p&gt;  set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN C17 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports MCLK&lt;/em&gt;out]
-set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN D18 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports LRCK&lt;/em&gt;out]
-set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN E18 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports SCLK&lt;/em&gt;out]
-set&lt;em&gt;property -dict {PACKAGE&lt;/em&gt;PIN G17 IOSTANDARD LVCMOS33} [get&lt;em&gt;ports SDIN&lt;/em&gt;out]&lt;/p&gt;
+&lt;p&gt;For testing the top level component connects a square waveform generator to the i2s_sender. The i2s_sender output is connected to the FPGA output pins. If the PMOD modules is plugged into the JA port. The following contraints can be used for the Nexys 4 DDR dev kit.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS33} [get_ports MCLK_out]
+set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVCMOS33} [get_ports LRCK_out]
+set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS33} [get_ports SCLK_out]
+set_property -dict {PACKAGE_PIN G17 IOSTANDARD LVCMOS33} [get_ports SDIN_out]&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
 &lt;h2 id=&quot;debugging&quot;&gt;&lt;a href=&quot;#debugging&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Debugging&lt;/h2&gt;
-&lt;p&gt;During simulation it is helpfull to print out all the calculated values to make sure that they are correct. It is also possible to view them in Vivado simulation objects pane. I added the following to i2s&lt;em&gt;sender to print out the values.
+&lt;p&gt;During simulation it is helpfull to print out all the calculated values to make sure that they are correct. It is also possible to view them in Vivado simulation objects pane. I added the following to i2s_sender to print out the values.
 &lt;br&gt;
 debug : process (dummy) is
 begin
 --print the dividers when in simulation mode
-report &quot;MCLK&lt;/em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(MCLK&lt;em&gt;FREQ);
-report &quot;LRCK&lt;/em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(LRCK&lt;em&gt;FREQ);
-report &quot;SCLK&lt;/em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(SCLK&lt;em&gt;FREQ);
-report &quot;SAMPLE&lt;/em&gt;WIDTH &quot; &amp;#x26; integer&apos;image(SAMPLE_WIDTH);&lt;/p&gt;
+report &quot;MCLK&lt;em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(MCLK&lt;/em&gt;FREQ);
+report &quot;LRCK&lt;em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(LRCK&lt;/em&gt;FREQ);
+report &quot;SCLK&lt;em&gt;FREQ hz &quot; &amp;#x26; integer&apos;image(SCLK&lt;/em&gt;FREQ);
+report &quot;SAMPLE&lt;em&gt;WIDTH &quot; &amp;#x26; integer&apos;image(SAMPLE&lt;/em&gt;WIDTH);&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
       &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    report &quot;LRCK_DIV&quot; &amp; integer&apos;image(LRCK_DIV);
     report &quot;SCLK_DIV&quot; &amp; integer&apos;image(SCLK_DIV);
@@ -300,7 +606,7 @@ i2s : entity work.i2s_sender
 &lt;li&gt;Eventhough simulation is running fine the synthesized result can still be wrong.&lt;/li&gt;
 &lt;li&gt;The Cypress CS4344 datasheet&apos;s I2S waveform specification is not very clear. It does not show that the last bit of the previous sample is clocked in at the first rising SCLK after LRCK phase change.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;The files are available on my github page. Version Control with Vivado is not trivial. I used &lt;a href=&quot;https://github.com/barbedo/vivado-git&quot;&gt;this approach&lt;/a&gt; to handle version control.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Generating text using an LSTM neural network]]></title><description><![CDATA[Some time ago I read Karpathy's  article  on LSTM networks and text generation. The idea that AI could be able to generate a novel was very…]]></description><link>https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</link><guid isPermaLink="false">https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</guid><category><![CDATA[Artificial Intelligence]]></category><category><![CDATA[LSTM]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Mon, 18 Dec 2017 20:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Some time ago I read Karpathy&apos;s &lt;a href=&quot;http://karpathy.github.io/2015/05/21/rnn-effectiveness/&quot;&gt;article&lt;/a&gt; on LSTM networks and text generation. The idea that AI could be able to generate a novel was very intreaging. Finally I had some spare time to test this idea.&lt;/p&gt;
+&lt;p&gt;The files are available on &lt;a href=&quot;https://github.com/dwjbosman/I2S_sender&quot;&gt;github&lt;/a&gt;. Version Control with Vivado is not trivial. I used &lt;a href=&quot;https://github.com/barbedo/vivado-git&quot;&gt;this approach&lt;/a&gt; to handle version control.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Generating text using an LSTM neural network]]></title><description><![CDATA[Some time ago I read Karpathy's  article  on LSTM networks and text generation. The idea that AI could be able to generate a novel was very…]]></description><link>https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</link><guid isPermaLink="false">https://dwjbosman.github.io/generating-text-using-an-lstm-neural-network</guid><category><![CDATA[Artificial Intelligence]]></category><category><![CDATA[LSTM]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Mon, 18 Dec 2017 20:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Some time ago I read Karpathy&apos;s &lt;a href=&quot;http://karpathy.github.io/2015/05/21/rnn-effectiveness/&quot;&gt;article&lt;/a&gt; on LSTM networks and text generation. The idea that AI could be able to generate a novel was very intreaging. Finally I had some spare time to test this idea.&lt;/p&gt;
 &lt;p&gt;I used the following software:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;nvidia-docker : A docker environment that allows the GPU to be used for CUDA.&lt;/li&gt;

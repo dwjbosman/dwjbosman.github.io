@@ -1,0 +1,2 @@
+webpackJsonp([0x9b85df90278f],{451:function(e,a){e.exports={data:{allMarkdownRemark:{totalCount:1,edges:[{node:{fields:{slug:"/vhdl-sine-wave-oscillator"},excerpt:"In my last  article  a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to…",timeToRead:11,frontmatter:{title:"VHDL sine wave oscillator",tags:["VHDL FPGA DSP"],cover:"doc resources/header.jpg",date:"2018-09-22 22:00"}}}]}},pathContext:{category:"FPGA"}}}});
+//# sourceMappingURL=path---categories-fpga-c50414b22173150b572d.js.map
