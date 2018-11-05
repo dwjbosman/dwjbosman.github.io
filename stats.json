@@ -8,10 +8,6 @@
       "path---categories-artificial-intelligence-763b07ad2cc900576a6f.js",
       "path---categories-artificial-intelligence-763b07ad2cc900576a6f.js.map"
     ],
-    "path---tags-vhdl-fpga-sdk": [
-      "path---tags-vhdl-fpga-sdk-b8bdbdbb5e6dc04e28d0.js",
-      "path---tags-vhdl-fpga-sdk-b8bdbdbb5e6dc04e28d0.js.map"
-    ],
     "path---categories-blaat": [
       "path---categories-blaat-69d742714b9a4417c8d7.js",
       "path---categories-blaat-69d742714b9a4417c8d7.js.map"
@@ -19,6 +15,10 @@
     "path---vhdl-sine-wave-oscillator": [
       "path---vhdl-sine-wave-oscillator-7972a1b132a7f8532290.js",
       "path---vhdl-sine-wave-oscillator-7972a1b132a7f8532290.js.map"
+    ],
+    "path---tags-microblaze-fpga-sdk": [
+      "path---tags-microblaze-fpga-sdk-16d58dcc9a1fec8a0902.js",
+      "path---tags-microblaze-fpga-sdk-16d58dcc9a1fec8a0902.js.map"
     ],
     "path---": [
       "path----557518bd178906f8d58a.js",
@@ -53,8 +53,8 @@
       "component---node-modules-gatsby-plugin-offline-app-shell-js-5c4c5a0f7af9dc69d6d7.js.map"
     ],
     "path---basic-microblaze-with-bootloader-setup": [
-      "path---basic-microblaze-with-bootloader-setup-5a804b8e202de808975c.js",
-      "path---basic-microblaze-with-bootloader-setup-5a804b8e202de808975c.js.map"
+      "path---basic-microblaze-with-bootloader-setup-34b0d5e1aaafb510d61c.js",
+      "path---basic-microblaze-with-bootloader-setup-34b0d5e1aaafb510d61c.js.map"
     ],
     "path---tags-vhdl-fpga-dsp": [
       "path---tags-vhdl-fpga-dsp-54f62971d05dba132880.js",
@@ -69,8 +69,8 @@
       "path---vhdl-i-2-s-transmitter-239dd80bb32eeaeefe88.js.map"
     ],
     "path---index": [
-      "path---index-e05f505a3f2e0f2def91.js",
-      "path---index-e05f505a3f2e0f2def91.js.map"
+      "path---index-58924d8590aa3b48f101.js",
+      "path---index-58924d8590aa3b48f101.js.map"
     ],
     "component---src-pages-about-jsx": [
       "component---src-pages-about-jsx-ad03a97f9d94d9bb3877.js",
@@ -95,8 +95,8 @@
       "build-js-styles.css.map"
     ],
     "path---categories-fpga": [
-      "path---categories-fpga-eec7e4f903b0f204d29a.js",
-      "path---categories-fpga-eec7e4f903b0f204d29a.js.map"
+      "path---categories-fpga-43dcf65e7a949ae03cd2.js",
+      "path---categories-fpga-43dcf65e7a949ae03cd2.js.map"
     ],
     "component---src-templates-tag-jsx": [
       "component---src-templates-tag-jsx-aaa311d3d699ffd762ea.js",
@@ -119,9 +119,9 @@
       "component---src-pages-index-jsx-5cd3e3488ba2b0d716bd.js.map"
     ],
     "app": [
-      "app-9183798a3725b0ffe1c9.js",
+      "app-26843fc004666d77baaa.js",
       "build-js-styles.css",
-      "app-9183798a3725b0ffe1c9.js.map",
+      "app-26843fc004666d77baaa.js.map",
       "build-js-styles.css.map"
     ],
     "path---categories-jupyter": [
