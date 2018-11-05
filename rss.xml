@@ -1,4 +1,1270 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Sat, 06 Oct 2018 00:27:44 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[VHDL sine wave oscillator]]></title><description><![CDATA[In my last  article  a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to…]]></description><link>https://dwjbosman.github.io/vhdl-sine-wave-oscillator</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-sine-wave-oscillator</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sat, 22 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/vhdl-i-2-s-transmitter&quot;&gt;article&lt;/a&gt; a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to develop an additive synthesis engine. In this article the goal is being able to generate a sine wave.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Mon, 05 Nov 2018 22:24:24 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Basic Microblaze with bootloader setup]]></title><description><![CDATA[Table of Contents Create the project Screenshots: Initializing version control (git) Create constraints file (XDC) Create the block design…]]></description><link>https://dwjbosman.github.io/basic-microblaze-with-bootloader-setup</link><guid isPermaLink="false">https://dwjbosman.github.io/basic-microblaze-with-bootloader-setup</guid><category><![CDATA[VHDL FPGA SDK]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Thu, 01 Nov 2018 09:00:00 GMT</pubDate><content:encoded>&lt;h2 id=&quot;table-of-contents&quot;&gt;&lt;a href=&quot;#table-of-contents&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Table of Contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#create-the-project&quot;&gt;Create the project&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#screenshots&quot;&gt;Screenshots:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#initializing-version-control-git&quot;&gt;Initializing version control (git)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#create-constraints-file-xdc&quot;&gt;Create constraints file (XDC)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#create-the-block-design&quot;&gt;Create the block design&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#microblaze&quot;&gt;Microblaze&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#screenshots-1&quot;&gt;Screenshots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#clocking-wizard&quot;&gt;Clocking wizard&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#screenshots-2&quot;&gt;Screenshots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-smartconnect&quot;&gt;AXI SmartConnect&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-gpio&quot;&gt;AXI GPIO&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-uartlite&quot;&gt;AXI UARTlite&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-interrupt-controller&quot;&gt;AXI Interrupt controller&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-timer&quot;&gt;AXI Timer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-ethernetlite&quot;&gt;AXI Ethernetlite&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-quad-spi&quot;&gt;AXI Quad SPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#axi-ddr2-controller&quot;&gt;AXI DDR2 controller&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#address-map&quot;&gt;Address map&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#xdc-pin-constraints&quot;&gt;XDC pin constraints&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#synthesize&quot;&gt;Synthesize&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#generate-bit-file&quot;&gt;Generate bit file&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#commit-the-block-design-to-version-control&quot;&gt;Commit the block design to version control&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#sdk-software-development&quot;&gt;SDK, software development&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#create-bootloader-and-bsp&quot;&gt;Create bootloader and BSP.&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#configure-bootloader-bsp&quot;&gt;Configure Bootloader BSP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#configure-bootloader&quot;&gt;Configure Bootloader&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#programming-the-fpga&quot;&gt;Programming the FPGA&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#flashing-the-fpga-bitstream&quot;&gt;Flashing the FPGA bitstream.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#create-user-application&quot;&gt;Create user application&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#configure-testapp-bsp&quot;&gt;Configure TestApp BSP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#configure-the-testapp&quot;&gt;Configure the TestApp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#flashing-the-user-application&quot;&gt;Flashing the user application&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#committing-the-sdk-code&quot;&gt;Committing the SDK code&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/...&quot;&gt;article&lt;/a&gt; a VHDL Sine oscillator was presented. Eventually the goal is to develop an additive synthesis engine. In this article a small step is taken by being able to run C/C++ code on a Microblaze processor.&lt;/p&gt;
+&lt;p&gt;There are quite a number of tutorials about setting up a Microblaze processor. Unfortunately most of these tutorials are either out of date or they are lacking some essential information. Especially most tutorials don&apos;t describe the &apos;why&apos; question. This article shows how to get a Microblaze running on a Nexys4 DDR development kit including the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use of the XX MB DDR2 ram chip&lt;/li&gt;
+&lt;li&gt;UART support for debugging&lt;/li&gt;
+&lt;li&gt;Ethernet support for lwIP stack&lt;/li&gt;
+&lt;li&gt;SPI flash support for bootloading from flash.&lt;/li&gt;
+&lt;li&gt;Use of AXI GPIO for simple LED control&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I started following &lt;a href=&quot;https://reference.digilentinc.com/learn/programmable-logic/tutorials/nexys-4-ddr-getting-started-with-microblaze-servers/start&quot;&gt;Microblaze server&lt;/a&gt; tutorial from Digilent. It misses some information in the block design to complete Ethernet and DDR2 configuration. I used this &lt;a href=&quot;https://www.instructables.com/id/Configuring-the-MIG-7-Series-to-Use-the-DDR-Memory/&quot;&gt;MIG7&lt;/a&gt; tutorial to implement the DDR2 ram. Lastly I followed this tutorial on &lt;a href=&quot;https://reference.digilentinc.com/learn/programmable-logic/tutorials/htsspisf/start&quot;&gt;Bootloading&lt;/a&gt; to implement the bootloader.&lt;/p&gt;
+&lt;h1 id=&quot;create-the-project&quot;&gt;&lt;a href=&quot;#create-the-project&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Create the project&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;First set up the project. Add this &lt;a href=&quot;https://github.com/dwjbosman/I2S_sender&quot;&gt;Vivado TCL script&lt;/a&gt; to your start up scripts. The script will create a project TCL file every time &apos;git commit&apos; is invoked. The TCL project file will contain relative paths which allows your project to be stored in a version control system. &lt;/li&gt;
+&lt;li&gt;Download and install the &lt;a href=&quot;https://github.com/Digilent/vivado-boards.git&quot;&gt;Nexys4 DDR board&lt;/a&gt; files.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After Vivado starts click the &apos;create project&apos; button.&lt;/p&gt;
+&lt;h2 id=&quot;screenshots&quot;&gt;&lt;a href=&quot;#screenshots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Screenshots:&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Start Vivado:
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABTklEQVQoz62SzUsCQRyG5x+sQ9fO/Q3RB5RFUEQdy9II0Qzpkl36EKKMyspWjUiTdPewuNnmtuynq65vsxsF2VpG/eBh5jLPvMy8RBRF8DyPmlSBqqrQNA26rv8agWVdD2GKReymznGUzXblOJfDVSGPF1l2L6zX61/QaRgnEPFFwhicm8XA9BT6Jic86acMLS6gIggfwmaziXa7/QnLskDW9xPwRWMYD29gNBTxZIwyEgxBqFZhmqZ70GsajQbINlPC8kkBwQu2K/6zB/j2rlEVn2k6i6ZBd2HilkM0dY9YuoytDOfJZprFfCIL1TDx3bjCnRyHlWQe/uQdAjTJGk3USSBVxswBQ4XGz8J4poSlwxusnhY9Ze/C4fglFL0HoSA84om+jSjWINNa/AVJkkBUxYCuGVCVtx45q/OLnZXoBdu2QZw+OZv/oNVq4RWMbRuU2dqTMQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Start vivado&quot;
+        title=&quot;Start vivado&quot;
+        src=&quot;/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-bf66f.png&quot;
+        srcset=&quot;/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-e6e4d.png 300w,
+/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-04aa4.png 600w,
+/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-bf66f.png 1200w,
+/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-7827d.png 1800w,
+/static/001_start_vivado-5a4960ca9387ff2e96076887fa0823a5-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Create project
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/002_vidado_create_project-e617be83b0d735d36dad5393753da498-b154b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 800px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 87.87499999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAAsSAAALEgHS3X78AAABEklEQVQ4y+2Uy07DMBBF89WwqNhApVIhFnwHO36ATf8gC5SkcWLiPJrYeTovKdLFDgIJKrUVbGPp+HpG8vXMwmM83a2wvV/j8WGD7eYWN6trxdWfMYZhQJZlKMsC/RBDSongPUDIQjDG4BEPLGBI0xR935/FmKYJTdMgz3PoJdWZej58BXFcpRTUp/Ddz5yOtXrERy4EeMaV5hBczMUY+LXqsoJjOyAugWM5sC0bexVbbzbcvYskPiCOYkRhjCRK5sp1rCmK4tjwkrZOtrwYLoaL4SWGnfroAaUwTROc8/8b6m0cx2+6rjtJI1vQqAI71D/zakppjLKq0bbt2Ze/LolS4vmV4WUXzXmd0zqPMDXOPgCaTFTmiCKMKgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Create project&quot;
+        title=&quot;Create project&quot;
+        src=&quot;/static/002_vidado_create_project-e617be83b0d735d36dad5393753da498-b154b.png&quot;
+        srcset=&quot;/static/002_vidado_create_project-e617be83b0d735d36dad5393753da498-49a13.png 300w,
+/static/002_vidado_create_project-e617be83b0d735d36dad5393753da498-99713.png 600w,
+/static/002_vidado_create_project-e617be83b0d735d36dad5393753da498-b154b.png 800w&quot;
+        sizes=&quot;(max-width: 800px) 100vw, 800px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Choose RTL project
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/004_vivado_rtl_project-4c5daea97b1457dd6c75ab30ff2cf93e-b154b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 800px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 87.87499999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAAsSAAALEgHS3X78AAABjUlEQVQ4y+1U20rDQBDNb4uIoEIt4oPf4Zs/4Is/obVN0tw2adIkm6QV0nKcs0mtFaStgk8GDrsz2T07c2Z2rbvLUwyvr3B7M8BwcIHzs5NfwYpVDGfiYPTyikpX0FpDlxpt2+LYT9fPsFarFb5ivV7/CG37BqtpGsySBFGokOc5qqpCXdWo69rMd6A5bv3MhusIzheLBazlcokwTDAZ2xiPxnAdF7ZIQBls8Tm2IwfOUOQF0iRFlmVIZ52dZ3OZd74szQyxRVaVZGajwcSGN/XgTlwZfaRpv0EwE6LNZhLyIII2weAMIQ3P9QxBGIQoy7LHNiWi+TwXqTp5Ohno+yCkdiqIoJSSKFKzmOA/LjoGhjCJk04zSTfwA6MLU6VfSVvxELaXipQZ6Wd03xJSZN8LJO1pRyAbqE3Sk5EgFpRFeWiEsaksK6zCLopUdGVEUW/PpaIHpXysRv+Ef0DIDmel92H7WDRwwxJ+rHf+bx4Mq5DrxVux72S+Jqad5hXuH308PIXGv2lwthXv+Tu8MUvSbYqOswAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Choose RTL project&quot;
+        title=&quot;Choose RTL project&quot;
+        src=&quot;/static/004_vivado_rtl_project-4c5daea97b1457dd6c75ab30ff2cf93e-b154b.png&quot;
+        srcset=&quot;/static/004_vivado_rtl_project-4c5daea97b1457dd6c75ab30ff2cf93e-49a13.png 300w,
+/static/004_vivado_rtl_project-4c5daea97b1457dd6c75ab30ff2cf93e-99713.png 600w,
+/static/004_vivado_rtl_project-4c5daea97b1457dd6c75ab30ff2cf93e-b154b.png 800w&quot;
+        sizes=&quot;(max-width: 800px) 100vw, 800px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    
+*Select Nexys 4 DDR
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/005_vivado_select_nexys4_ddr-1359172b60cda205bcc8f7ee034c146f-b154b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 800px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 87.87499999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAAsSAAALEgHS3X78AAAB00lEQVQ4y6VT3U7bMBj1a08TmrRNKghxwXPsjgfYLgZCbHAzxk+BIkFL05bESWzHSeOkB39uUyU0LRJYOvKXY+f4+2X73z5jZ/s79nY72Ol8xZetTx8Cex5P0LvtoXfTQxzFkEJCxHaXytlSSihri1i48yiMYHKDtiVUF6wsS9RRFMVyr/D6bB2MycCyLHNehGGIyeTZkubdyPMcLE0zRKoEjw10Zhpe0aW6p4SKq/Z6NMSxVGuXG53opetkU95Sna4NjwSSJHE5VSpxUU6n03nIIQ+dCOd8JYw0Te3Z/Ef6YdOihxi90r3qov84QBRF7qXXGI9G8IOgwcW2E4ZPw2X+Pc9zHCMPyP3ZbLb25bazOlfZFKETfGu1CZIT3Ocu15ktLH0HNgqmbO5GPIMXaPiyaAVXBcKkbEKt2qOJDxbEGocXEkeXCU7vy1ac3JkWvlix7/sLwXVCmwT/3uX4eebj93+B42uNP7f5XJALjX+PZiPOLS4GRQOXLXbfWxSF2oWG/6NVdo2t7aSQIJWcQCTNZB1tXDUQVGUaCvp2faiUJazoW6B786ZO8DCMMRiLxnnV8CyyodK0UOibIISwEzOGzyV+/Brg4HDoeBKhnQfc9eELW0hP1soOd0oAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Select Nexys4 DDR&quot;
+        title=&quot;Select Nexys4 DDR&quot;
+        src=&quot;/static/005_vivado_select_nexys4_ddr-1359172b60cda205bcc8f7ee034c146f-b154b.png&quot;
+        srcset=&quot;/static/005_vivado_select_nexys4_ddr-1359172b60cda205bcc8f7ee034c146f-49a13.png 300w,
+/static/005_vivado_select_nexys4_ddr-1359172b60cda205bcc8f7ee034c146f-99713.png 600w,
+/static/005_vivado_select_nexys4_ddr-1359172b60cda205bcc8f7ee034c146f-b154b.png 800w&quot;
+        sizes=&quot;(max-width: 800px) 100vw, 800px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Project Summary
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/006_vivado_project_summery-068485493f0bc946c545ee9cfee11fa8-b154b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 800px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 87.87499999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAAsSAAALEgHS3X78AAABMUlEQVQ4y+2US0vDQBSF86t1UdyoUIu48H/4I1y7kELEWB9NMkmbTCaZ5v2AwHFuQrvQlMa67cCZYebCd2cGztHuryaY3Vzj7naK2fQSF5NzpbOjpdV1DSEE4niDqvaQZRmYzZRsrBwXlmmrWoyqqkZJa9u2g0gpQUPGKdYeRxAIcJ9DbFcu4Ht+tw940NUHgfgxCGiaDNbSAjNZf1uLgXsED3eN8iwfB6RD27RgvBhYfplwmAPXXSFJknFPHgJ+LN4xf57jzVggz/PR/7cXWJblnyAHgf/RCXgCHgMslc0clSy6riMMQxRF0aUP+ZVCIFJngR/s9e4vIE1N0+xELhkSWZBSiRrSvmssM9jrBNGmr5G0OEm74qHOaZr2KaPAW38/vYZ4eHShf0rISCKKInwDqFZUtHAYRUYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Project summary&quot;
+        title=&quot;Project summary&quot;
+        src=&quot;/static/006_vivado_project_summery-068485493f0bc946c545ee9cfee11fa8-b154b.png&quot;
+        srcset=&quot;/static/006_vivado_project_summery-068485493f0bc946c545ee9cfee11fa8-49a13.png 300w,
+/static/006_vivado_project_summery-068485493f0bc946c545ee9cfee11fa8-99713.png 600w,
+/static/006_vivado_project_summery-068485493f0bc946c545ee9cfee11fa8-b154b.png 800w&quot;
+        sizes=&quot;(max-width: 800px) 100vw, 800px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Vivado IDE is opened
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABbElEQVQoz6WS607DMAyF+/4vBALtB0+AhBD8mAajW0ebpEmaWy9bdYgNRSDBhISlT0lT99jHaXG9usHl1QoXV9e4vX/C3cMzHtd7rLcNNqXCZvc3nvcttpVGUVYKVW3g0oyykmikge0Cs6sEXrYl2rZltNZnEUKgiCHiOB0xzzNE6/EqPZYw1uNQHSBzkbrRaHWH4AP6vv8R5xyKcRg5iQTHacbXsC6yoLERMSakdJ6u61C4zmEaJxZU2iPEAT70SP0EoQx25R71aw2lFKyxCCH8irUWRQgefepxOp3Q1A2kkBCNgG51FsmzyzQizyfbNlmQPoox/m55ecmWx5HXBUqQUnIR6s57z1BBOldS5SLm85wt88Z23OEwDMwiTLPV2qBRDrXMtvIcqTh1TWK1pHMP3aXPLovUJ3jnWVAIxTapEkFzIQd/hZorlhtli/mCaHYE/U7viYlXEk8fe4JyyTp1S/n0TF1/EyT+G29nQUphGUu6vgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Basc Vivado IDE&quot;
+        title=&quot;Vivado IDE&quot;
+        src=&quot;/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-bf66f.png&quot;
+        srcset=&quot;/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-e6e4d.png 300w,
+/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-04aa4.png 600w,
+/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-bf66f.png 1200w,
+/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-7827d.png 1800w,
+/static/007_vivado_ide-8a7db8ad93917fcf734adebdda4f5abe-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;initializing-version-control-git&quot;&gt;&lt;a href=&quot;#initializing-version-control-git&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Initializing version control (git)&lt;/h2&gt;
+&lt;p&gt;After completing the wizard, open the TCL tab and type the following commands:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;go to your project folder: cd /home/&lt;username&gt;/Xilinx/projects/basic_microblaze/&lt;/li&gt;
+&lt;li&gt;create a src and blockdesign dir. The src directory will contain all the files that are under version control: exec mkdir -p src/blockdesign&lt;/li&gt;
+&lt;li&gt;create a directory for vhdl files: exec mkdir -p src/design&lt;/li&gt;
+&lt;li&gt;create a folder for the SDK (C sources): exec mkdir -p src/sdk/workspace&lt;/li&gt;
+&lt;li&gt;create a folder for the SDK hardware definition: exec mkdir -p src/sdk/hardware&lt;/li&gt;
+&lt;li&gt;initialize the repository: git init&lt;/li&gt;
+&lt;li&gt;apply first commit: git commit -am &quot;first commit&quot; &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;create-constraints-file-xdc&quot;&gt;&lt;a href=&quot;#create-constraints-file-xdc&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Create constraints file (XDC)&lt;/h2&gt;
+&lt;p&gt;Add an empty XDC in the  project folder: .../basic_microblaze/src/design/design.xdc. In the TCL window run
+git add src/design/design.xdc&lt;/p&gt;
+&lt;h1 id=&quot;create-the-block-design&quot;&gt;&lt;a href=&quot;#create-the-block-design&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Create the block design&lt;/h1&gt;
+&lt;p&gt;First step is to specify the architecture of the synthesized FPGA hardware blocks. Pay careful attention to configuration of the clock wizard, the MIG7 memory generator and polarity of reset signals. &lt;/p&gt;
+&lt;p&gt;Add the block design in the  project folder: /home/&lt;username&gt;/Xilinx/projects/basic_microblaze/src/blockdesign&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create the block design:
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/010_create_block_design-6ea94ccd451cb3b3dc15e39d5c1aef8e-4d316.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 709px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 40.19746121297602%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAYAAAD5nd/tAAAACXBIWXMAAAsSAAALEgHS3X78AAAA5klEQVQoz52Qy0oEMRBF87viQhHEUdBhVn6FPyHMH7h148qF0Ih0d9JJOu9Hz+baiQrOzlhwqKIWh7pF7i9PcX11gd3dDXbbL7a3G5yfnfwLEnyAkjPmWUErDaNt7bNUaKnDIcK4F5BlWfCbEDN8aMeFhJgyiFYK4zBWYozoPjjeugHDZCF0aqJnpgg1KKUwxlShcw50pGCUHXXOOTidMK7z9L0TXB6l896DFFERToyBrfwIBReQUiLn/GeqMIRQL0spNSGUR9cb9OtriqgcUoVKGxRpq/D5VeBh/47HpwHO2prKWYdPVp5HuspkJrYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Create Block Design&quot;
+        title=&quot;Create Block Design&quot;
+        src=&quot;/static/010_create_block_design-6ea94ccd451cb3b3dc15e39d5c1aef8e-4d316.png&quot;
+        srcset=&quot;/static/010_create_block_design-6ea94ccd451cb3b3dc15e39d5c1aef8e-75802.png 300w,
+/static/010_create_block_design-6ea94ccd451cb3b3dc15e39d5c1aef8e-281da.png 600w,
+/static/010_create_block_design-6ea94ccd451cb3b3dc15e39d5c1aef8e-4d316.png 709w&quot;
+        sizes=&quot;(max-width: 709px) 100vw, 709px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;The Block Design window:
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABH0lEQVQoz62S7U6DMBiFuf9rEjPvQP8sJjolurkg9Lv0g1GOLW4IzB9zscmThqR5OG97stXqDjd5jjy/xf36GQ/rAo8vezwVJTZvNTbvl/G6JSh2FFldETDKEEIApRRKaTRNA2MM9iVFRQQYV6BHCFPgsoFQ5xAqke1KhU/mwHQYpNPlfIe/rsw0Zkz4L0IpJFrfjsIpdiHs+x5d140sAwxCrRWsscMBxli8RwbOebxLBandmXDJmTA9gLV2lux0+KqRUxLBxThC6H6k1z2KNVBSDUIZdyFUrImA1hpcpLFNxF5EqlN2MqdUSmp8bMuYWMce+iMtvA84HPpf73BKCN1cKIVBFXtJah2rFAvM5Ej6mXcezrrv3Tm07bwd6fsLP2dYaRYVSsMAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Block Design Window&quot;
+        title=&quot;Block Design Window&quot;
+        src=&quot;/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-bf66f.png&quot;
+        srcset=&quot;/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-e6e4d.png 300w,
+/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-04aa4.png 600w,
+/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-bf66f.png 1200w,
+/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-7827d.png 1800w,
+/static/011_vivado_block_design_window-dbf64634943fcebfa7d5bf303fba6160-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;microblaze&quot;&gt;&lt;a href=&quot;#microblaze&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Microblaze&lt;/h2&gt;
+&lt;p&gt;Click on the &apos;+&apos; button and search for &quot;Microblaze&quot;. After adding the Microblaze processor click on it to customize it:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;wizard page 1: enable the Debug Module (MDM) and enable caches.&lt;/li&gt;
+&lt;li&gt;wizard page 2: next&lt;/li&gt;
+&lt;li&gt;wizard page 3: select 16 kB instruction cache, and a 16 kB data cache.&lt;/li&gt;
+&lt;li&gt;wizard page 4: next&lt;/li&gt;
+&lt;li&gt;wizard page 5: Enable AXI data interface&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;A green box will appear containing a link to &quot;Run block automation&quot;. Clicking this Vivado will create additional IP blocks to support the Microblaze. When clicking &quot;Run block automation&quot; a settings window will open:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Choose local memory 16 KB&lt;/li&gt;
+&lt;li&gt;Choose cache configuration: 16 KB&lt;/li&gt;
+&lt;li&gt;Choose Debug module Debug Only&lt;/li&gt;
+&lt;li&gt;Select enable Peripheral AXI Port&lt;/li&gt;
+&lt;li&gt;Select enable interrupt controller&lt;/li&gt;
+&lt;li&gt;Choose to create a new clocking wizard (100 MHz)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The block design will now contain a Microblaze, Local memory, Processor System Reset, Interrupt controller (and concat block), Clocking wizard, AXI interconnect.&lt;/p&gt;
+&lt;ol start=&quot;7&quot;&gt;
+&lt;li&gt;Later another Processor System Reset block will be added. Rename the existing one to &quot;cpu_sys_reset&quot;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;screenshots-1&quot;&gt;&lt;a href=&quot;#screenshots-1&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Screenshots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Add Microblaze
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAAAeUlEQVQoz+WQywrDMAwE8/9/GeipRKmk1rXBj03lXJJDAo2OWRhkbDSwHsbHE9OsmNl4/84CeilYPmD9D9sdTCQsSCkhhIAYIzzpQhXtwlqrX8gadhduIdmfTQSiFavtEn5TRmttxzZnb4fCs5RSOjmv0y28VPlewgVjcmZGhloAYwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Add Microblaze&quot;
+        title=&quot;Add Microblaze&quot;
+        src=&quot;/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-bf66f.png&quot;
+        srcset=&quot;/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-e6e4d.png 300w,
+/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-04aa4.png 600w,
+/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-bf66f.png 1200w,
+/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-7827d.png 1800w,
+/static/012_add_microblaze-ae5912698106d01dcc151f5b59177d88-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Microblaze customize genera
+l
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABYklEQVQ4y6WTa26DMBCEuf9B+qNSVaUhPQAn6AWSH+GRCMzDvDEhU2YjKKnUJG1XGhkM/na8a1vrl2e8rV7xvlljY7/9S6vVEyydl6iqSlSWJZqmwel0+pP6voOVJAmiKEKu8ytwURTI0gz8nmWZzD0ii7B0XERndV3DGCPZOHZdJzKmGRN9JcnzHHo0UOQFhmG4ktX3vYA4TiKM8v0AvucL6Hw+39UMVErheDzKQmrpNCDU9eHtPXiuB3fvShKOnHNHHYKDGBEgAVpr7HY72TbVtq0AWdckTqDiFGXVoqq72b3pzPxM2OyQExOQDWB9JiDfVahQlA0yXaLt2M3h/pa5cLvdwnEc2LY9b5lu0yRFohIZYxWLs59iBrJWy1h2mSB2k67vhQB5xqIwkmbQEa1PQCZjHXWm5eeHgFz0PSagwPtL3R6Jm8DLgTa/ljV1dCnCpiN0S2wer6rzESIILzfoEyGmMYFrPiWjAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze customize general&quot;
+        title=&quot;Microblaze customize general&quot;
+        src=&quot;/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-bf66f.png&quot;
+        srcset=&quot;/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-e6e4d.png 300w,
+/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-04aa4.png 600w,
+/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-bf66f.png 1200w,
+/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Microblaze customize instructions
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/014_microblaze_customize_instructions-c54093d08ca5745d0bef6f04be973d85-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABTUlEQVQ4y6WTa06DQBSF2f9C/GFiTFvqAliBG2h/NgQozAOGN0fONVNt1UlVkpMh8/jmHO4l2j09Yrt5xst+h328/Zc2mwdE2tRomkZU1zXatsU0TX/SOPaIyrJEnucw2lyBrbVQlQLXlVIyd48iwqr1EJ055zAMg9zGseu69X3GPH+o73vZ+3nOi/PROI4C4uhFGFWeS5yLM6yx6LteLlqW5UcxnQCLokCaphKT8k55I2GucejaToChR4AEaK1xPB4FQDGqRF4hWmnUdi2Wa0WMHATyoAeyAMaYC5BOGbsqK3FJYMjlJTJBh8MBSZIgjuMvkZmiqZv7IhN4u9FXucje24kXGOOQFQbWDeGisMfy9SBd0BEXPJCuGJf9+CuHt48A14/PywiSFGO4Za7a5jsgq+lFt34MiXsiX9HbBd9CIfFXY4rkNcMpU9Ihb1BcNACM0josAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze customize instructions&quot;
+        title=&quot;Microblaze customize instructions&quot;
+        src=&quot;/static/014_microblaze_customize_instructions-c54093d08ca5745d0bef6f04be973d85-bf66f.png&quot;
+        srcset=&quot;/static/014_microblaze_customize_instructions-c54093d08ca5745d0bef6f04be973d85-e6e4d.png 300w,
+/static/014_microblaze_customize_instructions-c54093d08ca5745d0bef6f04be973d85-04aa4.png 600w,
+/static/014_microblaze_customize_instructions-c54093d08ca5745d0bef6f04be973d85-bf66f.png 1200w,
+/static/014_microblaze_customize_instructions-c54093d08ca5745d0bef6f04be973d85-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+     &lt;/li&gt;
+&lt;li&gt;Microblaze customize cache
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/015_microblaze_customize_cache-d9aac0ba21ee8ae263e8bdfb6a00f775-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABYElEQVQ4y7VSW26DMBDk/gfpR6WqSkJ6AE7QCySfFQGEH9iAeW09izYlrVQ1rWpphL3szj5mk8PTI+13z/RyPNAx3f8Ju90DJcY68t4znHPUdR1N0/QrjGOgpK5rKsuSrLE3xE3TkFaa8F9rzbafIAGZikGorG1bGoaBs+HbdT3bcZ/nmRFC4ERb2xbJOI5MhK8AzkBVVmuFkQDOSIQOyqIk1zj2FaJlWT4Iq6qiPM+5TUAqRVBjGzLasN35NbGqVXw7UkqxbxgmwmFCOBpj6Hw+c3tA3/dM6ONMEGyt5fn4dhWMbXHmSMTJxw0hAoVQBBJCzAt3eUvbYgt94Leca8sgOp1OlGUZpWl6bZnbjK21sVURap5mHoN3ntWXNbsh3GbBkWBU0EelxYdFiIQgkzX5Qmhilkt+4Z+oBGoJ4b3nWuHn8y+EEET28R4kouAWIJMV+g4YE4TJXgt6KzSv1zv1NjM47BxjZwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze customize cache&quot;
+        title=&quot;Microblaze customize cache&quot;
+        src=&quot;/static/015_microblaze_customize_cache-d9aac0ba21ee8ae263e8bdfb6a00f775-bf66f.png&quot;
+        srcset=&quot;/static/015_microblaze_customize_cache-d9aac0ba21ee8ae263e8bdfb6a00f775-e6e4d.png 300w,
+/static/015_microblaze_customize_cache-d9aac0ba21ee8ae263e8bdfb6a00f775-04aa4.png 600w,
+/static/015_microblaze_customize_cache-d9aac0ba21ee8ae263e8bdfb6a00f775-bf66f.png 1200w,
+/static/015_microblaze_customize_cache-d9aac0ba21ee8ae263e8bdfb6a00f775-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+     &lt;/li&gt;
+&lt;li&gt;Microblaze customize debug
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/016_microblaze_customize_debug-1c04fb68b8cf85c9190fa0c70d9b843f-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABRklEQVQ4y7VS206DUBDk/z/EBxNjaKkfQPwC38truRU4cLhfRmbpIVVRq8ZNJpA9u7OzF2v/cI+d/Yinwx4HZ/cn2PYdLJVrlGUp0FqjrmsMw/Ar9H0LK0kSRFGEXOVviIuiQJZm4HuWZeK7BRbJ0jmJyqqqQtd1Uo3fUi8FqrJCXdUXFb34xnHchMUAEvFrQLKubRFHMcIghC60BC/vS3vTNH3AShjHMXzflzYJo7TIl7bP8RkqVWiaRjphzpYJIQmUUvA8T4IJJhqFURgJKVumn8UYw4KbCvlgCM2ChNAoTDIh5NLoN0vaUrm2zKDj8QjXdeE4ztoyE1mMgVsz+3SGHPK1mS1zGVTH+VLddyaEalYR+IHcEM+DlQzhT21V+N7+hbCdtyz3eAOapkV7+bfMRq9BMnNCX4Fj4uKeX0KcwvkS8hyv7Ug0kDZagvoAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze customize debug&quot;
+        title=&quot;Microblaze customize debug&quot;
+        src=&quot;/static/016_microblaze_customize_debug-1c04fb68b8cf85c9190fa0c70d9b843f-bf66f.png&quot;
+        srcset=&quot;/static/016_microblaze_customize_debug-1c04fb68b8cf85c9190fa0c70d9b843f-e6e4d.png 300w,
+/static/016_microblaze_customize_debug-1c04fb68b8cf85c9190fa0c70d9b843f-04aa4.png 600w,
+/static/016_microblaze_customize_debug-1c04fb68b8cf85c9190fa0c70d9b843f-bf66f.png 1200w,
+/static/016_microblaze_customize_debug-1c04fb68b8cf85c9190fa0c70d9b843f-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+     &lt;/li&gt;
+&lt;li&gt;Microblaze customize bus
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/017_microblaze_customize_bus-7a842ebca98ae59936687c103629076c-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABOUlEQVQ4y6WSW26DMBBF2f9C+lGpqkhIF8A+wjcJFIwxTwO3vqMapZEKSTvSleXHHM8rOL694hC+4+N0xCk6/Eth+IKg0gZN04iMMei6DtM0/UnWDgiKokCWZdCV/gGu6xqqVOC9UkrOHlFAWOmcGFnbthjHUX7j2vf9twbM8yyy1qJru3V/r4APCOLqRRjFyPIsR3bNoZXLwDRYluVXrcA8z5GmqaRJ+UiZMsXouafDLpCAqqqQJIk4UkyTANaz+CxdSUr5aBxGbJkA6eiBvkEeSLipjUTMui3APpApE3Q+nxHHMaIoWlNmZKVLmR/4RnHdrSEf3Zp3ZkOoWtdy9lANK9fJS3qRGWqbVi48UDru6mZHuzpw3U353jzwWdsEDsOwzuMzCnxHb0WYH6EtsUwcfo4Xx0prjS/PfTYYMQw5+AAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze customize bus&quot;
+        title=&quot;Microblaze customize bus&quot;
+        src=&quot;/static/017_microblaze_customize_bus-7a842ebca98ae59936687c103629076c-bf66f.png&quot;
+        srcset=&quot;/static/017_microblaze_customize_bus-7a842ebca98ae59936687c103629076c-e6e4d.png 300w,
+/static/017_microblaze_customize_bus-7a842ebca98ae59936687c103629076c-04aa4.png 600w,
+/static/017_microblaze_customize_bus-7a842ebca98ae59936687c103629076c-bf66f.png 1200w,
+/static/017_microblaze_customize_bus-7a842ebca98ae59936687c103629076c-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+     &lt;/li&gt;
+&lt;li&gt;Microblaze block automation
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/018_microblaze_run_block_automation-476f153704eb0b679ebe32c507c58f5f-cbc2b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 870px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 73.2183908045977%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAACXBIWXMAAAsSAAALEgHS3X78AAABr0lEQVQ4y51T207bQBD1t6NCW4FQi0orvoEX/oDPoMEhCGLsxPFlL7bXt+R0ZgxGgpQAKx3N7OzM0dzWOzvax8mPI/w5/YlfJ8ciD79/wbevex/HwR68NEkQzkMEdwEW0RJhECJexCKNNjDKiLTWDndjURYl3QtY0hmF6AWK8g4eO2S5gdIWdV2jaZoRVVWJ7aX9LXjsrJVGGMW4f0iEXDIhOCIM7ueY3dyKD9tUpqByhSzNxMY6Q2uN9XoNj1n7voexNZZpCdf0eDr8xoTT6yn8iU8g+dfHzJ9hcjXB1J/S2w3ZrjGnlnVtNxD+7/BbmqRjf6OHEFEYIVklsNLXQrLcbDZjzJuEzjksF0sibqWcXWDinRkOw3Gjjaf61Ka2bV/F7CTkoGFAA6lWSqbedd3WmJ2EXPYqXslusp6uUpHbsnsXIe8iDyanNem6XtYlE73bmuW7eqhzLT+Es+Kd4xawnQfxYcKayuM1SahsJs51hVyVyBStjHHQRQ1bPZcvP4Untg38xlnJ93ODnyKSXD8SWgfDhGUzxng5lcBN/gyKssLvi1ucXwZQNP2YqvgH8vpyzqED+twAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze block automation&quot;
+        title=&quot;Microblaze block automation&quot;
+        src=&quot;/static/018_microblaze_run_block_automation-476f153704eb0b679ebe32c507c58f5f-cbc2b.png&quot;
+        srcset=&quot;/static/018_microblaze_run_block_automation-476f153704eb0b679ebe32c507c58f5f-bd233.png 300w,
+/static/018_microblaze_run_block_automation-476f153704eb0b679ebe32c507c58f5f-8d807.png 600w,
+/static/018_microblaze_run_block_automation-476f153704eb0b679ebe32c507c58f5f-cbc2b.png 870w&quot;
+        sizes=&quot;(max-width: 870px) 100vw, 870px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+     &lt;/li&gt;
+&lt;li&gt;Microblaze block design result
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABRklEQVQoz7WSy07DMBBF+/8fwycgVqxYoKpSU9qmbZqH83ASO37FCb1MglQJkBCgMtLV2F6cuTPjxeN+iWcWkF6wLEPSDqt6h7UIEYjDr7TiWyyM87hcLjcTAQfcMmZgIwzOeQtW6zkXrUXEWhxjjrwSuHs4IavMz4GiMzjmEnGlKLdIuMA2KrHeJQijHPdPKd1rMIJnRYu0aHBOSyR5Dd50mMY2y/p3oDY9FEkoh7SU6DSdOwfnenLcIKvVnPNqAhUIDik2MYEbi1bqq7sJOgPHcZwfOuMRJhxlowjqqJDB/lwgIvebE0OUMMQpw4nchVmLSg2oW/UVOG1ngnKhaVYCjVSw1kEpjd77q6xzV8mOWqWCCeNgXIJLOxv6sGXnRwjtMYyv3w7e9Z5mLVBLgywvERwZctlDfgb+JabuNDGUHf7nH74BiX9SmB3WRScAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Microblaze block design result&quot;
+        title=&quot;Microblaze block design result&quot;
+        src=&quot;/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-bf66f.png&quot;
+        srcset=&quot;/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-e6e4d.png 300w,
+/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-04aa4.png 600w,
+/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-bf66f.png 1200w,
+/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-7827d.png 1800w,
+/static/019_microblaze_blockauto_result-3954d65edf1983f265da778e04180efe-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+     &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;clocking-wizard&quot;&gt;&lt;a href=&quot;#clocking-wizard&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Clocking wizard&lt;/h2&gt;
+&lt;p&gt;Double click the &quot;clocking wizard&quot; to customize it:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;On the clock options page select &quot;single ended clock capability&quot; for the row &quot;primary&quot;.&lt;/li&gt;
+&lt;li&gt;On the output clocks page:
+2.1. Add two extra output clocks besides the existing 100 MHz clock: 200 MHz and 50 MHz.
+2.2 Also on the this page choose the reset type: active low&lt;/li&gt;
+&lt;li&gt;Finish the wizard and right click the &quot;clk_in1&quot; port. Select ake inputs external. A new external input will be created. Rename it to &quot;CLK100MHZ&quot;&lt;/li&gt;
+&lt;li&gt;Right click the &quot;resetn&quot; port. Select make inputs external. A new external input will be created. Rename it to &quot;reset_n&quot;&lt;/li&gt;
+&lt;li&gt;Connect the &quot;reset_n&quot; port to the  &quot;ext_reset_n&quot; port of the Processor System Reset block.
+These clocks are generated using the FPGA&apos;s built in MMCM which can be thought of as a kind of PLL. The 200 MHz will be used for the DDR2 controller, the 50 MHz for the Quad SPI Flash and external Ethernet LAN8720A chip. The reset button in on the Nexys4 DDR will output a &apos;0&apos; when pressed. To use this button for resetting the various IP blocks every reset input port has to be configured as &quot;active low&quot;. Renaming the ports is required to match the physical pin constraints in the XDC file. Add the following rows to the XDC file:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;set\_property -dict {PACKAGE\_PIN E3 IOSTANDARD LVCMOS33} [get\_ports CLK100MHZ]
+create\_clock -period 10.000 -name sys\_clk\_pin -waveform {0.000 5.000} -add [get\_ports CLK100MHZ]
+set\_property -dict {PACKAGE\_PIN C12 IOSTANDARD LVCMOS33} [get\_ports reset\_n]&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3 id=&quot;screenshots-2&quot;&gt;&lt;a href=&quot;#screenshots-2&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Screenshots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Add clocking wizard
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/020_add_clocking_wizard-bb3c088752ad8118f1870de38f4060d2-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAAA3UlEQVQ4y+WSy27DIBBF+f8PyaZKWlfJ93RVFAcbCgbzGKxbQ6Sqjpqkrbsr0tFII93DjIDtdw9oHrdonnY47J9X0TQbMG0snHOVlBJyzr+GKILJXuLUntD3Pay1lSJXSkFKia7roLX+FsYYMCLC5SmT8ldeEULUC7U2H8H22NY6juOCMshNoR0sYowL3BzkvJ2rx+jDgsHeEJbV9dt5jWmaFlD+mkT5urAEf3pKhqVEsJ7gfIKPhDCzShhCxAufX1pZCDWAH8U64Z+v/A+FIYQq+EzplU982b9HybwDlMI8j9VZ0CAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Add clocking wizard&quot;
+        title=&quot;Add clocking wizard&quot;
+        src=&quot;/static/020_add_clocking_wizard-bb3c088752ad8118f1870de38f4060d2-bf66f.png&quot;
+        srcset=&quot;/static/020_add_clocking_wizard-bb3c088752ad8118f1870de38f4060d2-e6e4d.png 300w,
+/static/020_add_clocking_wizard-bb3c088752ad8118f1870de38f4060d2-04aa4.png 600w,
+/static/020_add_clocking_wizard-bb3c088752ad8118f1870de38f4060d2-bf66f.png 1200w,
+/static/020_add_clocking_wizard-bb3c088752ad8118f1870de38f4060d2-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Options page 1
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/021_clocking_wizard_options-b20510e2455c0583aa836865a43a1402-4d1f3.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 62.5%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAABTUlEQVQ4y61S2W7DIBD0/39Qj6j5kb5EitrEGAzU5jI+prsojqomkaI2SCOwvDs7A1NtXp6weX3G9m3zEFTOObjeYRgG5Jz/jUprAyZNKRVEgtYaohaojzUa0UBKCdk0aAhKqfLfGHMV1bIs+LmmeUYIAdbaonwcR3DNvbggnInQe48hDeW8LPTtFFq1gzV7cnNA8EekqMGtdxEWhcYixngunKapDPLOnwbdUPgVRmiXoWxALS0SPQ7b7Lu+WHZ9f7bOAwzdeYoJv4Wsq3rffaCxHqLtsNuTHWpiNSsRNzPKXc4LxjyWM6u8SugTqQkZnU+QrSnxYctsL57IuZlJ+Lzi1rp5h7rVxd5KvO6cNR4aqYZjFk77OYcXhDQ9pgypDGVPlewdPg8ljxwlzlrXdWVAT7sQgmoUFAlotb2SQyJcs/eXVbHkR6CnR2R8A99K6J3NvGBbAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Clocking wizard options&quot;
+        title=&quot;Clocking wizard options&quot;
+        src=&quot;/static/021_clocking_wizard_options-b20510e2455c0583aa836865a43a1402-bf66f.png&quot;
+        srcset=&quot;/static/021_clocking_wizard_options-b20510e2455c0583aa836865a43a1402-e6e4d.png 300w,
+/static/021_clocking_wizard_options-b20510e2455c0583aa836865a43a1402-04aa4.png 600w,
+/static/021_clocking_wizard_options-b20510e2455c0583aa836865a43a1402-bf66f.png 1200w,
+/static/021_clocking_wizard_options-b20510e2455c0583aa836865a43a1402-4d1f3.png 1592w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Clocking wizard output options
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/022_clocking_wizard_output-b5e3ba428a293bdb5ade402c3f3e6b65-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABnElEQVQ4y6VT7W6DMAzk/R9kf6Z1Y+reZutUCpQASUj4JrRezqxV1amdtEU6JSTO+XwOwXr1SOHzE4UvK3pbv/4LYfhAgbENtW3LmKaJ5nn+M5wbKVBSUS5yklJS0zQMkGulCWdlWZK1lmGMuQvEBM45uh5QCqI8zznZPt1TvIspyzJ/qSatNQsAQdd1PCulmPQmocgEqwRRkiRUFAWTV7oiUxlOUuQFWWP5DPHRNrpNiIwITuLEKxOcHaouFQF935/XqOAmIbzE5c3HhqIootgTg3AcR6qqilWfvmFNmqasNJgmR7IeSXso25HUlgkRiBnl1XXNCYZh4G5ivvxGYjSSPRyGkd533p+qJSENfW5jJkIQuozyoAiXK710HlUdDgfeO60BJOGSh2n+hqPJzWeFTOq9QSnoLAYUs2rfbZDAw+PxyGdQedNDECIAPsEjEGM0vnwtNfVd/+PeXULngZKgBN6gnN/GXUIQ4dkss2Ef0QBcGr3vKPMauBdABRaXwN7y7hQ/XvbRzygf+0IIKovll0Rs1w/U+xl+fgEAxyv0hPpwCgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Clocking wizard output options&quot;
+        title=&quot;Clocking wizard output options&quot;
+        src=&quot;/static/022_clocking_wizard_output-b5e3ba428a293bdb5ade402c3f3e6b65-bf66f.png&quot;
+        srcset=&quot;/static/022_clocking_wizard_output-b5e3ba428a293bdb5ade402c3f3e6b65-e6e4d.png 300w,
+/static/022_clocking_wizard_output-b5e3ba428a293bdb5ade402c3f3e6b65-04aa4.png 600w,
+/static/022_clocking_wizard_output-b5e3ba428a293bdb5ade402c3f3e6b65-bf66f.png 1200w,
+/static/022_clocking_wizard_output-b5e3ba428a293bdb5ade402c3f3e6b65-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Updated block design
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABTklEQVQoz62Sy26DMBRE8//f1EVXXVVVlEYqSig04f0wYGMM2JDpNWmbqOqikXKlEQjBmZlrVk/vG6xTh7TDpvBJLraVizfuweH+TdqyPVZq0DidTncTAQ3uOQswyjjiUiAqBF1bJEzCPZYoKom1k+DhucA0Tf8HeiFDVCkcco5j3sCLGZyPEjs/wusuweNLhpieZ6xFpzQZiUVtN8Cu7FvaTGcgb3tINSKnRKxRy31KaZtWUWqOyKYnYF5W1KbCPiSzqAETIyWff9JZ6AK0daZ5XuoekhpCkkHXUwoOPyZAUMDxQhzCmKA13CBHUCp047xA/gTauDFVCinJOGr0wwCt9dnsS6KVZKRQNxysqsEF7ZvS57WEUPoCNMbQxwalGJAS9BpyLfuenaxqERQElx3tmZLToaZND0P1b/pt7L5+m2gzQ/YGwzhdTvme8wn2iVJtaf9CGwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Clocking wizard integrated&quot;
+        title=&quot;Clocking wizard integrated&quot;
+        src=&quot;/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-bf66f.png&quot;
+        srcset=&quot;/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-e6e4d.png 300w,
+/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-04aa4.png 600w,
+/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-bf66f.png 1200w,
+/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-7827d.png 1800w,
+/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Make ports external
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABVElEQVQoz62SW2+DMAyF+/9/2B76NHWteuVWoEAgkEAIIbCemTxU68O0TaqlI1vI/nJssXrzNnjPD6QTNmVAumBbX7CXPg4y+Je2/IyVNhb3+/1lIuCEef4Ea3pwOeBWCpRCk3pkpQSnvN5lOF47N/BbOGA/jDhGDHHZIWISKW+xDwt8nFIU9MB6x7DxFGRn0PUjlq0a0UFI5ervckBrZ4hugFQj8ooaKS91WjSIbiW8mDkd/QQ5q3GJcvi5RMgUOm0f7h7AJeZ5hhkneGmDuJBQPblRGlFWOeeHMMcpSBFeE8RZiXPCkdYGDbl+Asq2R68HB2hpneWWlVAYraXv2j00UOOipa54Q70aslVOvGnRtJrA2s2vlDYwxjiA0iMKYcDq7sejL9AlgrREwgR4LbD3U2Q0x1vzvPJfZKfJ5ZHOM9oJ0zQ7h7K3sPS3PICvipcDvwCexlHv2uZRugAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Clocking wizard external port&quot;
+        title=&quot;Clocking wizard external port&quot;
+        src=&quot;/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-bf66f.png&quot;
+        srcset=&quot;/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-e6e4d.png 300w,
+/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-04aa4.png 600w,
+/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-bf66f.png 1200w,
+/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-7827d.png 1800w,
+/static/024_external_clocking_ports-1c17d51d0580c2c3e5278477925543a2-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;axi-smartconnect&quot;&gt;&lt;a href=&quot;#axi-smartconnect&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI SmartConnect&lt;/h2&gt;
+&lt;p&gt;In a first attempt I added a DDR2 controller. The &apos;run block automation&apos; reappeared. After running it an &quot;AXI SmartConnect&quot; appeared. I wondered why this was a different component comparing it to the &quot;AXI interconnect&quot; created by the Microblaze Block Automation. The documentation notes that both &quot;Axi SmartConnect&quot;  and &quot;Axi interconnect&quot; have similar functionality and that &quot;Axi SmartConnect&quot; supersedes &quot;Axi interconnect&quot;. In all the examples I saw using Microblaze and DDR RAM there were two &quot;Axi interconnect/smartconnect&quot; blocks. In this design I will use one to keep things simple. Have to check later how this impacts performance.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Delete the existing &quot;AXI interconnect&quot;&lt;/li&gt;
+&lt;li&gt;Add an &quot;AXI SmartConnect&quot;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Double click the &quot;AXI SmartConnect&quot; it to customize:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Select the number of slaves: 3&lt;/li&gt;
+&lt;li&gt;Select the number of masters: 7&lt;/li&gt;
+&lt;li&gt;Select the number of clocks: 2&lt;/li&gt;
+&lt;li&gt;Enable reset input: has resetn input: 1&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Connect the block:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Connect microblaze M_AXI_DP, M_AXI_DC, M_AXI_IC to the input AXI slave interfaces: S00_AXI, S01_AXI, S02_AXI&lt;/li&gt;
+&lt;li&gt;Connect the &quot;clockin wizard&quot; 100Mhz clock (clk_out1) to the aclk pin.&lt;/li&gt;
+&lt;li&gt;Connect the &quot;processor system reset&quot; output port &quot;interconnect_aresetn&quot; to the resetn input&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The AXI SmartConnect is configures such that all the memory interfacing (including IO mapped peripherals) runs through it. Two clocks are required because the DDR2 controller is part of a different clock domain.&lt;/p&gt;
+&lt;h2 id=&quot;axi-gpio&quot;&gt;&lt;a href=&quot;#axi-gpio&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI GPIO&lt;/h2&gt;
+&lt;p&gt;The AXI GPIO IP block is used to control general purpose input/output pins. In our case only outputs are used to control an RGB LED on the Nexys4 DDR board. Add the AXI GPIO block, double click to configure:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Select &quot;All outputs&quot;&lt;/li&gt;
+&lt;li&gt;Select &quot;GPIO width&quot; as 3 pins.&lt;/li&gt;
+&lt;li&gt;Select default value: &quot;0x10&quot;.&lt;/li&gt;
+&lt;li&gt;Finish the wizard and right click the GPIO port. Select make external. A new external output will be created. Rename it to &quot;GPIO&quot;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Connect the block:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the M00_AXI of the &quot;AXI SmartConnect&quot; to the S_AXI input.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the &quot;clocking wizard&quot; 100Mhz clock (clk_out1) to the s_axi_aclk pin.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the &quot;processor system reset&quot; output port &quot;peripheral_aresetn&quot; to the s_axi_aresetn input&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add the following rows to the XDC file:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;set\_property -dict {PACKAGE\_PIN G14 IOSTANDARD LVCMOS33} [get\_ports {GPIO\_tri\_o[0]}]
+set\_property -dict {PACKAGE\_PIN R11 IOSTANDARD LVCMOS33} [get\_ports {GPIO\_tri\_o[1]}]
+set\_property -dict {PACKAGE\_PIN N16 IOSTANDARD LVCMOS33} [get\_ports {GPIO\_tri\_o[2]}]&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The GPIO width is chosen to 3 to be able to control the Red, Green and Blue channel of the RGB LED. THe output is renamed to &quot;GPIO&quot; so that physical pin constraints can be configured (later on) in the XDC file.&lt;/p&gt;
+&lt;h2 id=&quot;axi-uartlite&quot;&gt;&lt;a href=&quot;#axi-uartlite&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI UARTlite&lt;/h2&gt;
+&lt;p&gt;The AXI UARTlite IP block allows the processor to communicate via serial port to the outside world. The C/C++ print routines will make use of this serial port. Add the IP and customize it by double clicking:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Select 38400 as a Baudrate&lt;/li&gt;
+&lt;li&gt;Finish the wizard and right click the UART port. Select make external. A new external output will be created. Rename it to &quot;UART&quot;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Connect the block:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the M01_AXI of the &quot;AXI SmartConnect&quot; to the S_AXI input.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the &quot;clocking wizard&quot; 100Mhz clock (clk_out1) to the s_axi_aclk pin.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the &quot;processor system reset&quot; output port &quot;peripheral_aresetn&quot; to the s_axi_aresetn input&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The interrupt pin is not connected.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add the following pin constraints to the XDC file:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;set\_property -dict {PACKAGE\_PIN D4 IOSTANDARD LVCMOS33} [get\_ports UART\_txd]
+set\_property -dict {PACKAGE\_PIN C4 IOSTANDARD LVCMOS33} [get\_ports UART\_rxd]&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The serial port is accessible via USB. It uses the same USB port which is also used for JTAG and FPGA/Microblaze programming.&lt;/p&gt;
+&lt;h2 id=&quot;axi-interrupt-controller&quot;&gt;&lt;a href=&quot;#axi-interrupt-controller&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI Interrupt controller&lt;/h2&gt;
+&lt;p&gt;The interrupt controller signals the Microblaze once an external event needs to be handled by the processor. Interrupts are generated by the Timer and Ethernet component. &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Add a Concat block if it is not already connected to the interrupt controller.&lt;/li&gt;
+&lt;li&gt;Connect &quot;dout&quot; of the Concat block to intr of the interrupt controller&lt;/li&gt;
+&lt;li&gt;Connect &quot;interrupt&quot; output of the Interrupt Controller to the Microblaze &quot;interrupt&quot; input.&lt;/li&gt;
+&lt;li&gt;Connect the &quot;clocking wizard&quot; 100Mhz clock (clk_out1) to the &quot;s_axi_aclk&quot; pin.&lt;/li&gt;
+&lt;li&gt;Connect the &quot;processor system reset&quot; output port &quot;peripheral_aresetn&quot; to the s_axi_aresetn input&lt;/li&gt;
+&lt;li&gt;Connect the &quot;processor_clk&quot; input to &quot;s_axi_aclk&quot;.&lt;/li&gt;
+&lt;li&gt;Connect the &quot;processor system reset&quot; output port &quot;mb_reset&quot; to the processor_rst input.&lt;/li&gt;
+&lt;li&gt;Connect the axi bus &quot;s_axi&quot; input to the &quot;M02_axi&quot; output of the AXI SmartConnect.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Note that the intr input is initially displayed as intr[0:0]. This will update automatically to intr[0:1] once the design is validated.&lt;/p&gt;
+&lt;h2 id=&quot;axi-timer&quot;&gt;&lt;a href=&quot;#axi-timer&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI Timer&lt;/h2&gt;
+&lt;p&gt;The Timer component implements a programmable timer. Add an AXI Time IP block. Configure by double clicking:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The Default settings should be ok.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Connect the block:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Connect the &quot;M03_AXI&quot; of the AXI SmartConnect to the &quot;S_AXI&quot; input.&lt;/li&gt;
+&lt;li&gt;Connect the Clocking Wizard &quot;clk_out1&quot; (100Mhz clock) to the &quot;s_axi_aclk&quot; pin.&lt;/li&gt;
+&lt;li&gt;Connect the Processor System Reset output port &quot;peripheral_aresetn&quot; to the &quot;s_axi_aresetn&quot; input.&lt;/li&gt;
+&lt;li&gt;Connect the interrupt pin to &quot;in0&quot; of the Concat block (which is connected to the interrupt controller).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;axi-ethernetlite&quot;&gt;&lt;a href=&quot;#axi-ethernetlite&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI Ethernetlite&lt;/h2&gt;
+&lt;p&gt;The Ethernetlite component presents a memory mapped ethernet device to the Microblaze. In the C user application running on the Microblaze the lwIP stack will be used to connect to the Internet.  The Ethernetlite component presents a MII interface. The Nexys4 DDR contains a LAN8720A chip which already implements part of this interface. That chip presents a so called reduced MII interface. Xilinx has a MII_to_RMII IP block available to convert. Add both the &quot;AXI Ethernetlite&quot; and &quot;Ethernet PHY MII to Reduced MII&quot; to the block design.&lt;/p&gt;
+&lt;p&gt;Configure the AXI Ethernetlite block:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Enable Internal Loopback&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Create two external output ports:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create an output port &quot;ETH_RST_N&quot; of type &apos;other&apos;.&lt;/li&gt;
+&lt;li&gt;Create an output port &quot;ETH_CLK&quot; of type &apos;clock&apos;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Connect the blocks:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Connect the &quot;M04_AXI&quot; of the AXI SmartConnect to the &quot;S_AXI&quot; input.&lt;/li&gt;
+&lt;li&gt;Connect the Clocking Wizard &quot;clk_out1&quot; (100Mhz clock) to the &quot;s_axi_aclk&quot; pin.&lt;/li&gt;
+&lt;li&gt;Connect the Processor System Reset output port &quot;peripheral_aresetn&quot; to the &quot;s_axi_aresetn&quot; input.&lt;/li&gt;
+&lt;li&gt;Connect the interrupt &quot;ip2intc_irpt&quot; pin to &quot;in1&quot; of the Concat block (which is connected to the interrupt controller).&lt;/li&gt;
+&lt;li&gt;Connect the Clocking Wizard &quot;clk_out3&quot; (50Mhz clock) to the &quot;ref_clk&quot; pin.&lt;/li&gt;
+&lt;li&gt;Connect the Clocking Wizard &quot;clk_out3&quot; (50Mhz clock) to the &quot;ETH_CLK&quot; external pin.&lt;/li&gt;
+&lt;li&gt;Connect the Ethernetlite port &quot;MII&quot; to the &quot;MII&quot; port of the MII_to_RMII block.&lt;/li&gt;
+&lt;li&gt;Right click the &quot;MDIO&quot; port, make it external. Rename it to &quot;MDIO&quot;&lt;/li&gt;
+&lt;li&gt;Right click the &quot;RMII_PHY_M&quot; port, make it external. Rename to &quot;RMII_PHY_M&quot;.&lt;/li&gt;
+&lt;li&gt;Expand the &quot;MII&quot; port of the Ethernetlite device.
+9.1 Connect the &quot;phy&lt;em&gt;rst&lt;/em&gt;n&quot; pin of the MII bus to the &quot;rst&lt;em&gt;n&lt;/em&gt;rmii&quot; of the MII_to_RMII block.
+9.2 Connect the &quot;phy&lt;em&gt;rst&lt;/em&gt;n&quot; pin of the MII bus to the &quot;ETH&lt;em&gt;RST&lt;/em&gt;N&quot; external pin.
+9.3 Collapse the &quot;MII&quot; port.&lt;/li&gt;
+&lt;li&gt;Add the following constraints to the XDC file:
+`
+set_property -dict {PACKAGE_PIN C9 IOSTANDARD LVCMOS33} [get_ports MDIO_mdc]
+set_property -dict {PACKAGE_PIN A9 IOSTANDARD LVCMOS33} [get_ports MDIO_mdio_io]
+set_property -dict {PACKAGE_PIN B3 IOSTANDARD LVCMOS33} [get_ports ETH_RST_N]
+set_property -dict {PACKAGE_PIN D9 IOSTANDARD LVCMOS33} [get_ports RMII_PHY&lt;em&gt;M\&lt;/em&gt;crs_dv]
+set_property -dict {PACKAGE_PIN C10 IOSTANDARD LVCMOS33} [get_ports RMII_PHY&lt;em&gt;M\&lt;/em&gt;rx_er]
+set_property -dict {PACKAGE_PIN C11 IOSTANDARD LVCMOS33} [get_ports {RMII_PHY&lt;em&gt;M\&lt;/em&gt;rxd[0]}]
+set_property -dict {PACKAGE_PIN D10 IOSTANDARD LVCMOS33} [get_ports {RMII_PHY&lt;em&gt;M\&lt;/em&gt;rxd[1]}]
+set_property -dict {PACKAGE_PIN B9 IOSTANDARD LVCMOS33} [get_ports RMII_PHY_M_tx_en]
+set_property -dict {PACKAGE_PIN A10 IOSTANDARD LVCMOS33} [get_ports {RMII_PHY_M_txd[0]}]
+set_property -dict {PACKAGE_PIN A8 IOSTANDARD LVCMOS33} [get_ports {RMII_PHY_M_txd[1]}]
+set_property -dict {PACKAGE_PIN D5 IOSTANDARD LVCMOS33} [get_ports ETH_CLK]
+#set_property -dict { PACKAGE_PIN B8    IOSTANDARD LVCMOS33 } [get_ports { ETH_INTN }]; #IO_L12P_T1_MRCC_16 Sch=eth_intn&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In most tutorials the 50MHz clock is used to drive the LANxxx chip and the MII_to_RMII block. According to some recommendations the  MII_to_RMII block introduces a clock delay. Ideally the clocking wizard should be used to create two 50 MHz clocks, one with a phase delay. The un-delayed clock is connected to the MII_to_RMII block. The delayed clock is connected to the LANxxx chip. Furthermore there is a discussion if the LANxxx can be clocked used a synthesized 50MHz clock as there the clock jitter would be outside the LANxxx requirements.  &lt;/p&gt;
+&lt;h2 id=&quot;axi-quad-spi&quot;&gt;&lt;a href=&quot;#axi-quad-spi&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI Quad SPI&lt;/h2&gt;
+&lt;p&gt;The Quad SPI component is connected to the external Quad SPI Flash (A Spansion S25FL128S). It allows the FPGA to retrieve its bit stream from the Flash chip. Furthermore the Microblaze will be able to boot the user application from flash. Add a Quad SPI IP block and configure it:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Select mode: quad&lt;/li&gt;
+&lt;li&gt;Select the Spansion slave device.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Connect the Quad SPI block as follows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the &quot;M05_AXI&quot; of the AXI SmartConnect to the &quot;S_AXI&quot; input.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the Clocking Wizard &quot;clk_out1&quot; (100Mhz clock) to the &quot;s_axi_aclk&quot; pin.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the Processor System Reset output port &quot;peripheral_aresetn&quot; to the &quot;s_axi_aresetn&quot; input.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the Clocking Wizard &quot;clk_out3&quot; (50Mhz clock) to the &quot;ext_spi_clk&quot; pin.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Right click the &quot;SPI_0&quot; port, make it external and rename to &quot;QSPI_FLASH&quot;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add the following pin constraints to the XDC file:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;set\_property -dict {PACKAGE\_PIN K17 IOSTANDARD LVCMOS33} [get\_ports QSPI\_FLASH\_io0\_io]
+set\_property -dict {PACKAGE\_PIN K18 IOSTANDARD LVCMOS33} [get\_ports QSPI\_FLASH\_io1\_io]
+set\_property -dict {PACKAGE\_PIN L14 IOSTANDARD LVCMOS33} [get\_ports QSPI\_FLASH\_io2\_io]
+set\_property -dict {PACKAGE\_PIN M14 IOSTANDARD LVCMOS33} [get\_ports QSPI\_FLASH\_io3\_io]
+set\_property -dict {PACKAGE\_PIN L13 IOSTANDARD LVCMOS33} [get\_ports {QSPI\_FLASH\_ss\_io[0]}]&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;axi-ddr2-controller&quot;&gt;&lt;a href=&quot;#axi-ddr2-controller&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;AXI DDR2 controller&lt;/h2&gt;
+&lt;p&gt;The Memory Interface Generator (MIG7) is used to create a DDR2 controller for the Micron MT47H64M16HR-25:H RAM chip on the Nexys4 DDR board. The Microblaze will use a BRAM based bootloader to copy the user application from Flash to DDR2 Ram. The DDR2 controller requires very precise timing parameters. These are specified in the &lt;a href=&quot;&quot;&gt;DDR2 RAM tutorial&lt;/a&gt;. Add a MIG7 component and double click to configure:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;At this introduction page click Next.&lt;/li&gt;
+&lt;li&gt;Again click next.&lt;/li&gt;
+&lt;li&gt;Select the pin compatible FPGA. The Nexys4 DDR uses the xc7a100ti-csg324.&lt;/li&gt;
+&lt;li&gt;Choose DDR2 as controller type.&lt;/li&gt;
+&lt;li&gt;On the &quot;Controller options&quot; page select:
+5.1. Clock period: 3077
+5.2. Memory part: MT47H64M16HR-25E
+5.3. Datawidth: 16 bits
+5.4. Ordering: Normal&lt;/li&gt;
+&lt;li&gt;On the &quot;AXI Parameter&quot; page configure the AXI interface:
+6.1. Data width: 128
+6.2. Enable narrow burst support (set to one).&lt;/li&gt;
+&lt;li&gt;On the &quot;Memory Options&quot; page choose:
+7.1. Set the &quot;input clock period&quot; to 100 MHz. If this setting is missing chances are that you run across a bug in the Memory Interface Generator (MIG7). When running Vivado 2018.2 from Ubuntu use the right locale settings. Restart Vivado from the terminal and first execute: export LC&lt;em&gt;NUMERIC=en&lt;/em&gt;US.utf8
+7.2.  RTT-ODT to be 50 ohms. &lt;/li&gt;
+&lt;li&gt;On the &quot;FPGA options&quot; page:
+8.1. select &quot;no buffer&quot; for both system clock and reference clock. &quot;no buffer&quot; means that we can connect clocks generated by the clocking wizard.
+8.2. Set the system reset polarity to active low.
+8.3. Enable usage of &quot;Internal vref&quot;.&lt;/li&gt;
+&lt;li&gt;On the &quot;Extended FPGA options&quot; choose the Internal termination impedance to be 50 omhs.&lt;/li&gt;
+&lt;li&gt;On the &quot;IO Planning&quot; page select fixed pin out as we want to connect the controller to the external RAM chip.&lt;/li&gt;
+&lt;li&gt;On the &quot;Pin selection&quot; page, type the pin numbers, next click validate. Refer to the XDC constraints below for the actual pin values. The pin selection page does not fit on one page, and you have to scroll to get to all the pins. Be care full when scrolling: scrolling when the mouse is above a pin selection drop down changes the pin!&lt;/li&gt;
+&lt;li&gt;On the &quot;System signals&quot; do not select anything.&lt;/li&gt;
+&lt;li&gt;Verify that the summary report is similar to the screenshot.&lt;/li&gt;
+&lt;li&gt;The last pages &quot;simulation options:&quot;: accept, &quot;pcb information&quot;: next, &quot;design notes&quot;: generate.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The DDR RAM controller will generate its own clock on the &quot;ui_clk&quot; pin. The DDR RAM controller needs its own system reset logic as part of this clock domain. Add another &quot;Processor System Reset&quot;, rename it to FPGA_sys_reset&quot;.&lt;/p&gt;
+&lt;p&gt;Connect the DDR RAM controller:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Connect the AXI SmartConnect pin &quot;M06\AXI&quot; to the S_AXI pin.&lt;/li&gt;
+&lt;li&gt;Connect the external &quot;reset_n&quot; pin to the &quot;sys_rst&quot; pin of the FPGA_sys_reset block.&lt;/li&gt;
+&lt;li&gt;Connect the clocking wizard &quot;clk_out1&quot; (100 MHz) clock to &quot;sys_clk_i&quot; of the Ram controller.&lt;/li&gt;
+&lt;li&gt;Connect the clocking wizard &quot;clk_out2&quot; (200 MHz) clock to &quot;clk_ref_i&quot; of the RAM controller. &lt;/li&gt;
+&lt;li&gt;Right click the DDR controller &quot;DDR2&quot; pin and make it external. Rename the external pin to &quot;DDR2&quot;.&lt;/li&gt;
+&lt;li&gt;Connect the DDR controller &quot;ui_clk_sync_rst&quot; to the &quot;ext_reset_in&quot; of the FPGA_sys_reset block.&lt;/li&gt;
+&lt;li&gt;Connect the DDR controller &quot;ui_clk&quot; clock to the &quot;slowest_sync_clk&quot; of the FPGA_sys_reset block.&lt;/li&gt;
+&lt;li&gt;Connect this clock also to the &quot;aclk1&quot; pin of the AXI SmartConnect.&lt;/li&gt;
+&lt;li&gt;Connect the &quot;mmcm_locked&quot; of the DDR Controller to the  &quot;dcm_locked&quot; pin of the FPGA_sys_reset block.&lt;/li&gt;
+&lt;li&gt;The DDR Controller pin &quot;int_calib_complete&quot; is left unconnected.&lt;/li&gt;
+&lt;li&gt;Connect the FPGA_sys_reset pin &quot;peripheral_aresetn&quot; to the DDR controller &quot;aresetn&quot; pin. &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In some articles it is specified that one should not use a clocking wizard generated clock connected to the DDR controller as it would have too much jitter. In spite of this advice I have used the 200 MHz output of the clock wizard. The following pin constraints are required connecting the DDR RAM chip.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    set\_property -dict {PACKAGE\_PIN R7 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[0]}]
+    set\_property -dict {PACKAGE\_PIN V6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[1]}]
+    set\_property -dict {PACKAGE\_PIN R8 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[2]}]
+    set\_property -dict {PACKAGE\_PIN U7 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[3]}]
+    set\_property -dict {PACKAGE\_PIN V7 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[4]}]
+    set\_property -dict {PACKAGE\_PIN R6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[5]}]
+    set\_property -dict {PACKAGE\_PIN U6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[6]}]
+    set\_property -dict {PACKAGE\_PIN R5 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[7]}]
+    set\_property -dict {PACKAGE\_PIN T5 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[8]}]
+    set\_property -dict {PACKAGE\_PIN U3 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[9]}]
+    set\_property -dict {PACKAGE\_PIN V5 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[10]}]
+    set\_property -dict {PACKAGE\_PIN U4 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[11]}]
+    set\_property -dict {PACKAGE\_PIN V4 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[12]}]
+    set\_property -dict {PACKAGE\_PIN T4 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[13]}]
+    set\_property -dict {PACKAGE\_PIN V1 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[14]}]
+    set\_property -dict {PACKAGE\_PIN T3 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dq[15]}]
+
+    set\_property -dict {PACKAGE\_PIN T6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dm[0]}]
+    set\_property -dict {PACKAGE\_PIN U1 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_dm[1]}]
+
+    set\_property -dict {PACKAGE\_PIN U9 IOSTANDARD DIFF\_SSTL18\_II} [get\_ports {DDR2\_dqs\_p[0]}]
+    set\_property -dict {PACKAGE\_PIN V9 IOSTANDARD DIFF\_SSTL18\_II} [get\_ports {DDR2\_dqs\_n[0]}]
+    set\_property -dict {PACKAGE\_PIN U2 IOSTANDARD DIFF\_SSTL18\_II} [get\_ports {DDR2\_dqs\_p[1]}]
+    set\_property -dict {PACKAGE\_PIN V2 IOSTANDARD DIFF\_SSTL18\_II} [get\_ports {DDR2\_dqs\_n[1]}]
+
+    set\_property -dict {PACKAGE\_PIN N6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[12]}]
+    set\_property -dict {PACKAGE\_PIN K5 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[11]}]
+    set\_property -dict {PACKAGE\_PIN R2 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[10]}]
+    set\_property -dict {PACKAGE\_PIN N5 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[9]}]
+    set\_property -dict {PACKAGE\_PIN L4 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[8]}]
+    set\_property -dict {PACKAGE\_PIN N1 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[7]}]
+    set\_property -dict {PACKAGE\_PIN M2 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[6]}]
+    set\_property -dict {PACKAGE\_PIN P5 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[5]}]
+    set\_property -dict {PACKAGE\_PIN L3 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[4]}]
+    set\_property -dict {PACKAGE\_PIN T1 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[3]}]
+    set\_property -dict {PACKAGE\_PIN M6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[2]}]
+    set\_property -dict {PACKAGE\_PIN P4 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[1]}]
+    set\_property -dict {PACKAGE\_PIN M4 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_addr[0]}]
+
+    set\_property -dict {PACKAGE\_PIN R1 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_ba[2]}]
+    set\_property -dict {PACKAGE\_PIN P3 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_ba[1]}]
+    set\_property -dict {PACKAGE\_PIN P2 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_ba[0]}]
+
+    set\_property -dict {PACKAGE\_PIN L6 IOSTANDARD DIFF\_SSTL18\_II} [get\_ports {DDR2\_ck\_p[0]}]
+    set\_property -dict {PACKAGE\_PIN L5 IOSTANDARD DIFF\_SSTL18\_II} [get\_ports {DDR2\_ck\_n[0]}]
+
+
+    set\_property -dict {PACKAGE\_PIN N4 IOSTANDARD SSTL18\_II} [get\_ports DDR2\_ras\_n]
+    set\_property -dict {PACKAGE\_PIN L1 IOSTANDARD SSTL18\_II} [get\_ports DDR2\_cas\_n]
+    set\_property -dict {PACKAGE\_PIN N2 IOSTANDARD SSTL18\_II} [get\_ports DDR2\_we\_n]
+    set\_property -dict {PACKAGE\_PIN M1 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_cke[0]}]
+    set\_property -dict {PACKAGE\_PIN M3 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_odt[0]}]
+    set\_property -dict {PACKAGE\_PIN K6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_cs\_n[0]}]&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2 id=&quot;address-map&quot;&gt;&lt;a href=&quot;#address-map&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Address map&lt;/h2&gt;
+&lt;p&gt;The connected AXI devices are either memory type devices or memory mapped IO devices. We have to specify the Microblaze memory map so that the AXI devices can be accessed by the bootloader and user application. Click the address editor tab.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Right click Data area, unmapped slaves. For each of the following devices select assign address: ethernetlite, gpio, uartlite, timer, quad spi, mig7.&lt;/li&gt;
+&lt;li&gt;The  &quot;Instructions&quot; mapped devices should only contain the local memory and the mig7 device. Select any other mapped devices and rigth click &quot;exclude&quot;. &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Check that the Microblaze local memory sections for both data and instructions are at least 32 kB.&lt;/p&gt;
+&lt;h1 id=&quot;xdc-pin-constraints&quot;&gt;&lt;a href=&quot;#xdc-pin-constraints&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;XDC pin constraints&lt;/h1&gt;
+&lt;p&gt;The XDC file specifies constraints on the physical FPGA pins. Digilent provides a XDC file for the Nexys4 DDR. This file is adapted to map the input and output ports of the block design to physical pins. The [XDC constraints file] is based upon a reference of Digilent. When the block design is completed and synthesized you can run the &quot;get_ports&quot; command in the tcl window. The names of all the different block design input and output pins will then be displayed. These names have to be added to the XDC file. So if you run get_ports and &quot;OUTPUT_X&quot; is displayed then the XDC should contain a row (change the IOStandard and PACKAGE_PIN to suit your needs):&lt;/p&gt;
+&lt;p&gt;set_property -dict {PACKAGE_PIN K17 IOSTANDARD LVCMOS33} [get_ports OUTPUT_X]&lt;/p&gt;
+&lt;p&gt;Some additional constraints are required to get rid of a warning:
+set_property CFGBVS VCCO [current_design]
+set_property CONFIG_VOLTAGE 3.3 [current_design]&lt;/p&gt;
+&lt;h1 id=&quot;synthesize&quot;&gt;&lt;a href=&quot;#synthesize&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Synthesize&lt;/h1&gt;
+&lt;p&gt;Right click &quot;mb_design&quot; in the sources pane. Click &quot;generate HDL wrapper&quot;, select &quot;Let Vivado manage wrapper...&quot;&lt;/p&gt;
+&lt;p&gt;Click &quot;Run synthesis&quot; in the &quot;Flow Navigator&quot;.
+Click &quot;Run implementation&quot; ....&lt;/p&gt;
+&lt;p&gt;Click &quot;Open implemented design&quot; and select the IO ports tab. If the XDC contains no errors. It should look like the following screenshot.&lt;/p&gt;
+&lt;h1 id=&quot;generate-bit-file&quot;&gt;&lt;a href=&quot;#generate-bit-file&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Generate bit file&lt;/h1&gt;
+&lt;p&gt;Later on the FPGA bit stream will be flashed on the Quad SPI Flash device. In order to reduce the size of the bit stream and speed up booting the bit stream can be compressed. Turn compression on by adding this to the XDC file.&lt;/p&gt;
+&lt;p&gt;Open the tools -&gt; settings menu. Select bit stream options under project settings. Tick the &quot;-bin_file&quot; option. Open &quot;additional settings&quot; and tick &quot;enable compression&quot;. A constraint will be added automatically to the XDC file:&lt;/p&gt;
+&lt;p&gt;set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]&lt;/p&gt;
+&lt;p&gt;Run the bit stream generator.&lt;/p&gt;
+&lt;h1 id=&quot;commit-the-block-design-to-version-control&quot;&gt;&lt;a href=&quot;#commit-the-block-design-to-version-control&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Commit the block design to version control&lt;/h1&gt;
+&lt;p&gt;Store the current version of the  block design inside version control:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;git add src/blockdesign/mb_design/*&lt;/li&gt;
+&lt;li&gt;check with git status that no files under src are &quot;untracked&quot;. If needed use &quot;git add&quot; to add remaining untracked files under src. Do not add these folders: basici_microblaze.cache/, basic_microblaze.hw/, basic_microblaze.runs/, basic_microblaze.xpr&lt;/li&gt;
+&lt;li&gt;git commit -am &quot;Block design done&quot;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;sdk-software-development&quot;&gt;&lt;a href=&quot;#sdk-software-development&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;SDK, software development&lt;/h1&gt;
+&lt;p&gt;First export the hardware definition. Select the File menu -&gt; export -&gt; export hardware. Enable &quot;include bit stream&quot;. Choose the src/sdk/hardware folder.&lt;/p&gt;
+&lt;p&gt;Click launch &quot;SDK&quot; from the project menu. Choose the relevant src/sdk/workspace folder for as workspace. Vivado will start the SDK which is the Eclipse C/C++ development IDE. The workspace will contain the hardware definition &quot;mb_design_wrapper....&quot;. Click the &quot;system.hdf&quot; file and check that the memory map is correct.&lt;/p&gt;
+&lt;h2 id=&quot;create-bootloader-and-bsp&quot;&gt;&lt;a href=&quot;#create-bootloader-and-bsp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Create bootloader and BSP.&lt;/h2&gt;
+&lt;p&gt;Create a new &quot;Application project&quot; named &quot;Bootloader&quot;. In the &quot;Target software&quot; pane select &quot;Create new&quot; board support package. Name the BSP &quot;Bootloader_bsp&quot;. Click &quot;next&quot; and select the &quot;SREC SPI bootloader&quot; template. Click &quot;Finish&quot;.&lt;/p&gt;
+&lt;h3 id=&quot;configure-bootloader-bsp&quot;&gt;&lt;a href=&quot;#configure-bootloader-bsp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Configure Bootloader BSP&lt;/h3&gt;
+&lt;p&gt;Open the Bootloader_bsp project and open &quot;system.mss&quot;. Click &quot;Modify this BSP&apos;s Settings&quot;. Select &quot;xilisf&quot; in the navigation tree view. Set the &quot;serial_flash_family&quot; type to 5 (Spansion). Click &quot;Regenerate BSP sources&quot;. &lt;/p&gt;
+&lt;h3 id=&quot;configure-bootloader&quot;&gt;&lt;a href=&quot;#configure-bootloader&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Configure Bootloader&lt;/h3&gt;
+&lt;p&gt;Open the &quot;Bootloader&quot; project and edit the &quot;blconfig.h&quot; file. The bootloader needs to know the address in SPI flash where the user application resides. Remove the warning and change the &quot;FLASH_IMAGE_BASEADDR&quot; to 0x003D0900. Select the linker &quot;ldscript.ld&quot; file. Set the stack size to 0x200. Check that all segments are assigned to BRAM local memory (and not the external DDR RAM as this memory will receive the user application loaded from the Flash memory). &lt;/p&gt;
+&lt;p&gt;In bootloader.c check that SPI_DEVICE_ID is set to XPAR_SPI_0_DEVICE_ID. The warning line above it can then be removed.&lt;/p&gt;
+&lt;p&gt;In bootloader.c the VERBOSE flag should be defined (by default). This will cause the bootloader to print messages while the bootloading is in progress. The print output will be streamed over the UARTlite interface. The print commands unfortunately slow down the bootloading. A small modification helps. Replace the contents of the function &quot;display_progress&quot; by:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;print(&quot;.&quot;)&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;This will speedup things while still giving some insight in the bootloading progress. After saving Eclipse will rebuild the Bootloader. If all is well the Bootloader should compile without errors now.&lt;/p&gt;
+&lt;h3 id=&quot;programming-the-fpga&quot;&gt;&lt;a href=&quot;#programming-the-fpga&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Programming the FPGA&lt;/h3&gt;
+&lt;p&gt;In this step the hardware design including bootloader will be programmed into flash such that the FPGA loads it every time it boots. Configure the SPI jumper on the Nexys4 DDR development kit. This allows the FPGA to load its bit file from the SPI flash. The FPGA bit file contains the configuration of the FPGA including initial contents of the Microblaze local BRAM.  Next connect the Nexys4 DDR board via the JTAG usb connector. Start a serial terminal (eg. gtkterm) and select the port (eg. /dev/ttyUSB1) and set the baud rate to 38400 (as configured in the UARTlite block design).&lt;/p&gt;
+&lt;p&gt;Run the program FPGA command from the Xilinx menu. Select the bootloader.elf file (in the Bootloader/Debug project) in stead of &quot;bootloop&quot;. Selecting &quot;program&quot; will generate a download.bit file in the &quot;mb_design_wrapper_hw_platform_0&quot; project. &lt;/p&gt;
+&lt;p&gt;After the programming completes, in the serial terminal you should see the bootloader starting (and failing).&lt;/p&gt;
+&lt;h3 id=&quot;flashing-the-fpga-bitstream&quot;&gt;&lt;a href=&quot;#flashing-the-fpga-bitstream&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Flashing the FPGA bitstream.&lt;/h3&gt;
+&lt;p&gt;Next click the &quot;Program Flash&quot; menu item in the Xilinx menu. Select the download.bit files as &quot;image file&quot;. The offset should be 0. The flash type is &quot;s25fl128sxxxxx0-spi-x1_x2_x4&quot;. Check &quot;verify after flash&quot;. And finish by clicking &quot;Program&quot;.&lt;/p&gt;
+&lt;p&gt;After flashing you can restart the Nexys4 DDR by pressing the &quot;prog&quot; button. Again the bootloader should start and fail. Note that while the FPGA can load its bit file from flash it can also still be programmed as usual using JTAG.&lt;/p&gt;
+&lt;h2 id=&quot;create-user-application&quot;&gt;&lt;a href=&quot;#create-user-application&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Create user application&lt;/h2&gt;
+&lt;p&gt;Create a new project, named TestApp. Select Create new board support package named &quot;TestApp_bsp&quot;. Click next and select the &quot;Peripheral tests&quot; template.&lt;/p&gt;
+&lt;h3 id=&quot;configure-testapp-bsp&quot;&gt;&lt;a href=&quot;#configure-testapp-bsp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Configure TestApp BSP&lt;/h3&gt;
+&lt;p&gt;Open the TestApp_bsp project and open &quot;system.mss&quot;. Click &quot;Modify this BSP&apos;s Settings&quot;. Enable &quot;xilisf&quot; and &quot;lwip202&quot; in the supported libraries pane. Select &quot;xilisf&quot; in the navigation tree view. Set the &quot;serial_flash_family&quot; type to 5 (Spansion). S&lt;/p&gt;
+&lt;p&gt;Click &quot;Regenerate BSP sources&quot;. Probably the build will fail. There is a bug in Vivado 2018.2 lwip202, it does not define some xadapter code required to compile using EthernetLite. There is a &lt;a href=&quot;&quot;&gt;patch&lt;/a&gt; available. The patch has been applied manually in the example repository. Be care full not to regenerate the BSP sources as this will remove the patch.&lt;/p&gt;
+&lt;p&gt;The changes can be viewed by looking at this diff:
+git diff 69b53308d4d4690ab77b53d72262df3ee429e0b d45cd8645e9563a86cef6648e0a15483d39f63f9 &apos;*.c&apos;&lt;/p&gt;
+&lt;h3 id=&quot;configure-the-testapp&quot;&gt;&lt;a href=&quot;#configure-the-testapp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Configure the TestApp&lt;/h3&gt;
+&lt;p&gt;The peripherial test application does not need any configuring.&lt;/p&gt;
+&lt;h3 id=&quot;flashing-the-user-application&quot;&gt;&lt;a href=&quot;#flashing-the-user-application&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Flashing the user application&lt;/h3&gt;
+&lt;p&gt;Click the &quot;Program Flash&quot; menu item in the Xilinx menu. Select the TestApp.elf file &quot;image file&quot;. The offset should be 0x003D0900 (as configured in the bootloader). The flash type is &quot;s25fl128sxxxxx0-spi-x1_x2_x4&quot;. Tick &quot;convert elf file to bootable SREC...&quot;. Check &quot;verify after flash&quot;. And finish by clicking &quot;Program&quot;.&lt;/p&gt;
+&lt;p&gt;Reset the Nexys4 DDR by pressing the &quot;prog&quot; button. The bootloader should start loading and eventually run the user application. The user application will print various test messages. The RGB LED connected to the GPIO should react to one of the tests. The last tests will test the Ethernetlite interface (you&apos;ll see the Ethernet LEDs blinking twice).&lt;/p&gt;
+&lt;h2 id=&quot;committing-the-sdk-code&quot;&gt;&lt;a href=&quot;#committing-the-sdk-code&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Committing the SDK code&lt;/h2&gt;
+&lt;p&gt;First add .gitignore files to a number of folders to ignore logging files:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    src/sdk/workspace/Bootloader_bsp/.gitignore:
+    *.o
+    *.a
+
+    src/sdk/workspace/TestApp_bsp/.gitignore:
+    *.o
+    *.a
+
+    src/sdk/workspace/mb_design_wrapper_hw_platform_0/.gitignore:
+    cache
+
+    src/sdk/workspace/.metadata/.gitignore:
+    *.log
+    .lock
+
+    src/sdk/.gitignore:
+    *.jou
+    *.log
+
+
+    git add src/sdk/hardware/mb\_design\_wrapper.hdf
+    git add src/sdk/workspace/Bootloader
+    git add src/sdk/workspace/Bootloader\_bsp
+    git add src/sdk/workspace/TestApp
+    git add src/sdk/workspace/TestApp\_bsp
+    git add src/sdk/workspace/mb\_design\_wrapper\_hw\_platform\_0
+    git add src/sdk/workpace/.metadata
+
+    git commit --message &quot;Added bootloader and test application with patched lwip202&quot;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;&lt;a href=&quot;#conclusion&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Conclusion&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;Creating the basic Microblaze architecture running requires many configuration steps. While writing this tutorial I had one working reference project and created a new project describing each step. The first time I ended up with a bootloader that did not fit in the BRAM. Somehow, somewhere the Microblaze cache size was set to 16 kB, instead of the required 32 kB. I suspect the block automation step to be the culprit. Luckily by checking the linker script in the SDK this was easy to find and correct.&lt;/li&gt;
+&lt;li&gt;When working in Linux check your Locale settings as described in the tutorial. If set wrongly the MIG7 wizard will not snow essential settings.&lt;/li&gt;
+&lt;li&gt;The Eclipse SDK crashed a few times resulting in a locked SDK which could not be restarted. Remove .lock files from the .metadata in src/sdk/workspace to get it working again. &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The VHDL code can be found in the &lt;a href=&quot;https://github.com/dwjbosman/basic_microblaze&quot;&gt;Basic_microblaze&lt;/a&gt; repository.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[VHDL sine wave oscillator]]></title><description><![CDATA[In my last  article  a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to…]]></description><link>https://dwjbosman.github.io/vhdl-sine-wave-oscillator</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-sine-wave-oscillator</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sat, 22 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/vhdl-i-2-s-transmitter&quot;&gt;article&lt;/a&gt; a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to develop an additive synthesis engine. In this article the goal is being able to generate a sine wave.&lt;/p&gt;
 &lt;p&gt;As a starting point I use this &lt;a href=&quot;https://github.com/jorisvr/vhdl_sincos_gen&quot;&gt;VHDL sine generator&lt;/a&gt; sub component. This generator is nicely parametrized. You can specify the number of bits in the output resolution as well as the phase input.&lt;/p&gt;
 &lt;p&gt;The additive synthesis engine which is to be developed needs to be able to control the frequency of the oscillator. I am not sure yet on the required frequency resolution. I will pick a reasonable number and keep the formulas general so that the value can be easily changed later. The challenge in the development of this oscillator is to implement the following features:&lt;/p&gt;
 &lt;ul&gt;
@@ -245,7 +1511,7 @@ procedure Advance_Phase(
 &lt;p&gt;
   &lt;a
     class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-31b0a.png&quot;
+    href=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-1c0e9.png&quot;
     style=&quot;display: block&quot;
     target=&quot;_blank&quot;
     rel=&quot;noopener&quot;
@@ -264,10 +1530,10 @@ procedure Advance_Phase(
         style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
         alt=&quot;440 Hz sine wave&quot;
         title=&quot;440 Hz sine wave&quot;
-        src=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-31b0a.png&quot;
-        srcset=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-f77c2.png 300w,
-/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-c0f67.png 600w,
-/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-31b0a.png 1079w&quot;
+        src=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-1c0e9.png&quot;
+        srcset=&quot;/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-a0af6.png 300w,
+/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-b3d4a.png 600w,
+/static/sine_440-273ac55780a91441eb21b34e03f5cd5d-1c0e9.png 1079w&quot;
         sizes=&quot;(max-width: 1079px) 100vw, 1079px&quot;
       /&gt;
     &lt;/span&gt;
@@ -324,7 +1590,7 @@ constant X : real := sel( TRUE, 1.0, 2.0); -- will set X to 1.0 &lt;/code&gt;&lt
 &lt;p&gt;
   &lt;a
     class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f755b.png&quot;
+    href=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f9a87.png&quot;
     style=&quot;display: block&quot;
     target=&quot;_blank&quot;
     rel=&quot;noopener&quot;
@@ -343,9 +1609,9 @@ constant X : real := sel( TRUE, 1.0, 2.0); -- will set X to 1.0 &lt;/code&gt;&lt
         style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
         alt=&quot;I2S protocol&quot;
         title=&quot;I2S protocol&quot;
-        src=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f755b.png&quot;
-        srcset=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-ed329.png 300w,
-/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f755b.png 401w&quot;
+        src=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f9a87.png&quot;
+        srcset=&quot;/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-82751.png 300w,
+/static/i2s-06532f98f4d256d0c6ed0231cad6b67a-f9a87.png 401w&quot;
         sizes=&quot;(max-width: 401px) 100vw, 401px&quot;
       /&gt;
     &lt;/span&gt;
@@ -533,7 +1799,7 @@ i2s : entity work.i2s_sender
 &lt;p&gt;
   &lt;a
     class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-5fc45.png&quot;
+    href=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-25ac7.png&quot;
     style=&quot;display: block&quot;
     target=&quot;_blank&quot;
     rel=&quot;noopener&quot;
@@ -552,11 +1818,11 @@ i2s : entity work.i2s_sender
         style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
         alt=&quot;LRCK left channel&quot;
         title=&quot;LRCK left channel&quot;
-        src=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-abe1c.png&quot;
-        srcset=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-10046.png 300w,
-/static/lrck1-09e17902d487e0a568fedf5370d484a4-3c4a3.png 600w,
-/static/lrck1-09e17902d487e0a568fedf5370d484a4-abe1c.png 1200w,
-/static/lrck1-09e17902d487e0a568fedf5370d484a4-5fc45.png 1523w&quot;
+        src=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-bf66f.png&quot;
+        srcset=&quot;/static/lrck1-09e17902d487e0a568fedf5370d484a4-e6e4d.png 300w,
+/static/lrck1-09e17902d487e0a568fedf5370d484a4-04aa4.png 600w,
+/static/lrck1-09e17902d487e0a568fedf5370d484a4-bf66f.png 1200w,
+/static/lrck1-09e17902d487e0a568fedf5370d484a4-25ac7.png 1523w&quot;
         sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
       /&gt;
     &lt;/span&gt;
@@ -568,7 +1834,7 @@ i2s : entity work.i2s_sender
 &lt;p&gt;
   &lt;a
     class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-5fc45.png&quot;
+    href=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-25ac7.png&quot;
     style=&quot;display: block&quot;
     target=&quot;_blank&quot;
     rel=&quot;noopener&quot;
@@ -587,11 +1853,11 @@ i2s : entity work.i2s_sender
         style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
         alt=&quot;LRCK right channel&quot;
         title=&quot;LRCK right channel&quot;
-        src=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-abe1c.png&quot;
-        srcset=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-10046.png 300w,
-/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-3c4a3.png 600w,
-/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-abe1c.png 1200w,
-/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-5fc45.png 1523w&quot;
+        src=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-bf66f.png&quot;
+        srcset=&quot;/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-e6e4d.png 300w,
+/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-04aa4.png 600w,
+/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-bf66f.png 1200w,
+/static/lrck2-22f2222ac105c1e30a8f27b6d7b099e3-25ac7.png 1523w&quot;
         sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
       /&gt;
     &lt;/span&gt;
