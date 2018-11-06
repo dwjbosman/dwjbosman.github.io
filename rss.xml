@@ -1,6 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Mon, 05 Nov 2018 23:15:49 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Basic Microblaze with bootloader setup]]></title><description><![CDATA[Table of Contents 1. Introduction & Goals 2. Create the project 2.1. Screenshots: 2.2. Initializing version control (git) 2.3. Create…]]></description><link>https://dwjbosman.github.io/basic-microblaze-with-bootloader-setup</link><guid isPermaLink="false">https://dwjbosman.github.io/basic-microblaze-with-bootloader-setup</guid><category><![CDATA[Microblaze FPGA SDK]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Thu, 01 Nov 2018 09:00:00 GMT</pubDate><content:encoded>&lt;h2 id=&quot;table-of-contents&quot;&gt;&lt;a href=&quot;#table-of-contents&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Table of Contents&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Tue, 06 Nov 2018 21:06:03 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Nexys4 DDR Microblaze with DDR Ram and Flash bootloader support]]></title><description><![CDATA[The goal is to develop an additive synthesis engine. The synthesizer needs a processor to implement high level functionality. In this…]]></description><link>https://dwjbosman.github.io/nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support</link><guid isPermaLink="false">https://dwjbosman.github.io/nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support</guid><category><![CDATA[Microblaze FPGA SDK]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Thu, 01 Nov 2018 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;The goal is to develop an additive synthesis engine. The synthesizer needs a processor to implement high level functionality. In this article a small step is taken by making it possible to run C/C++ code on a Microblaze processor. The idea is that once we have a general computing platform we can more easily develop high level C programs that interface with custom hardware peripherals, such as the I2S transmitter and &lt;a href=&quot;https://dwjbosman.github.io/vhdl-sine-wave-oscillator&quot;&gt;sine wave generator&lt;/a&gt; described in previous articles.&lt;/p&gt;
+&lt;p&gt;There are quite a number of tutorials about setting up a Microblaze processor. Unfortunately most of these tutorials are either out of date or they are lacking some essential information. This article shows how to get a Microblaze running on a Nexys4 DDR development kit. The designed platform has the following features:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#1-introduction--goals&quot;&gt;1. Introduction &amp;#x26; Goals&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Run an user application from the on board DDR2 ram.&lt;/li&gt;
+&lt;li&gt;UART support for debugging&lt;/li&gt;
+&lt;li&gt;Ethernet (lite) support for lwIP stack&lt;/li&gt;
+&lt;li&gt;SPI flash support for bootloading from flash.&lt;/li&gt;
+&lt;li&gt;Use of AXI GPIO for simple LED control&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This tutorial is setup as follows:&lt;/p&gt;
+&lt;h2&gt;Table of contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#1-introduction--goals&quot;&gt;1. Introduction &amp;amp; Goals&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&quot;#2-create-the-project&quot;&gt;2. Create the project&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -15,23 +25,48 @@
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&quot;#31-microblaze&quot;&gt;3.1. Microblaze&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#311-screenshots&quot;&gt;3.1.1. Screenshots&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#311-vivado-screen-shots&quot;&gt;3.1.1. Vivado screen shots&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&quot;#32-clocking-wizard&quot;&gt;3.2. Clocking wizard&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#321-screenshots&quot;&gt;3.2.1. Screenshots&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#321-vivado-screen-shots&quot;&gt;3.2.1. Vivado screen shots&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#33-axi-smartconnect&quot;&gt;3.3. AXI SmartConnect&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#34-axi-gpio&quot;&gt;3.4. AXI GPIO&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#35-axi-uartlite&quot;&gt;3.5. AXI UARTlite&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#33-axi-smartconnect&quot;&gt;3.3. AXI SmartConnect&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#331-vivado-screen-shots&quot;&gt;3.3.1 Vivado screen shots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#34-axi-gpio&quot;&gt;3.4. AXI GPIO&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#341-vivado-screen-shots&quot;&gt;3.4.1. Vivado screen shots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#35-axi-uartlite&quot;&gt;3.5. AXI UARTlite&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#351-vivado-screen-shots&quot;&gt;3.5.1. Vivado screen shots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#36-axi-interrupt-controller&quot;&gt;3.6. AXI Interrupt controller&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#37-axi-timer&quot;&gt;3.7. AXI Timer&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#38-axi-ethernetlite&quot;&gt;3.8. AXI Ethernetlite&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#38-axi-ethernetlite&quot;&gt;3.8. AXI Ethernetlite&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#381-vivado-screen-shots&quot;&gt;3.8.1. Vivado screen shots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#39-axi-quad-spi&quot;&gt;3.9. AXI Quad SPI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#310-axi-ddr2-controller&quot;&gt;3.10. AXI DDR2 controller&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#310-axi-ddr2-controller&quot;&gt;3.10. AXI DDR2 controller&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#3101-vivado-screen-shots&quot;&gt;3.10.1 Vivado screen shots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#311-address-map&quot;&gt;3.11. Address map&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -64,26 +99,17 @@
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#9-conclusion&quot;&gt;9. Conclusion&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&quot;1-introduction--goals&quot;&gt;&lt;a href=&quot;#1-introduction--goals&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;1. Introduction &amp;#x26; Goals&lt;/h1&gt;
-&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/vhdl-sine-wave-oscillator&quot;&gt;article&lt;/a&gt; a VHDL Sine oscillator was presented. Eventually the goal is to develop an additive synthesis engine. In this article a small step is taken by being able to run C/C++ code on a Microblaze processor. &lt;/p&gt;
-&lt;p&gt;There are quite a number of tutorials about setting up a Microblaze processor. Unfortunately most of these tutorials are either out of date or they are lacking some essential information. Especially most tutorials don&apos;t describe the &apos;why&apos; question. This article shows how to get a Microblaze running on a Nexys4 DDR development kit including the following:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Run the user application from the on board DDR2 ram.&lt;/li&gt;
-&lt;li&gt;UART support for debugging&lt;/li&gt;
-&lt;li&gt;Ethernet (lite) support for lwIP stack&lt;/li&gt;
-&lt;li&gt;SPI flash support for bootloading from flash.&lt;/li&gt;
-&lt;li&gt;Use of AXI GPIO for simple LED control&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h1 id=&quot;1-previous-work&quot;&gt;&lt;a href=&quot;#1-previous-work&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;1. Previous work&lt;/h1&gt;
 &lt;p&gt;I started following &lt;a href=&quot;https://reference.digilentinc.com/learn/programmable-logic/tutorials/nexys-4-ddr-getting-started-with-microblaze-servers/start&quot;&gt;Microblaze server&lt;/a&gt; tutorial from Digilent. It misses some information in the block design to complete Ethernet and DDR2 configuration. I used this &lt;a href=&quot;https://www.instructables.com/id/Configuring-the-MIG-7-Series-to-Use-the-DDR-Memory/&quot;&gt;MIG7&lt;/a&gt; tutorial to implement the DDR2 ram. Lastly I followed this tutorial on &lt;a href=&quot;https://reference.digilentinc.com/learn/programmable-logic/tutorials/htsspisf/start&quot;&gt;Bootloading&lt;/a&gt; to implement the bootloader.&lt;/p&gt;
 &lt;h1 id=&quot;2-create-the-project&quot;&gt;&lt;a href=&quot;#2-create-the-project&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;2. Create the project&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;First set up the project. Add this &lt;a href=&quot;https://github.com/dwjbosman/I2S_sender&quot;&gt;Vivado TCL script&lt;/a&gt; to your start up scripts. The script will create a project TCL file every time &apos;git commit&apos; is invoked. The TCL project file will contain relative paths which allows your project to be stored in a version control system. &lt;/li&gt;
+&lt;li&gt;First set up the project. Add this &lt;a href=&quot;https://github.com/barbedo/vivado-git&quot;&gt;Vivado TCL script&lt;/a&gt; to your start up scripts. The script will create a project TCL file every time &apos;git commit&apos; is invoked. The TCL project file will contain relative paths which allows your project to be stored in a version control system. &lt;/li&gt;
 &lt;li&gt;Download and install the &lt;a href=&quot;https://github.com/Digilent/vivado-boards.git&quot;&gt;Nexys4 DDR board&lt;/a&gt; files.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;After Vivado starts click the &apos;create project&apos; button.&lt;/p&gt;
 &lt;h2 id=&quot;21-screenshots&quot;&gt;&lt;a href=&quot;#21-screenshots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;2.1. Screenshots:&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Start Vivado:
+&lt;li&gt;Start Vivado
 
   &lt;a
     class=&quot;gatsby-resp-image-link&quot;
@@ -295,20 +321,50 @@
 &lt;h2 id=&quot;22-initializing-version-control-git&quot;&gt;&lt;a href=&quot;#22-initializing-version-control-git&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;2.2. Initializing version control (git)&lt;/h2&gt;
 &lt;p&gt;After completing the wizard, open the TCL tab and type the following commands:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;go to your project folder: cd /home/&lt;username&gt;/Xilinx/projects/basic_microblaze/&lt;/li&gt;
-&lt;li&gt;create a src and blockdesign dir. The src directory will contain all the files that are under version control: exec mkdir -p src/blockdesign&lt;/li&gt;
-&lt;li&gt;create a directory for vhdl files: exec mkdir -p src/design&lt;/li&gt;
-&lt;li&gt;create a folder for the SDK (C sources): exec mkdir -p src/sdk/workspace&lt;/li&gt;
-&lt;li&gt;create a folder for the SDK hardware definition: exec mkdir -p src/sdk/hardware&lt;/li&gt;
-&lt;li&gt;initialize the repository: git init&lt;/li&gt;
-&lt;li&gt;apply first commit: git commit -am &quot;first commit&quot; &lt;/li&gt;
+&lt;li&gt;go to your project folder: cd /home/[username]/Xilinx/projects/basic_microblaze/&lt;/li&gt;
+&lt;li&gt;create a src and blockdesign directory. The src directory will contain all the files that are kept under version control. The other files are generated by the vivado project tcl script that is generated by Vivado when we execute &quot;git commit&quot;.&lt;/li&gt;
 &lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;exec mkdir -p src/blockdesign&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;create a directory for vhdl files: &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;exec mkdir -p src/design&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;create a folder for the SDK (C sources): &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;exec mkdir -p src/sdk/workspace&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;create a folder for the SDK hardware definition: &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;exec mkdir -p src/sdk/hardware&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;ol start=&quot;6&quot;&gt;
+&lt;li&gt;initialize the repository: &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;git init&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;ol start=&quot;7&quot;&gt;
+&lt;li&gt;apply first commit: &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;git commit -am &quot;first commit&quot; &lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
 &lt;h2 id=&quot;23-create-constraints-file-xdc&quot;&gt;&lt;a href=&quot;#23-create-constraints-file-xdc&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;2.3. Create constraints file (XDC)&lt;/h2&gt;
-&lt;p&gt;Add an empty XDC in the  project folder: .../basic_microblaze/src/design/design.xdc. In the TCL window run
-git add src/design/design.xdc&lt;/p&gt;
+&lt;p&gt;Add an empty XDC in the  project folder: .../basic_microblaze/src/design/design.xdc. In the TCL window run&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;git add src/design/design.xdc&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
 &lt;h1 id=&quot;3-create-the-block-design&quot;&gt;&lt;a href=&quot;#3-create-the-block-design&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3. Create the block design&lt;/h1&gt;
 &lt;p&gt;First step is to specify the architecture of the synthesized FPGA hardware blocks. Pay careful attention to configuration of the clock wizard, the MIG7 memory generator and polarity of reset signals. &lt;/p&gt;
-&lt;p&gt;Add the block design in the  project folder: /home/&lt;username&gt;/Xilinx/projects/basic_microblaze/src/blockdesign&lt;/p&gt;
+&lt;p&gt;Add the block design in the  project folder: /home/[username]/Xilinx/projects/basic_microblaze/src/blockdesign&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Create the block design:
 
@@ -390,20 +446,20 @@ git add src/design/design.xdc&lt;/p&gt;
 &lt;li&gt;wizard page 4: next&lt;/li&gt;
 &lt;li&gt;wizard page 5: Enable AXI data interface&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;A green box will appear containing a link to &quot;Run block automation&quot;. Clicking this Vivado will create additional IP blocks to support the Microblaze. When clicking &quot;Run block automation&quot; a settings window will open:&lt;/p&gt;
+&lt;p&gt;A green box will appear containing a link to &quot;Run block automation&quot;. Clicking the link and Vivado will create additional IP blocks to support the Microblaze. When clicking &quot;Run block automation&quot; a settings window will appear:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Choose local memory 16 KB&lt;/li&gt;
-&lt;li&gt;Choose cache configuration: 16 KB&lt;/li&gt;
+&lt;li&gt;Choose cache configuration: 16 KB. &lt;/li&gt;
 &lt;li&gt;Choose Debug module Debug Only&lt;/li&gt;
 &lt;li&gt;Select enable Peripheral AXI Port&lt;/li&gt;
 &lt;li&gt;Select enable interrupt controller&lt;/li&gt;
 &lt;li&gt;Choose to create a new clocking wizard (100 MHz)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;The block design will now contain a Microblaze, Local memory, Processor System Reset, Interrupt controller (and concat block), Clocking wizard, AXI interconnect.&lt;/p&gt;
+&lt;p&gt;The block design will now contain a Microblaze, Local memory, Processor System Reset, Interrupt controller (and concat block), Clocking wizard and AXI interconnect.&lt;/p&gt;
 &lt;ol start=&quot;7&quot;&gt;
 &lt;li&gt;Later another Processor System Reset block will be added. Rename the existing one to &quot;cpu_sys_reset&quot;.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&quot;311-screenshots&quot;&gt;&lt;a href=&quot;#311-screenshots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.1.1. Screenshots&lt;/h3&gt;
+&lt;h3 id=&quot;311-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#311-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.1.1. Vivado screen shots&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Add Microblaze
 
@@ -441,8 +497,8 @@ git add src/design/design.xdc&lt;/p&gt;
   
   &lt;/a&gt;
     &lt;/li&gt;
-&lt;li&gt;Microblaze customize genera
-l
+&lt;li&gt;Microblaze customize general
+
   &lt;a
     class=&quot;gatsby-resp-image-link&quot;
     href=&quot;/static/013_microblaze_customize_general-ed71bad4b2c462f85c0792f91cd80f8a-eba86.png&quot;
@@ -698,17 +754,17 @@ l
 &lt;li&gt;Also on the this page choose the reset type: active low&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/li&gt;
-&lt;li&gt;Finish the wizard and right click the &quot;clk_in1&quot; port. Select ake inputs external. A new external input will be created. Rename it to &quot;CLK100MHZ&quot;&lt;/li&gt;
+&lt;li&gt;Finish the wizard and right click the &quot;clk_in1&quot; port. Select &quot;make inputs external&quot;. A new external input will be created. Rename it to &quot;CLK100MHZ&quot;&lt;/li&gt;
 &lt;li&gt;Right click the &quot;resetn&quot; port. Select make inputs external. A new external input will be created. Rename it to &quot;reset_n&quot;&lt;/li&gt;
 &lt;li&gt;Connect the &quot;reset_n&quot; port to the  &quot;ext_reset_n&quot; port of the Processor System Reset block.
-These clocks are generated using the FPGA&apos;s built in MMCM which can be thought of as a kind of PLL. The 200 MHz will be used for the DDR2 controller, the 50 MHz for the Quad SPI Flash and external Ethernet LAN8720A chip. The reset button in on the Nexys4 DDR will output a &apos;0&apos; when pressed. To use this button for resetting the various IP blocks every reset input port has to be configured as &quot;active low&quot;. Renaming the ports is required to match the physical pin constraints in the XDC file. Add the following rows to the XDC file:&lt;/li&gt;
+These clocks are generated using the FPGA&apos;s built in MMCM which can be thought of as a kind of PLL. The 200 MHz will be used for the DDR2 controller, the 50 MHz for the Quad SPI Flash and external Ethernet LAN8720A chip. The reset button signal on the Nexys4 DDR will measure as a &apos;0&apos; when pressed. To use this button for resetting the various IP blocks every reset input port has to be configured as &quot;active low&quot;. Renaming the ports is required to match the physical pin constraints in the XDC file. Add the following rows to the XDC file:&lt;/li&gt;
 &lt;/ol&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
       &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;set\_property -dict {PACKAGE\_PIN E3 IOSTANDARD LVCMOS33} [get\_ports CLK100MHZ]
 create\_clock -period 10.000 -name sys\_clk\_pin -waveform {0.000 5.000} -add [get\_ports CLK100MHZ]
 set\_property -dict {PACKAGE\_PIN C12 IOSTANDARD LVCMOS33} [get\_ports reset\_n]&lt;/code&gt;&lt;/pre&gt;
       &lt;/div&gt;
-&lt;h3 id=&quot;321-screenshots&quot;&gt;&lt;a href=&quot;#321-screenshots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.2.1. Screenshots&lt;/h3&gt;
+&lt;h3 id=&quot;321-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#321-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.2.1. Vivado screen shots&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Add clocking wizard
 
@@ -815,42 +871,6 @@ set\_property -dict {PACKAGE\_PIN C12 IOSTANDARD LVCMOS33} [get\_ports reset\_n]
   
   &lt;/a&gt;
     &lt;/li&gt;
-&lt;li&gt;Updated block design
-
-  &lt;a
-    class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-07402.png&quot;
-    style=&quot;display: block&quot;
-    target=&quot;_blank&quot;
-    rel=&quot;noopener&quot;
-  &gt;
-  
-  &lt;span
-    class=&quot;gatsby-resp-image-wrapper&quot;
-    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
-  &gt;
-    &lt;span
-      class=&quot;gatsby-resp-image-background-image&quot;
-      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABTklEQVQoz62Sy26DMBRE8//f1EVXXVVVlEYqSig04f0wYGMM2JDpNWmbqOqikXKlEQjBmZlrVk/vG6xTh7TDpvBJLraVizfuweH+TdqyPVZq0DidTncTAQ3uOQswyjjiUiAqBF1bJEzCPZYoKom1k+DhucA0Tf8HeiFDVCkcco5j3sCLGZyPEjs/wusuweNLhpieZ6xFpzQZiUVtN8Cu7FvaTGcgb3tINSKnRKxRy31KaZtWUWqOyKYnYF5W1KbCPiSzqAETIyWff9JZ6AK0daZ5XuoekhpCkkHXUwoOPyZAUMDxQhzCmKA13CBHUCp047xA/gTauDFVCinJOGr0wwCt9dnsS6KVZKRQNxysqsEF7ZvS57WEUPoCNMbQxwalGJAS9BpyLfuenaxqERQElx3tmZLToaZND0P1b/pt7L5+m2gzQ/YGwzhdTvme8wn2iVJtaf9CGwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
-    &gt;
-      &lt;img
-        class=&quot;gatsby-resp-image-image&quot;
-        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
-        alt=&quot;Clocking wizard integrated&quot;
-        title=&quot;Clocking wizard integrated&quot;
-        src=&quot;/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-bf66f.png&quot;
-        srcset=&quot;/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-e6e4d.png 300w,
-/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-04aa4.png 600w,
-/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-bf66f.png 1200w,
-/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-7827d.png 1800w,
-/static/023_block_design_incl_clocking_wizard-3ba5b6c253505a003c2fa1e08fde6abf-07402.png 1855w&quot;
-        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
-      /&gt;
-    &lt;/span&gt;
-  &lt;/span&gt;
-  
-  &lt;/a&gt;
-    &lt;/li&gt;
 &lt;li&gt;Make ports external
 
   &lt;a
@@ -889,16 +909,16 @@ set\_property -dict {PACKAGE\_PIN C12 IOSTANDARD LVCMOS33} [get\_ports reset\_n]
     &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;33-axi-smartconnect&quot;&gt;&lt;a href=&quot;#33-axi-smartconnect&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.3. AXI SmartConnect&lt;/h2&gt;
-&lt;p&gt;In a first attempt I added a DDR2 controller. The &apos;run block automation&apos; reappeared. After running it an &quot;AXI SmartConnect&quot; appeared. I wondered why this was a different component comparing it to the &quot;AXI interconnect&quot; created by the Microblaze Block Automation. The documentation notes that both &quot;Axi SmartConnect&quot;  and &quot;Axi interconnect&quot; have similar functionality and that &quot;Axi SmartConnect&quot; supersedes &quot;Axi interconnect&quot;. In all the examples I saw using Microblaze and DDR RAM there were two &quot;Axi interconnect/smartconnect&quot; blocks. In this design I will use one to keep things simple. Have to check later how this impacts performance.&lt;/p&gt;
+&lt;p&gt;In a first attempt I added a DDR2 controller. The &apos;run block automation&apos; reappeared. After running it an &quot;AXI SmartConnect&quot; appeared. I wondered why this was a different component comparing it to the &quot;AXI interconnect&quot; created by the Microblaze Block Automation. The documentation notes that both &quot;Axi SmartConnect&quot;  and &quot;Axi interconnect&quot; have similar functionality and that &quot;Axi SmartConnect&quot; supersedes &quot;Axi interconnect&quot;. In all the examples I saw using Microblaze and DDR RAM there were two &quot;Axi interconnect/smartconnect&quot; blocks. In this design I will use one to keep things simple. I&apos;ll have to check later how this impacts performance.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Delete the existing &quot;AXI interconnect&quot;&lt;/li&gt;
 &lt;li&gt;Add an &quot;AXI SmartConnect&quot;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Double click the &quot;AXI SmartConnect&quot; it to customize:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Select the number of slaves: 3&lt;/li&gt;
-&lt;li&gt;Select the number of masters: 7&lt;/li&gt;
-&lt;li&gt;Select the number of clocks: 2&lt;/li&gt;
+&lt;li&gt;Select the number of slaves: 3 (Microblaze data path, data cache and instruction cache)&lt;/li&gt;
+&lt;li&gt;Select the number of masters: 7 (GPIO, Uartlite, ethernetlite, timer, MIG7, Quad SPI, Interrupt)&lt;/li&gt;
+&lt;li&gt;Select the number of clocks: 2 (the MIG7 will use the second clock input)&lt;/li&gt;
 &lt;li&gt;Enable reset input: has resetn input: 1&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Connect the block:&lt;/p&gt;
@@ -908,6 +928,115 @@ set\_property -dict {PACKAGE\_PIN C12 IOSTANDARD LVCMOS33} [get\_ports reset\_n]
 &lt;li&gt;Connect the &quot;processor system reset&quot; output port &quot;interconnect_aresetn&quot; to the resetn input&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;The AXI SmartConnect is configures such that all the memory interfacing (including IO mapped peripherals) runs through it. Two clocks are required because the DDR2 controller is part of a different clock domain.&lt;/p&gt;
+&lt;h3 id=&quot;331-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#331-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.3.1 Vivado screen shots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Add SmartConnect IP
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABMElEQVQoz62S22rCQBCG8/7v1NtCb4qIpZ5DojlusudTTMzfVduCYJG2Dnw3w87HP8NGz5spJuU8sMSUxIE1ZnSNd7HFXMS/YtauEHGpobWG8w7GGviuwziOfyZqmAIVHtIeodyIJG9RUoN9LbFJGxCq8PSS4HUpzgP3KiQ0V420aLEjAouUIA3yfUEwWVR421LUDYd1B1h/G+d7RC0VkFJ+k2Q1uHLQxiOvOQrCkTWhX1LE+wp9P/yY7iSNjO3QdReUtkgKijwkPAm1cSgbERIrrHY1dkUT3pjQt1dcCRlXYEKeBQ03IY1CVjN0h7CGdRiG4SYXsQEPs2UrQIQFUx6RDXt/HbsfRjB9gND+7vFPW1TMoCIt5nGGnDm08lP43/LdAOP6EOj4GOHVt3m08ANTFFTbgiuccgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Add SmartConnect IP&quot;
+        title=&quot;Add SmartConnect IP&quot;
+        src=&quot;/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-bf66f.png&quot;
+        srcset=&quot;/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-e6e4d.png 300w,
+/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-04aa4.png 600w,
+/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-bf66f.png 1200w,
+/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-7827d.png 1800w,
+/static/025_add_axi_smartconnect-00c551114eecbd01bf7d6c36bc4000cc-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;SmartConnect configuration
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/026_axi_smartconnect_properties-51721b3a031cbce2b6c3f1340895bbb8-b5db0.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1186px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 74.95784148397976%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAACXBIWXMAAAsSAAALEgHS3X78AAABPklEQVQ4y82T32qDMBSHff+XGIxRXNfd7xF2PRjdHzrqSrGriUmMmsRof+sJKKOslrU3O/AhxuQ7yTkmup9cY3YXYzaNEU9uML2dnE0cXyFiXCDnOXShUZYluq47G+cUIpJIKVGoAk3TBJxzIYHIBTjjyLYZpFLQWo9CrogEh9G2bZjAMgbGGKy1Q7IxaN5RIY1TKVjGg5jLGlI7KG1xLLz340I6Lt8LrXWhDLSAdkH1GhXapoVxPT58oHoIIUId6Z2S9MXf7Xa/Mgjnyy2SlGPxmeLpJUFlXNhhURRQUkHtG0JNq8oKpjbhSdRVHaiqajhBEL4uN9jkGsn6C8/vq0H41xiEiyQFVzVW6RZvH2vU9kKhbzs0vg34PX1TzhYe6/L/EFJ3SPCT/vodjp+C1kXGGFzCfCnw8JiGX4v4Bh8VhAOjPRzUAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;SmartConnect configuration&quot;
+        title=&quot;SmartConnect configuration&quot;
+        src=&quot;/static/026_axi_smartconnect_properties-51721b3a031cbce2b6c3f1340895bbb8-b5db0.png&quot;
+        srcset=&quot;/static/026_axi_smartconnect_properties-51721b3a031cbce2b6c3f1340895bbb8-ce319.png 300w,
+/static/026_axi_smartconnect_properties-51721b3a031cbce2b6c3f1340895bbb8-ac783.png 600w,
+/static/026_axi_smartconnect_properties-51721b3a031cbce2b6c3f1340895bbb8-b5db0.png 1186w&quot;
+        sizes=&quot;(max-width: 1186px) 100vw, 1186px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;SmartConnect connections
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABf0lEQVQoz52S626jMBCF8/4Ptr92tVWVqLQJSaCBcDHgO9hATgdLvdCuqt219MnCHp05jM/mR3yPuyIinnBfn4gDtu0BD+KISJz+iW2zx8YOHrfb7Q1D30XdwvY9dmeJn3u7uv+O+TYvgiM+rqUBayX+Z80zCe6TGueMIa9V4HRpkZcdWq5XFFUbmknjUDIBRmfK+nD2ijYDNsdCIGs0KjXgKS1xty/RCbsqXOgE1VBdRAZSZvCYVkgKvnI4jiM2z8yiFA7MzIjJaXzpkFecXMgVKd1drg12cYa4UIjOJc5/Emyps7EDpmkKKNND2x4ZieRMhb3k1JRxcKmg+glMOhStDr//RTDOOR6TkmZiwgyk7lE3HL8fjshai+3hGb92FKUoRl5UkFJDkPDrvphYCV7JRUMzG/z7RT846GFCpz0aSU1o+G6cv7zqIqaN/eTwyoOTiqLivA944rtoOOdCzWdB70kwqTTSenGp/yprQpnweEnJScxQnGrKbReoWIMXHy5NMCTbtKwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;SmartConnect connections&quot;
+        title=&quot;SmartConnect connections&quot;
+        src=&quot;/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-bf66f.png&quot;
+        srcset=&quot;/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-e6e4d.png 300w,
+/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-04aa4.png 600w,
+/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-bf66f.png 1200w,
+/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-7827d.png 1800w,
+/static/027_axi_smartconnect_links-09800b6ba91ff36bacd1df8c34a94523-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;34-axi-gpio&quot;&gt;&lt;a href=&quot;#34-axi-gpio&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.4. AXI GPIO&lt;/h2&gt;
 &lt;p&gt;The AXI GPIO IP block is used to control general purpose input/output pins. In our case only outputs are used to control an RGB LED on the Nexys4 DDR board. Add the AXI GPIO block, double click to configure:&lt;/p&gt;
 &lt;ol&gt;
@@ -936,7 +1065,114 @@ set\_property -dict {PACKAGE\_PIN N16 IOSTANDARD LVCMOS33} [get\_ports {GPIO\_tr
       &lt;/div&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;The GPIO width is chosen to 3 to be able to control the Red, Green and Blue channel of the RGB LED. THe output is renamed to &quot;GPIO&quot; so that physical pin constraints can be configured (later on) in the XDC file.&lt;/p&gt;
+&lt;p&gt;The GPIO width is chosen to 3 to be able to control the Red, Green and Blue channel of the RGB LED. The output is renamed to &quot;GPIO&quot; so that physical pin constraints can be configured (later on) in the XDC file.&lt;/p&gt;
+&lt;h3 id=&quot;341-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#341-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.4.1. Vivado screen shots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Add AXI gpio IP
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/028_add_axi_gpio-4905d558f75559e0f92e5ab3cd9df907-5e5fa.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 994px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 78.57142857142857%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABO0lEQVQ4y82US07DMBCGff8VQlAQKg9RLsGGG3CCVtBA29R5uI2d2M5LPx6LZlEUWtINI32ylIy/eEbjsKebCzzcjzF5vMPt+BpXo/PBjC7PwLIsQ5KkUEqhbduT0CYFi2KB7WYLJZVDOnGOuq4Hw4qiAJ2SpEYbNE2DqqpAz+M4RhIn4JwjiiKfdwhGm/eDpNK9DFchloslgiDA4nMBvuYQQkC6SvroFWqtMX+bI3X9tdZ2SNea6ewdq5BDFRralh3KVfirkGS0GmM8lGvLEqlw7bHVDwpT9gtJkOe5L4P6Sz09JryQiwLrxG3MS2S5dSepvXBIeOEsWGE6X4KnEmEksJH6NGHdtCirpmNX8mBhXw//v5DWv8JoWPfvI32E5o+uXfr949jN4iHYsYl9vLxyTJ4//A2K3QG+AEduzHXrMcBLAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Add AXI GPIO&quot;
+        title=&quot;Add AXI GPIO&quot;
+        src=&quot;/static/028_add_axi_gpio-4905d558f75559e0f92e5ab3cd9df907-5e5fa.png&quot;
+        srcset=&quot;/static/028_add_axi_gpio-4905d558f75559e0f92e5ab3cd9df907-4614f.png 300w,
+/static/028_add_axi_gpio-4905d558f75559e0f92e5ab3cd9df907-dd912.png 600w,
+/static/028_add_axi_gpio-4905d558f75559e0f92e5ab3cd9df907-5e5fa.png 994w&quot;
+        sizes=&quot;(max-width: 994px) 100vw, 994px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;GPIO Configuration
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/029_axi_gpio_configuration-34cce5b372b466fcc75568d0fc2a84b5-0876f.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1028px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 80.73929961089495%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABd0lEQVQ4y6WUy07DMBBF8/97JARFVALRLvgIJL6ANQuKBHnHjySOnefFY5qqaiGkxdKRZTtzPb5jx1svr7B6uMN6dY/l7QI3i8uzWVxfwMulRJZm0Fqj7/t/oaoAXpQwsIyhyAsIzqFUhbqu0TTNDhrPxdO6QlmUKIoCbduCGvXSZh5HsdssDEIwxiCEmIRiPMrgsJEgt9mmSWp74URpd7Jliqqqfhckgbw0UKXCMAyzoLhJQWmzy5IMw3ZuNJ9iRnsO4yYFyVfBhPM4TRIkFjoalwqc8S3iWNBPC0SsBC9r8Fy7BWOMrbo1mksnSkcnj+h7bSyVdhhtjgVfN5+OKJN491OYurECpa1ajq7rHCd52JEvbW8nOrRdvzvy2A+Y1/70sFLqu8p2jvxUNLYYrc8rCj3JOEzcfdy8bRx0P4PY4gcI/RBREM8TpKLsv1OaG5/i/hXah9Y8ChyNH6Hs6GiU2fjjmIt3ysc/8fj0geeX2N5HeusSXyfDywSId2B6AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;GPIO Configuration&quot;
+        title=&quot;GPIO Configuration&quot;
+        src=&quot;/static/029_axi_gpio_configuration-34cce5b372b466fcc75568d0fc2a84b5-0876f.png&quot;
+        srcset=&quot;/static/029_axi_gpio_configuration-34cce5b372b466fcc75568d0fc2a84b5-4a1a3.png 300w,
+/static/029_axi_gpio_configuration-34cce5b372b466fcc75568d0fc2a84b5-fc3c6.png 600w,
+/static/029_axi_gpio_configuration-34cce5b372b466fcc75568d0fc2a84b5-0876f.png 1028w&quot;
+        sizes=&quot;(max-width: 1028px) 100vw, 1028px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;GPIO Connections
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABdElEQVQoz52S626CQBCFff8H6782xjaReEMFFFh2YS8sCwinA1ZTg23STvIlkIGzZ+fM7GW7wDz2iBUWzCc2+BAbLOUOnvT/xDtfY2Zdg77vn+KaFrmyePNi7E4aXd899Jv2Alk6CG3RdtceCbb4qZgw4ELi1ePYnJpJn+cKWa5x4pqEa1SVw+zMNIS0T/FDgYTlEIUZ4fTzcKMbYSzuz9WXsbtgIkqcyVFaWKTDe26w9NmDo8EBy0sckwKHs0BAgrcaREdBZSrUTYOC5pDpGkEqETCJkPD2DIdIYL2PiQQrP8b2mGBNzuerEMffBG9khUbCFSQdkHKJXZAgyAy2EYe3C+naBbStoWhmhdRTwe+hdF1PV9eIM0UJtuMBXF7HEJHjjELQpoQp7UjC+FQwK4YP3EiuSkTC0ooIOOdQ1w0d0k3SNbaCMpYcKvgRo5QNMllNHQ57ZKp25LdilDaj4LShUYTpaEJoNxX8Tw1jai/XpR7qE62YTyt9igimAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;GPIO Connections&quot;
+        title=&quot;GPIO Connections&quot;
+        src=&quot;/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-bf66f.png&quot;
+        srcset=&quot;/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-e6e4d.png 300w,
+/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-04aa4.png 600w,
+/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-bf66f.png 1200w,
+/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-7827d.png 1800w,
+/static/030_axi_gpio_connections-5675fe26b6d56389779ffdd86f9fb1cd-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;35-axi-uartlite&quot;&gt;&lt;a href=&quot;#35-axi-uartlite&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.5. AXI UARTlite&lt;/h2&gt;
 &lt;p&gt;The AXI UARTlite IP block allows the processor to communicate via serial port to the outside world. The C/C++ print routines will make use of this serial port. Add the IP and customize it by double clicking:&lt;/p&gt;
 &lt;ol&gt;
@@ -966,8 +1202,79 @@ set\_property -dict {PACKAGE\_PIN C4 IOSTANDARD LVCMOS33} [get\_ports UART\_rxd]
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;The serial port is accessible via USB. It uses the same USB port which is also used for JTAG and FPGA/Microblaze programming.&lt;/p&gt;
+&lt;h3 id=&quot;351-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#351-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.5.1. Vivado screen shots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;UART lite settings&lt;br&gt;
+&lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/031_axi_uartlite_settings-98651657ed1b86b3c86b58e149003259-b61cb.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 802px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 83.91521197007481%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAAsSAAALEgHS3X78AAABUUlEQVQ4y+VU20rDQBDd3xaRgkUriC9+my8VQRo3adJkL7m2TS/HPastbbUh1EcPHHY2Gc7OzM6seB5e42F0i6fHkeM97oYDDG6uLqbQWiNNM8ziBNbm+Ats8QIRxQpGG8+mbpDnOcqixGazuYiiaRrM5/MfXCwWe3JPvz4UdC6KAlZb5C7ldtlitVqhriokrgyeyQzyQ0IGEsYYn8U5CkZwCgryECklZk5sGkWIwsiXwloL1n1H7nsJMvJgEmA8foVSai/GNXTilcugLEtUZQVrrK8/0SmYuui0Mkf/6E8x+rRt6+tGe4dOQa30kTOx3W6PbpX7Q3jB91DhLYiR5Q0mUQpT1F6QETDFuqq/b3zp7XMtQ3EvGCYawTRDnFqEcebS+GodOqzXax8l153dhc6UL8F/FGQfHc7t4eyefu9D8dvD0JccT+V6lSOXuSeQ/AQqJBTSJYKmlwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;UART lite settings&quot;
+        title=&quot;UART lite settings&quot;
+        src=&quot;/static/031_axi_uartlite_settings-98651657ed1b86b3c86b58e149003259-b61cb.png&quot;
+        srcset=&quot;/static/031_axi_uartlite_settings-98651657ed1b86b3c86b58e149003259-dfd7a.png 300w,
+/static/031_axi_uartlite_settings-98651657ed1b86b3c86b58e149003259-f0d7d.png 600w,
+/static/031_axi_uartlite_settings-98651657ed1b86b3c86b58e149003259-b61cb.png 802w&quot;
+        sizes=&quot;(max-width: 802px) 100vw, 802px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;UART connections&lt;br&gt;
+&lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABb0lEQVQoz5WS2W7CMBBF+f9v6TdUfepbUUURpEDYQpw9XuLEDllu7VS0pUBFRzqyoomOZ8YzenYneA0dwwKTZGNYYZqvMOdrOHzzL6bZEqNKH+FHFHEm8PC4wWwr0PUdKqXQ9/0XQiocYgo/FaBSoyjLs7yl7VqMqFBw9wnSXOBpHMMlCvYSyuVwntiTFH7McUikkdWD4Hc0TWMrbJDk8iKplD77tsJ9aCpMBEhSoJDldeH7LoUXsIukrTDMC4RmFPbcejESJg0VbFfXYhC+OD6cdTxIfzJ3CZxdjPEiwGRJwIvvLuwIbgqpqBClzMyHgZiB+wlDlHH4JERMTY4qBGkBWVb3CVNWIss5ZmsCkld4W3qYOjOQYI8sCyGEHMgou08oqxpa16ibDqU6DjRti6775PSaVipLZR6jMiuk/xY2TXv1B8oL0y4DMzLPD+BsI0S8HlbnptCuza0oVY280KbiDkprLMy+ktxUqdqbwg+5cU8xs5FNdAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;UART connections&quot;
+        title=&quot;UART connections&quot;
+        src=&quot;/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-bf66f.png&quot;
+        srcset=&quot;/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-e6e4d.png 300w,
+/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-04aa4.png 600w,
+/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-bf66f.png 1200w,
+/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-7827d.png 1800w,
+/static/032_axi_uartlite_connections-8ecafca002bc709ae900cabd73337bd2-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;36-axi-interrupt-controller&quot;&gt;&lt;a href=&quot;#36-axi-interrupt-controller&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.6. AXI Interrupt controller&lt;/h2&gt;
-&lt;p&gt;The interrupt controller signals the Microblaze once an external event needs to be handled by the processor. Interrupts are generated by the Timer and Ethernet component. &lt;/p&gt;
+&lt;p&gt;The interrupt controller signals the Microblaze once an external event needs to be handled by the processor. Interrupts are generated by the Timer and Ethernetlite component. &lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Add a Concat block if it is not already connected to the interrupt controller.&lt;/li&gt;
 &lt;li&gt;Connect &quot;dout&quot; of the Concat block to intr of the interrupt controller&lt;/li&gt;
@@ -979,8 +1286,43 @@ set\_property -dict {PACKAGE\_PIN C4 IOSTANDARD LVCMOS33} [get\_ports UART\_rxd]
 &lt;li&gt;Connect the axi bus &quot;s_axi&quot; input to the &quot;M02_axi&quot; output of the AXI SmartConnect.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Note that the intr input is initially displayed as intr[0:0]. This will update automatically to intr[0:1] once the design is validated.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABqElEQVQoz5VSa3PTMBD0//9PfOUbA5QWQuLUruOHXpb1sC3XjrOcPNAGGphhZ3akOd3tnVZK3h/v8IntiHvcyYyY4l6n+GYfsbPZf/G+PSAZpxmXy+WFQntY71FLh3cfO/TTGWMIv+VESm2xrCu0GzE+L1tsvaxRcME1pO7xJ0KY3sTKpgVrPUrlcaxadG6gvICk4BZFoyFNACextFCIU1+zsz36cYboBpS829aHQw2mHJ6YgTATJppyWRYkx9og5wbMjvj+xPD5wKBpf81GGHx9FHTO8ZArfNiV24TXiI03Qd4FSDvBjgtNOdCVPYkM1N1uRY20JNih5i3KdqDmHl+ODEq724INJaUFR6P6bRpBvuSVQFoqVHS2yxvssxLGOnqcGa6f8DwvEMr8XfBEPhp6rfP5TMkzZOdQCouTII/I30ZoOE8+DuMLi4rfFsxZLDQk4jfBGIzrLfz6MhEVE2QLpzoN7QOG8FMwYw6Vji/sNqHIlf7XLRS1RFYrtHQD1XbY5zVOZFWlRxg/bbVJ9GVdXzv/C/N5hQ90A8qP07CWrJEe0r1q/AAvmEsAYbmPJAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Connecting the interrupt controller&quot;
+        title=&quot;Interrupt controller connections&quot;
+        src=&quot;/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-bf66f.png&quot;
+        srcset=&quot;/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-e6e4d.png 300w,
+/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-04aa4.png 600w,
+/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-bf66f.png 1200w,
+/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-7827d.png 1800w,
+/static/033_interrupt_controller_connections-69cbb5da455dbd7fa820f6b2f4228659-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h2 id=&quot;37-axi-timer&quot;&gt;&lt;a href=&quot;#37-axi-timer&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.7. AXI Timer&lt;/h2&gt;
-&lt;p&gt;The Timer component implements a programmable timer. Add an AXI Time IP block. Configure by double clicking:&lt;/p&gt;
+&lt;p&gt;The Timer component implements a programmable timer. It is used by the Xilinx SDK to implement the &quot;sleep&quot; subroutine. Add an AXI Time IP block. Configure by double clicking:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;The Default settings should be ok.&lt;/li&gt;
 &lt;/ol&gt;
@@ -991,6 +1333,39 @@ set\_property -dict {PACKAGE\_PIN C4 IOSTANDARD LVCMOS33} [get\_ports UART\_rxd]
 &lt;li&gt;Connect the Processor System Reset output port &quot;peripheral_aresetn&quot; to the &quot;s_axi_aresetn&quot; input.&lt;/li&gt;
 &lt;li&gt;Connect the interrupt pin to &quot;in0&quot; of the Concat block (which is connected to the interrupt controller).&lt;/li&gt;
 &lt;/ol&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/034_AXI_Timer_settings-fb9026eebb79794f59609937ea68bb02-b61cb.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 802px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 83.91521197007481%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAAsSAAALEgHS3X78AAABiklEQVQ4y62U60rDMBiGe9siMnDoBBHEK/AC/O99qGhhc2PHrtvaJmmbtmm313ypLWMnyjTwkDRJ3++UxHpqX+Kuc42H+47mFjftFlpXF2dj+b6P1XKFIAgQxzH+0pj4gDWbewj8wCBjCc45QhFivV6fhSWlRJIke6RpWkPftK8JFm0WQoD5DJxxqEwhz3PEUQR37pa4C0zGEziOYyI4hUUe7DYSNBZ1CigVZEhw0SzkY4LkOQ9KoQojrPOr9HqWZQcLc1JwqUNN9PquF0VRlORlX81vNptSkEUpAiERJcqQ6TyWxZFwZ3M4GtdxDcvF0ng6HU/he77Zt+fhZ2+Ed7uP3nAKuzsAF1Fd6SiMEOkCkdf5b6hVr5Qynu0Jvn31YH8PsWIxuv1hLcgZM4K0h8Jp0oxgqgrINDckqTKWSZDp2+Ot9MEPmB6zuij0D1U/1MbI070cHisKCQstUh0bvjUmQ1z3u9U+KXhO+39BuhHb93b77u7ON8E69DA05fl1hMeXPuyBZ55A4gcILBBH38/ItwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;AXI Timer settings&quot;
+        title=&quot;AXI Timer settings&quot;
+        src=&quot;/static/034_AXI_Timer_settings-fb9026eebb79794f59609937ea68bb02-b61cb.png&quot;
+        srcset=&quot;/static/034_AXI_Timer_settings-fb9026eebb79794f59609937ea68bb02-dfd7a.png 300w,
+/static/034_AXI_Timer_settings-fb9026eebb79794f59609937ea68bb02-f0d7d.png 600w,
+/static/034_AXI_Timer_settings-fb9026eebb79794f59609937ea68bb02-b61cb.png 802w&quot;
+        sizes=&quot;(max-width: 802px) 100vw, 802px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h2 id=&quot;38-axi-ethernetlite&quot;&gt;&lt;a href=&quot;#38-axi-ethernetlite&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.8. AXI Ethernetlite&lt;/h2&gt;
 &lt;p&gt;Note: at this point actual use of the lwIP stack has not been tested yet.&lt;/p&gt;
 &lt;p&gt;The Ethernetlite component presents a memory mapped ethernet device to the Microblaze. In the C user application running on the Microblaze the lwIP stack will be used to connect to the Internet.  The Ethernetlite component presents a MII interface. The Nexys4 DDR contains a LAN8720A chip which already implements part of this interface. That chip presents a so called reduced MII interface. Xilinx has a MII_to_RMII IP block available to convert. Add both the &quot;AXI Ethernetlite&quot; and &quot;Ethernet PHY MII to Reduced MII&quot; to the block design.&lt;/p&gt;
@@ -1059,6 +1434,145 @@ set\_property -dict {PACKAGE\_PIN D5 IOSTANDARD LVCMOS33} [get\_ports ETH\_CLK]
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;In most tutorials the 50MHz clock is used to drive the LAN8720A chip and the MII_to_RMII block. According to some recommendations the  MII_to_RMII block introduces a clock delay. Ideally the clocking wizard should be used to create two 50 MHz clocks, one with a phase delay. The un-delayed clock is connected to the MII_to_RMII block. The delayed clock is connected to the LAN8720A. Furthermore there is a discussion if the LAN8720A can be clocked used a synthesized 50MHz clock as there the clock jitter would be outside its datasheet specs.&lt;/p&gt;
+&lt;h3 id=&quot;381-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#381-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.8.1. Vivado screen shots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Ethernet lite configuration
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/037_ethernetlite_settings-dc2d16017d42a1819cf13342d2affbdc-5e5fa.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 994px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 78.57142857142857%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABa0lEQVQ4y61Ty07DMBDM/58QgoJQeYjyE1z4A65IiB5omqRN7DwdO6+mg3epKlS1QQpYGm3keCczO47zdHOBh/spZo93uJ1e42pyPhqTyzM4WZZBCgkpY9Bz3/ejYaoYTiQSZGkGVSiLAkqV6LpuNBytNfI8Z9LKVNhsNmjbFrQvhGD1URgh8AJEkeCzQ3Co+XARaWHVxnGMNEkRrkN7uOC933CSsKoq+J4Pz/V4vkopbLdbGGN4PGSPemnvJwYJm6aBLjWTUS1tJaU0DkJd12ib1p7v972DhKtgBX/pw/102TbNmNIkhUYbVnlUYZRqyNyg0A1EYpPW9bfCurGqyt0NUPsmUkbqj4lhwrf5Eh+LFdaxwvt8gSQrmdBYWzKSnLSwCZNyIqRKSqkeJTxlubUqUnud0iTjtGmOZHtoDRJ29l2xs1vYMMg+KRtNOGb9PyEldvg/0kfY8ph/mRr/gpfXELNnl2ct7G34AjbnyqHhDqymAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Ethernetlite configuration&quot;
+        title=&quot;Ethernetlite configuration&quot;
+        src=&quot;/static/037_ethernetlite_settings-dc2d16017d42a1819cf13342d2affbdc-5e5fa.png&quot;
+        srcset=&quot;/static/037_ethernetlite_settings-dc2d16017d42a1819cf13342d2affbdc-4614f.png 300w,
+/static/037_ethernetlite_settings-dc2d16017d42a1819cf13342d2affbdc-dd912.png 600w,
+/static/037_ethernetlite_settings-dc2d16017d42a1819cf13342d2affbdc-5e5fa.png 994w&quot;
+        sizes=&quot;(max-width: 994px) 100vw, 994px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Ethernet lite clocks
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/038_create_eth_clk_port-6648db4ca44f0bda487a35e24aa0ad28-eac13.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 553px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 82.45931283905968%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABeElEQVQ4y62T20oDMRCG991Eb7SgKIigQsV7H0HwRcTX6kWxzZ66SXazmz3Qm/5mZjd7UVptpQs/nUkm3xySBm83Z7i7vcL0+QHTp3u8vjzienKByeX5vxSYosDie4E4ipFECZI4RrgMkcbpaAshEIvI2RHEUqDrup2q7BwBhm+z2WDf5/d+i8mLOdrOAdu2xSkVUKnULrfs2iS/aRpub5WssF6vD5K1Neq67oGRCHk2pjAMpEypm6eSmuHk75vbthiopEJZluNibmosQ4lUltCmhcxrZNoeDszzHLay4xxM1SDJDIMIqEjOrqqKE5MozlrLa8YY7mQEkiMW/dMJw9AFuMqU5gNeBNFaI8syKKUYQoX4NdonDgPJoU0O0j2ocO/zWI2XUjqQX6xs3zrZlMDPhrKbIe7PGTLQVegvhoHOp8NUedO0DKT97UQ7gVRqMbTs2/cwHsXQzsG3fEqdHkjvaJWpow59fM3w/jnjX3oRUkr3b4vY/gFdaKag0g4EcgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Ethernet lite clocks&quot;
+        title=&quot;Ethernet lite clocks&quot;
+        src=&quot;/static/038_create_eth_clk_port-6648db4ca44f0bda487a35e24aa0ad28-eac13.png&quot;
+        srcset=&quot;/static/038_create_eth_clk_port-6648db4ca44f0bda487a35e24aa0ad28-da1a7.png 300w,
+/static/038_create_eth_clk_port-6648db4ca44f0bda487a35e24aa0ad28-eac13.png 553w&quot;
+        sizes=&quot;(max-width: 553px) 100vw, 553px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Ethernet reset port
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/039_create_eth_rstn_port-bbd76d4db17dc8ac99b23836aaad1594-eac13.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 553px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 82.45931283905968%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABi0lEQVQ4y62T3UrDMBTH926iNzpQFERQYeK9jyD4IuJrDRzr+rHaJG2a9IPd7G/OadOLsblNVviznOTkd76y0dvNGe5urzB5fsDk6R6vL4+4Hl9gfHn+L410USCYB0jiBMt4iWWSIFpESJN0WIdhiCSM3TpGuAjRtu1WGTvDCP23Xq+x6/Nnf/nkxQxN64BN0+CUGlGqVC6X7Moku65rLi92ZepCY7Va7ZW1Faqq6oBxGHFv6DLZFCl1/ZRCMZzsXX3bFAOlkCjLctjMdYV5kCLJNJRuIPIKmbKHA/M8hzV26IM2NVJhkDkQASXJrY0xHJhEftZa3tNacyUDkIww6J5OFEXOoYSSii94EUQphSzLIKVkCCXi9+icOAwkgw7ZSXWgwr3PYzUMpXQgv2lsVzqtKYDvDUXXvd/eHjLQZegHw0Bn02XKvK4bBtL5ZqCtQEq16Ev25XsYt6Iv5+ApH6ou88AN4dtNV5wGqHXiFLvB5duB9I5+MoljwB9fU7x/TvmXXoQQgv+mtP4FNRClqMAKzIYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Ethernet reset port&quot;
+        title=&quot;Ethernet reset port&quot;
+        src=&quot;/static/039_create_eth_rstn_port-bbd76d4db17dc8ac99b23836aaad1594-eac13.png&quot;
+        srcset=&quot;/static/039_create_eth_rstn_port-bbd76d4db17dc8ac99b23836aaad1594-da1a7.png 300w,
+/static/039_create_eth_rstn_port-bbd76d4db17dc8ac99b23836aaad1594-eac13.png 553w&quot;
+        sizes=&quot;(max-width: 553px) 100vw, 553px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Ethernet lite connections
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABq0lEQVQoz5VSWW7bMBDV/S+TO/QjfwECwYgNxTJjS9ROUhQXrfbrSEXaugmadoAHAhQ185YJHuMQz8WBECGsGeGInTxir084aPZf2IlXBEJ78FKilhoP31JEfMTtdvsAN0xopEIhDZSbMM4z3Y0/0VmH5bog4KVGRg0/q3FaoI3DMM5oux5pIZBWLXJhYf1093a5XjHTkOB4EcRQwTp/h4gVeGEljnmHp/0ZRWOQVw2ypkMpLXpi5Yn1O5zvfzR8DBO8cQlJ0n9HeLjgLZdI5YBdnON5z7fBq2RBbJ0fPijaGjJqVtLUpOwQJzVOqUBWG7wyTjI9eWuh6DxzAZbkiOl8OXEobT5vmFWazG4RRhdw6bFnGbE7QbX67vE6tGoUskoRQ7/J1MZDqI4C6X81FMqgqgUSMjwhSSytSFpDP4s7Ty98ZV9tQ1nRIjrXiNMaXDjy1YAXNay1CLRZ/fCU6PRXWDcQS7UFUipLyU/ktUNrBhj61rYtjDEIrB9xpci/qlUeI0bnQm1hVcpvQ95TNrSHzjkEfpjxL7Usy7b8Ge1g2Xr0tJvr3Z+hfAcfWkgvp7xoSQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Ethernet lite connections&quot;
+        title=&quot;Ethernet lite connections&quot;
+        src=&quot;/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-bf66f.png&quot;
+        srcset=&quot;/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-e6e4d.png 300w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-04aa4.png 600w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-bf66f.png 1200w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-7827d.png 1800w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;39-axi-quad-spi&quot;&gt;&lt;a href=&quot;#39-axi-quad-spi&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.9. AXI Quad SPI&lt;/h2&gt;
 &lt;p&gt;The Quad SPI component is connected to the external Quad SPI Flash (A Spansion S25FL128S). It allows the FPGA to retrieve its bit stream from the Flash chip. Furthermore the Microblaze will be able to boot the user application from flash. Add a Quad SPI IP block and configure it:&lt;/p&gt;
 &lt;ol&gt;
@@ -1092,11 +1606,86 @@ set\_property -dict {PACKAGE\_PIN M14 IOSTANDARD LVCMOS33} [get\_ports QSPI\_FLA
 set\_property -dict {PACKAGE\_PIN L13 IOSTANDARD LVCMOS33} [get\_ports {QSPI\_FLASH\_ss\_io[0]}]&lt;/code&gt;&lt;/pre&gt;
       &lt;/div&gt;
 &lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Configure Quad SPI IP block
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/040_quad_spi_config-45c7ed01ad557ec2eacd58c6a873534c-eba86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.3512336719884%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAABLklEQVQ4y6WT6U7DMBCE8/4Pwh8kINDyNv2Deigh8RUfudrBY0hVIbWyWksj27HzZXdnU6xen1G+veBz/YH16v0hleUTCm0snHNJ4zhinue7NU0DCu88bGfR9/35gGCtNUQr0DYtmijuc1RM04T/g1ApJeqqxmF3wDAMWQohXAcySqMNlFTpcs44Ho/XgaypjDCuCeS90+l0U7x7M0IpZJJSCt77vAj7+PXNtkElLIQJ2NcRYjzG+Jx1pFmMNiftBGQhN9tv7BuNqtX42lVQnUugxfncca7hHBfzfKlYQ2uhlUbw4a/HpvTC3aYwOhuhlLPucZeHzsAKkWAhGsIfwKfZpX7jnmeE5LkcTVAxZWN+e5Hpc1607GkYs+hMl1QwNbbIpegoLxKWo6ULyPoBhhs4HbdrzTsAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Configure Quad SPI IP block&quot;
+        title=&quot;Configure Quad SPI IP block&quot;
+        src=&quot;/static/040_quad_spi_config-45c7ed01ad557ec2eacd58c6a873534c-bf66f.png&quot;
+        srcset=&quot;/static/040_quad_spi_config-45c7ed01ad557ec2eacd58c6a873534c-e6e4d.png 300w,
+/static/040_quad_spi_config-45c7ed01ad557ec2eacd58c6a873534c-04aa4.png 600w,
+/static/040_quad_spi_config-45c7ed01ad557ec2eacd58c6a873534c-bf66f.png 1200w,
+/static/040_quad_spi_config-45c7ed01ad557ec2eacd58c6a873534c-eba86.png 1378w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect the Quad SPI IP block
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABq0lEQVQoz5VSWW7bMBDV/S+TO/QjfwECwYgNxTJjS9ROUhQXrfbrSEXaugmadoAHAhQ185YJHuMQz8WBECGsGeGInTxir084aPZf2IlXBEJ78FKilhoP31JEfMTtdvsAN0xopEIhDZSbMM4z3Y0/0VmH5bog4KVGRg0/q3FaoI3DMM5oux5pIZBWLXJhYf1093a5XjHTkOB4EcRQwTp/h4gVeGEljnmHp/0ZRWOQVw2ypkMpLXpi5Yn1O5zvfzR8DBO8cQlJ0n9HeLjgLZdI5YBdnON5z7fBq2RBbJ0fPijaGjJqVtLUpOwQJzVOqUBWG7wyTjI9eWuh6DxzAZbkiOl8OXEobT5vmFWazG4RRhdw6bFnGbE7QbX67vE6tGoUskoRQ7/J1MZDqI4C6X81FMqgqgUSMjwhSSytSFpDP4s7Ty98ZV9tQ1nRIjrXiNMaXDjy1YAXNay1CLRZ/fCU6PRXWDcQS7UFUipLyU/ktUNrBhj61rYtjDEIrB9xpci/qlUeI0bnQm1hVcpvQ95TNrSHzjkEfpjxL7Usy7b8Ge1g2Xr0tJvr3Z+hfAcfWkgvp7xoSQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Connect the Quad SPI IP block&quot;
+        title=&quot;Connect the Quad SPI IP block&quot;
+        src=&quot;/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-bf66f.png&quot;
+        srcset=&quot;/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-e6e4d.png 300w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-04aa4.png 600w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-bf66f.png 1200w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-7827d.png 1800w,
+/static/041_connect_quad_spi-0137a82249e2bf371ef89fdf28a669a7-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&quot;310-axi-ddr2-controller&quot;&gt;&lt;a href=&quot;#310-axi-ddr2-controller&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.10. AXI DDR2 controller&lt;/h2&gt;
-&lt;p&gt;The Memory Interface Generator (MIG7) is used to create a DDR2 controller for the Micron MT47H64M16HR-25:H RAM chip on the Nexys4 DDR board. The Microblaze will use a BRAM based bootloader to copy the user application from Flash to DDR2 Ram. The DDR2 controller requires very precise timing parameters. These are specified in the &lt;a href=&quot;&quot;&gt;DDR2 RAM tutorial&lt;/a&gt;. Add a MIG7 component and double click to configure:&lt;/p&gt;
+&lt;p&gt;The Memory Interface Generator (MIG7) is used to create a DDR2 controller for the Micron MT47H64M16HR-25:H RAM chip on the Nexys4 DDR board. The Microblaze will use a BRAM based bootloader to copy the user application from Flash to DDR2 Ram. The DDR2 controller requires precise timing parameters. These are specified in this &lt;a href=&quot;https://www.instructables.com/id/Configuring-the-MIG-7-Series-to-Use-the-DDR-Memory/&quot;&gt;DDR2 RAM tutorial&lt;/a&gt;. Add a MIG7 component and double click to configure:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;At this introduction page click Next.&lt;/li&gt;
+&lt;li&gt;At the introduction page click Next.&lt;/li&gt;
 &lt;li&gt;Again click next.&lt;/li&gt;
 &lt;li&gt;Select the pin compatible FPGA. The Nexys4 DDR uses the xc7a100ti-csg324.&lt;/li&gt;
 &lt;li&gt;Choose DDR2 as controller type.&lt;/li&gt;
@@ -1119,8 +1708,8 @@ set\_property -dict {PACKAGE\_PIN L13 IOSTANDARD LVCMOS33} [get\_ports {QSPI\_FL
 &lt;li&gt;
 &lt;p&gt;On the &quot;Memory Options&quot; page choose:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Set the &quot;input clock period&quot; to 100 MHz. If this setting is missing chances are that you run across a bug in the Memory Interface Generator (MIG7). When running Vivado 2018.2 from Ubuntu use the right locale settings. Restart Vivado from the terminal and first execute: export LC&lt;em&gt;NUMERIC=en&lt;/em&gt;US.utf8&lt;/li&gt;
-&lt;li&gt;RTT-ODT to be 50 ohms. &lt;/li&gt;
+&lt;li&gt;Set the &quot;input clock period&quot; to 100 MHz. If this setting is missing chances are that you run across a bug in the Memory Interface Generator (MIG7). When running Vivado 2018.2 from Ubuntu use the right locale settings. Restart Vivado from the terminal and first execute: export LC_NUMERIC=en_US.utf8&lt;/li&gt;
+&lt;li&gt;Set RTT-ODT to be 50 ohms. &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/li&gt;
 &lt;li&gt;
@@ -1209,19 +1798,601 @@ set\_property -dict {PACKAGE\_PIN L13 IOSTANDARD LVCMOS33} [get\_ports {QSPI\_FL
     set\_property -dict {PACKAGE\_PIN M3 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_odt[0]}]
     set\_property -dict {PACKAGE\_PIN K6 IOSTANDARD SSTL18\_II} [get\_ports {DDR2\_cs\_n[0]}]&lt;/code&gt;&lt;/pre&gt;
       &lt;/div&gt;
+&lt;h3 id=&quot;3101-vivado-screen-shots&quot;&gt;&lt;a href=&quot;#3101-vivado-screen-shots&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.10.1 Vivado screen shots&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Add MIG7
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABeElEQVQoz5WS626jMBBGef8H299RtFJJUUIgGPCFi8EmGEO+DqyabXpRW0tHlvFwmPlE8Oe4x64MiWfsZYydOBInPOkTQh3/ir9VhCCXHSpt74SnAnHGkVUGEWuwixh2IUMuG4i2h6Ia6ya4yeF2uz2w3BYEl6JFwhTOmQRXPRLac15D1BYFnWt9pQ8oMK4Q0V1cNvS8JeGE92uVBvsoQ6kdEqERnguoWuN6HR8KueqQFRIpybgeoc2IafKY53ljWZb/wkMicJEGz6nAkTq4sBLG2k36SsIkRKUhWwvR9BTNgCSvkfIWuTI0jQErSgzDgGAtbHW/obt177Zx3tJQbmuucdEg4RoxyQrR0LmlCDrIxmyyTWgGd2/9K9Ya3Vso6nAd3/nlYeSVVeacQzCMHt+t3l4RJSXOZYtUdDikkmIZMYzTna43sBTVj4ST91uHvKb8uhGW3vF+/lDnqe5Hwtf1b/Thy/tfCd0048gqZMpidH77RT4TvgAFUU5YwezGZAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Add MIG7&quot;
+        title=&quot;Add MIG7&quot;
+        src=&quot;/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-bf66f.png&quot;
+        srcset=&quot;/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-e6e4d.png 300w,
+/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-04aa4.png 600w,
+/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-bf66f.png 1200w,
+/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-7827d.png 1800w,
+/static/041_Add_Memory_Interface_Generator-cbd94a4599d3ed7d317adea708167e77-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Intro page
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/042_Memory_Interface_generator_intro-bfbc1e0ceda6d052ff0798723779be18-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABwUlEQVQ4y82U227TQBCG/e5cQCVaaCMRUWgaDhKGm6K0IFBUUYTaKCcndby2Nwk4PsVrxUke4Wd2QiuqFNSCkLj4NDP2zK/xzqyNankbT3fL2K88wf7eLip7j1HaeYCt+xu4d/cOtjY3sLO9eWOMsRfCsSSCaMak0xy2bcN1Pfi+DymH8KWE53nkr6yOXdeFHA45R6PjKIphHDdyvD0uLrG9HHEcI01TFEWB+Xx+K4yPZwpv6vklPZGh0+2iS/T7fdiDATzqwHEEHOEQgjsSwuWudMcuoXOiKILx4TTDaxK6oCemlKyL5I9PloiTBBF1rQsS7ZONk1U8m82wXC6xWCzYrgn2PcUv/hQWNOvqSoej0YgP+LqCPFfUVfF7wbKpUHqh8PxQwXJSnDUaPMnrCrIsQxiGtA3TXws+eqXw8JlCtbYSbDabOKfV0efyM3qKWmwyCdeme5HDgqWXJFhVqBysBLuWBYtotVqwej2O2SfLk7cHvAntdpttp9Oh5+ec+2+G8n8Lfjmd4P3nFO9OYhx9iiFk9neCo/oJT7VWq8E0Tb5Ot72/V+7yt2CC8deA/hxjWuZkbVVugnB9BEHIGt8BjEh0x2B/uKwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Intro page&quot;
+        title=&quot;MIG7 Intro page&quot;
+        src=&quot;/static/042_Memory_Interface_generator_intro-bfbc1e0ceda6d052ff0798723779be18-12e06.png&quot;
+        srcset=&quot;/static/042_Memory_Interface_generator_intro-bfbc1e0ceda6d052ff0798723779be18-7107b.png 300w,
+/static/042_Memory_Interface_generator_intro-bfbc1e0ceda6d052ff0798723779be18-fb611.png 600w,
+/static/042_Memory_Interface_generator_intro-bfbc1e0ceda6d052ff0798723779be18-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Output options
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/043_Memory_Interface_Generator_Output_Options-926bcaaeb06969170228f2442db4eb63-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAAB60lEQVQ4y6VT227TQBT0/wupVK1IlZY2BSQML6BwESiqWoQKCSapHcd27PgeX7YJST5hOGddR6XkIYGH0ewe64znXFZpNfZx0mzg7PQYZ0+bODk+QrN5hMPDfeztPdoZiu8kGA1cROlcIpkKmKaJG11HkiRYLBY7Qbn4fou3F7/W6JsFLMuSYMEacRxvuKeIiNOUOIplTPn8TeB153YNjQQNQ4em/US32yPW0O310B8MEAQBJhMfvu8TTzAh5hjfPboHQQjl03WJVyRUQxvmGA4NwhCW7SAMKYGSwjCUiZzk3wkFd/H6zPG/Bcmh4ziwCVEUyXIYXB6XyueH5Uuk1XcpqHbEPcGcSu3iB5Vq2TbM0Qg2sU1u+Ufj8Viy53myTD47FOO467qVYEMVOHgu8OydkIK6YUgXQgiJ2WyG+Xy+FaTgk5cCj88FWu1KcESu2Blz7YBbIFthO9Jx5cqVcdux/3R48IIEWwKnbypB3kNOYNE8L1AUxfZ7uGko7IJ7VA+hany6HgAPq2ZuTXxvNzcKZllGznLZu51fykPBvlVitVr9M5Sv1zE+fsnx4WqK95dTGE7xf4KTzhV69LTa7TZUVUX/Rsc0K5FmxU4oxQx5KaCE9Kj9IILr+TSADMvlcmtktAF1bkK5zL8BedVpY1KyrNwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot; MIG7 Output options&quot;
+        title=&quot;MIG7 Output options&quot;
+        src=&quot;/static/043_Memory_Interface_Generator_Output_Options-926bcaaeb06969170228f2442db4eb63-12e06.png&quot;
+        srcset=&quot;/static/043_Memory_Interface_Generator_Output_Options-926bcaaeb06969170228f2442db4eb63-7107b.png 300w,
+/static/043_Memory_Interface_Generator_Output_Options-926bcaaeb06969170228f2442db4eb63-fb611.png 600w,
+/static/043_Memory_Interface_Generator_Output_Options-926bcaaeb06969170228f2442db4eb63-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Select part
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/044_MIG_Select_Part-058f2a1907aae166eec939fad130cd79-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAAB8UlEQVQ4y6WT62/SYBTG+99rdCbuluk2LjGLIiNzYexmqQWTOfjglN5bOmhLR1c6QPkOj+d9wSZmX4Y0eXJO38uvz+l7XiG/s4793R3ksnvIZXaR2XuD7c3XWHv5HGsvnmFj/dVSElzTh3ZjoxskXOFdDE3ToOs6NCbKDcOAYZo8V1V1PrdY01KU+TjJ830I0nWMY+kh1Y0a4rMo4ossQ6QoVquokmq1GhcbZ7Fer0OmXKZckiRcXF6i0Wg8BraMKP3i3IUBy7J4bnKXOnesKCp3zcScMvWjCMK53EGh4qJ42kFZJqAeQaGyGNC2bZgEMxcbGYjBLTZO72yOrbEW0XEcCKWKgu18A5mPWupQVefOfD9AEATo9XqkMBVzch/Hj3UfQ6hIt3h35OD9iceBP7Q+OXDQ9QJEUYzxr8nTNf4N4fCkhc3sFbJFjUN/6n1Mp1MkSQK33UbyMMQyj1Ak4BaVvP+hhSMxToGj0QgBtcFwNF4OWJE6VLLNyz44dv916LqI6d8sBSydqnh78B35koVP1YQDZ7MZhsMhBoMBj0sBD+mUt3LX3B07FAZc5eGNzZz9beyVgVffPFx87eO8FuKMpJrhasC2WEOz2US5XEahUOBXaDKZ/LeETteDe9uF7bh0K0LeLk9VeNdP9/q0l8U/24N/baOtlWgAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Select part&quot;
+        title=&quot;MIG7 Select part&quot;
+        src=&quot;/static/044_MIG_Select_Part-058f2a1907aae166eec939fad130cd79-12e06.png&quot;
+        srcset=&quot;/static/044_MIG_Select_Part-058f2a1907aae166eec939fad130cd79-7107b.png 300w,
+/static/044_MIG_Select_Part-058f2a1907aae166eec939fad130cd79-fb611.png 600w,
+/static/044_MIG_Select_Part-058f2a1907aae166eec939fad130cd79-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 memory selection
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/045_MIG_Memory_Selection-53efbbc1d8bc36834f5f88d3d124883e-8a55f.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 974px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 83.67556468172485%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAAsSAAALEgHS3X78AAABeklEQVQ4y62U207CQBCGeXgTNWIiGCAgBBHP5RiLgoKKmHooJtC0tPREi3gobeARfte9IF5wAZaLL5mZi29ns7MTSIaDiEXDSMQjlL14FKGdbUIQmxtrCG6tL0XA1mwobyI+v1yK43jo9SR0ul1IkgRZlkneg6woNBZJjeay8icmdVGEqqoI3D45KDW8GS1+DMuyYJomnPEYruthOp0uzFyhrusQBAF9cqLjOMsJa00L2aJCkHFY1nHHf1Dh7xV0w1hKRoXV+wGOSn1kCzIKN2Paoed5S4tmwhzbxW6aQ/JUmF3Zl5BtGEgzEs4vR6sR5lgB4dQjQskWUmeif2GFdJjJKzi5sFCsu/6F+YqASOYFB4U+9om4+er4E5ZrChLHHaTIo+Rq3/47LFZ7iGXbZA611TzKvJ/iS/jc6uP6wcYVGXC2oYNrW/6EaqMJnudRr9fBMAw4jiMLwaXS/xAYDGxoukEWgQ6TxJPJZGGG7yMYpgVVM2DZQ+r5AWl0xf1DqZzJAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 memory selection&quot;
+        title=&quot;MIG7 memory selection&quot;
+        src=&quot;/static/045_MIG_Memory_Selection-53efbbc1d8bc36834f5f88d3d124883e-8a55f.png&quot;
+        srcset=&quot;/static/045_MIG_Memory_Selection-53efbbc1d8bc36834f5f88d3d124883e-3e024.png 300w,
+/static/045_MIG_Memory_Selection-53efbbc1d8bc36834f5f88d3d124883e-be2b8.png 600w,
+/static/045_MIG_Memory_Selection-53efbbc1d8bc36834f5f88d3d124883e-8a55f.png 974w&quot;
+        sizes=&quot;(max-width: 974px) 100vw, 974px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Controller options
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/046_MIG_Controller_Options-f3e525a0a76bf76859438e69bee06dd8-f6a1a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1067px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 78.63167760074975%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAACsElEQVQ4y41U2U7bUBT0/z9UtIRNFGhAotCCKEoAqUDDEkJWJ7ETJ7bj5V47G0ngE6bn3CyFigceRmNfyaOZOeda211fxs7mBnaT24QtJHe+ErawsZbASmIJXz5/QmJ5CWuryx+CZlsSRtWD648UgkCiUCigXC7DMAzU6nWYpknnAXzfJw5nHODp6ekNhsMhtKvcEL+uxws4Xh+WoaNezKJZycFp6JBOA8JtEpsQtqGemWWnhW63iyiKEYYhQbwv6NTvYZczCq5+i6CeRWjmIEhYug1EHYu4iUhKxHGsnI3HE4xGI2hHaRMryQLW98rYO3eVYKPRQLPZnMKy0Gq3lQOOGRBHMpo5CiGEmD6LCILOtYubAAepDk6vBwuH9VlvVqsF27YVPM+DnDmKokgxO4rjLjx/JkjQTn87SB7bODiTC8FMJoPbuzs85HLIPT4qzj48oFypQK9W1aCqxP3+AKVKHXfZPPJFHY7rQzs+b6rIO0cWDs8iJVir1WjCJtoUtUGxObJltSiSVO4YPAxJHAoJPxAKAUH7kTKwmixi69DEyavILGRRfwyOO+9sDo7P/UnqzfOCqSBPmR1u7tewe+JgPxUqwXz+EaVSCRVdR4n2kVkncGR+5wSVCp1VaxgMBnh5eVGYTCbQUlceddhWgvMO/dkSh0KoyfZ6PTUAXt7X/D/4XPuZNpD4lsd3cjcXvLy6xH02i8xNRg2lSG7ZYZUccQW246jJd6iKXq9PXXan4LV5b7H5wxatjMMfEtix2rfZzrFr7pBvBkd+4zB37+HiRuLsT0As4Hqx2r/pZC0lwFNlgdeYn/l+oKbLe8gT1zzaIf4ZpNNpBc+nH4Xr/ltkuqdzAXYpJEHIxZR5fcbj8QJap+OTgEeubMTdHp6fnz+MPsVt2y7V4lKfAaVy8BcSe1lJI09xagAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Controller options&quot;
+        title=&quot;MIG7 Controller options&quot;
+        src=&quot;/static/046_MIG_Controller_Options-f3e525a0a76bf76859438e69bee06dd8-f6a1a.png&quot;
+        srcset=&quot;/static/046_MIG_Controller_Options-f3e525a0a76bf76859438e69bee06dd8-9b357.png 300w,
+/static/046_MIG_Controller_Options-f3e525a0a76bf76859438e69bee06dd8-f2b61.png 600w,
+/static/046_MIG_Controller_Options-f3e525a0a76bf76859438e69bee06dd8-f6a1a.png 1067w&quot;
+        sizes=&quot;(max-width: 1067px) 100vw, 1067px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 AXI Parameters
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/047_MIG_AXI_Parameter-2c287ad4b4a84611e9672b596c883329-f6a1a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1067px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 78.63167760074975%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAAB90lEQVQ4y62Ua28SQRSG9/9/0NTtBVORSxNsbZtagWoaajSaphgjsLiw99md2QtkC/yE1zOzQL19QPHDmzNnNvOcd87OjFYv6agcPkW99pxURrXyDLVqGaUDHXu7O9CfPIa+8wgH+/pG0uwRh9Hz4Qa5ks84en0DX3t9DIbfYI7GMIYmuIjB4wSCJKPMxTIXcYokzRAnKbTO7RSvbu7XsrwMlmUp2Y4Dx3Vh2zZcip7nqxgEDHEcI01TpSRJ1FwYRn8GDgYDGIaBgBULOedFFFwtluPpdEqwDKY5JliIMBKIuIB21hpir9ZF6egLjq5cBZSOHHIn3TCCRlFE1UMlOS7mQjDK5ZgtC8ti2tsPIY6bLhqvA5x2UgWUix4WPsAYKwAFmK/n8zwnWKrmtMtrB7VzG8dtvt6y53lKQjZeCFVdajWeTCZYLBY/SfYyotZo51em2nLlbISTtlDAMf2QlZOVM+VK5j+4Z8vvsscSKItpL5sG9mufUT4Z4mLpcLVlTo5ms9lGUj8pywqHh40+6hcOGs0QTjD9bTt/I63Z8amHlgLKHm4NPG0Z2K3e4QW5+y/AXw/21sDbjz7evOdov2MUI7rP6XZA/9Mdut0uWq2Wkrzs+f3sn6V5XkBXzMdobKvXYj6fb6yMDrhl0+Ph0MPhMzq/Dr4Dfrh1JVP3RVAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 AXI Parameters&quot;
+        title=&quot;MIG7 AXI Parameters&quot;
+        src=&quot;/static/047_MIG_AXI_Parameter-2c287ad4b4a84611e9672b596c883329-f6a1a.png&quot;
+        srcset=&quot;/static/047_MIG_AXI_Parameter-2c287ad4b4a84611e9672b596c883329-9b357.png 300w,
+/static/047_MIG_AXI_Parameter-2c287ad4b4a84611e9672b596c883329-f2b61.png 600w,
+/static/047_MIG_AXI_Parameter-2c287ad4b4a84611e9672b596c883329-f6a1a.png 1067w&quot;
+        sizes=&quot;(max-width: 1067px) 100vw, 1067px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Memory options&lt;br&gt;
+&lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/048_MIG_Memory_Options-5cbda8fc2fc8c9617b837d35a2b61ccc-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAAClklEQVQ4y41UbU/TUBTu7zYR4z4YE6MEeTGibMMQBTRIxuYHhwGEvZEwGO26tmvXl7Xdutef8HjOZe0aEo0fnjz3tr3PPec551TKb63h4/Y75LIfkNvZxtbmGlZfv8LLFxlkMivIPH9KWMGzlSd4u/YGG+ur/4RkqC7ub3RYzljA84fodDpQVRWGYaDX68GyLMGO49D6Yc/wPA+j0SjBYDCAVK5EOP41SdBUBqhWq7iqVFCr1QTX63VU+NnVlXh3eUlM71jUMExoehc6sev1If1kwdMxvhOOTkdC0NANisZFv99H3/cRhiEGwyGiKMIw4QiTyQTT6TQBRykdFmVs5OvY3G1gt6QLQRbwSSgIAsEhpZJO7W+IIhI8OLnHJgnuHCj4UnZIMBQR8O0xxmPyltLxg1AgCAd0WYghfRelwFFLZ40RShdTFM+XHrLAbD7HfAEWVdoaeWWl0BVFEbakIB0UWljPVpA9VPD5xEkE548EZaWDjmamYMB13UeC/oOH69kqcl9VHJUjIcjGs2gMTsfq2XBcbwkqGrcJfxuDvZcKpz18OtIJBvaOTSGoaVoCXdcFc29qvCY2ul1RrHR0HoF9lQ5PZLzfu0H+myZahwW5726aTSGiU3ObpikO8MFYKGaXfOT0Pc8XhRNV3sjVRHRxURrX15BlGbd3d7Bthw4/RNBnXhSCBRke+cbNHQSc8mJSOLL0pLRaLbTbbagUIRuftMYoWvTbslV4n/Zb+l1x8eMiROk8QPHMR0v1RXSyrIjRsm0b5mKWec9ri9YuFYYLwWxatkjZ9wNI3fI5Go0GCoUC9vf3oSgK7ijV5u2tiJIjjME/B0453vOaReMBEI3dI4/4Bh5uvmU2m/03eGrisy6dZf4DDYBiUZEARMEAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Memory options&quot;
+        title=&quot;MIG7 Memory options&quot;
+        src=&quot;/static/048_MIG_Memory_Options-5cbda8fc2fc8c9617b837d35a2b61ccc-12e06.png&quot;
+        srcset=&quot;/static/048_MIG_Memory_Options-5cbda8fc2fc8c9617b837d35a2b61ccc-7107b.png 300w,
+/static/048_MIG_Memory_Options-5cbda8fc2fc8c9617b837d35a2b61ccc-fb611.png 600w,
+/static/048_MIG_Memory_Options-5cbda8fc2fc8c9617b837d35a2b61ccc-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 FPGA options
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/049_MIG_FPGA_Options-b015e1ffaa0f47214dfea15bebab9bdf-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAACT0lEQVQ4y52T7U/aUBTG+/9niTHB6BAHbmayaZgR3UyAhCyZDhMKHe+l7y1toQJ/wrNzDtIh+GHbh19OubTPfc69z1EKh/vIZQ+Rf3eM/EkWueMjZLNHyGT2sbf35p9RjIGLrjqC7SWC68cYDofQdR2u58H3fTiOI8+u6wqmacGmNcuyEAQBZrMkRak9THFVe0ppdkI0m010Oh0kSbKD63oYDEZwXH8XxyPBexKsJvhClKozEWy329A0DZZti4Mg8OF5jIexYaDXG2Ckj2GYNvSxSV1MEMVThFEM5fK2g0zhJw5OGzi9HYkgt8Vtsti2wziOMZmErxKGEQne/MIBCZ586uK84oggu2PUliri7GyxWGC5XJKbAP3nlj0veIFLKDc1E+9LOj6WHVxUQxHktthhGPLOk7RuPnOV5+fK3bB75a5uoVjW8aE0FFEWbDw+ot/vyy2m0HmapgmDNuPKG66eV/+bBG+kfC5rcoa5cw2lylQE17GJomjnDF9b24RatqjlkbR9dmWIYKvVkjPsdLt0XgPJIuMR7MrgHNpOikU4FKcZC/Itvz1ronA5lOiwILfbJTFua9uBHwQ7l/EHH8oF3XIm/yDu1sFmhy3KolSCg85VZVQ1/c3v8BrnltcdSoRMCjvbnJTVRyq9qNFUDCjIPfTYNVdCQm2Y0ipXvhjTsqkjEvxx7+Due4hv9QBfCa0/kQjwmXEc5vP5Czi8PH4BBXkbDrcyrtTRaDRwfX2NYrFIF9FD8jT/bxSxTTM50g05WJ6Iv4Vdrb/lKeH6G5PdYpPHgU58AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 FPGA options&quot;
+        title=&quot;MIG7 FPGA options&quot;
+        src=&quot;/static/049_MIG_FPGA_Options-b015e1ffaa0f47214dfea15bebab9bdf-12e06.png&quot;
+        srcset=&quot;/static/049_MIG_FPGA_Options-b015e1ffaa0f47214dfea15bebab9bdf-7107b.png 300w,
+/static/049_MIG_FPGA_Options-b015e1ffaa0f47214dfea15bebab9bdf-fb611.png 600w,
+/static/049_MIG_FPGA_Options-b015e1ffaa0f47214dfea15bebab9bdf-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Extended FPGA options page
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/050_MIG_Extended_FPGA_Options-7a05b989a07e6bfa3d66caff595c4cb7-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABX0lEQVQ4y62U3WrCQBBG8/4URIjURq1apForVqK2gqaVQrW5sBqNJLHRbH7RavQRvm4W6lUvWuPFYdiFPczs7gxXuEwiK1wif51BPicgm0lDENLg+SQSiYt/w5maDfXDgOVsGba7xkRRMJ5MGDNVharOYVkEruvCIgS2bYNQonUULcti+L4PThpu0JB2R0azALquQ6OwqGnwgwBhGDIcx6X7CxDi/AonDaiwt8UDpd77wni+xuFwOBmu1p6BL7wjVZRRbBtnELamSFFh7k5FuUviC1vSEjf1BW6bBNWeF1/Y6a9QFhdoPtO7fFnHF1abCrvDbFlBvbs5R8krWrLByi41zPO88lVphEJNZ18ntvCevjKfH7Lsoo8dWxh1SpTZT6fEFr4NCDqvAZ76Hh4pUy2IJ/zs9iHLMkRRRKVSocNgju0uPBluRaeIubRgLEza+B72+/2f8fzgeNamZ6P4DYxRf5lKlLj3AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Extended FPGA options page&quot;
+        title=&quot;MIG7 Extended FPGA options page&quot;
+        src=&quot;/static/050_MIG_Extended_FPGA_Options-7a05b989a07e6bfa3d66caff595c4cb7-12e06.png&quot;
+        srcset=&quot;/static/050_MIG_Extended_FPGA_Options-7a05b989a07e6bfa3d66caff595c4cb7-7107b.png 300w,
+/static/050_MIG_Extended_FPGA_Options-7a05b989a07e6bfa3d66caff595c4cb7-fb611.png 600w,
+/static/050_MIG_Extended_FPGA_Options-7a05b989a07e6bfa3d66caff595c4cb7-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Memory Controller IO Planning page
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/051_MIG_IO_Planning-46b1f6de1e3a61d86555aa330dc3368e-12e06.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1024px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 79.4921875%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsSAAALEgHS3X78AAABVElEQVQ4y62T30vCUBTH94/3kFAE5YOlSP6ahtQyMZmagY4kUBvUtutGbjp1uk0wQ/+Eb3eLfBOk7eHDuefhfLjnnnuYfDKGTCoJNpcGm00hk07i4vwMpycRRI6PEKXny1j0YBhzOIcmGZgt1r9YDgxDh6zIUFUViqKADAYghEDTND93XXcvjNBfoSp873gn9k7kIcsyjQQKFXq5JEmwbXsvjNCjwvYaj5RK+wuascZ2u/03TLmhIp5/Q6IgotAwQhDWB0hQYfZew13LCi6sCxPcVEa4rVkotZ3gwocawVWui1xJA8t/Bhc2Xybg6mNUW64/5RBantKWDb/tYtUMZ8rXxQ/ky7r/dYK/IZ1ynO37twulZW9TvJv9bUpgYbdn4fl1iWbHwRNlOF4FE45bHYiiCJ7nwXEcdF0PJpzOLJiTGYyRicXCwWazORjHXe5q57TWiz+lQX7H/w2pEQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Memory controller IO Planning&quot;
+        title=&quot;MIG7 Memory controller IO planning&quot;
+        src=&quot;/static/051_MIG_IO_Planning-46b1f6de1e3a61d86555aa330dc3368e-12e06.png&quot;
+        srcset=&quot;/static/051_MIG_IO_Planning-46b1f6de1e3a61d86555aa330dc3368e-7107b.png 300w,
+/static/051_MIG_IO_Planning-46b1f6de1e3a61d86555aa330dc3368e-fb611.png 600w,
+/static/051_MIG_IO_Planning-46b1f6de1e3a61d86555aa330dc3368e-12e06.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Pin selection page&lt;br&gt;
+&lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/052_MIG_Pin_Selection_1-8a8585e84cedb31d32a9ad58d7709736-62b20.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1019px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 103.63101079489697%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAAsSAAALEgHS3X78AAACv0lEQVQ4y52U208TURDG+39rFCMkaqJGQZogchGMmoI0WgIINeGFq6KlLdtt90JbuvfetrS024fPM6dspbCk6sPkzJ5uf+f7ZuZsaG7yBaanwpideY3ZN1MIT77Es6dP8PjRGB6M3MXY6Aju37uD0YcjmBh/PjRCkpBH6kiEWrB55Is6cnIex6kTnGQkiDmF5QIEUWYh8TyTVZAWsjj88QuipPL9ZDrD3w3Fd01E404/9n4WYJo2Wq0W2u02DMOA67qwbRulUonnmqaxd8z+frVahWlZLMrBQMsuw/M8dLtdOI6Der3OV4JTruv6wD4d3mg0YNpBwKMesMPUeV6XK2g2m6hUKhxIOa30THm5XOZgm4EtpxIMNC0HFxcX6HQ63BqdTn/UmDLKCejvk8JarcYOdnoKV7+pePtJxPxyBour0qVC5/8sUw0jsQReze0j/PYQHzbzvIYGa0rPsjdgmVT5lklxoOXIlwQm5/cxz1S+3zzlQE03Ay3rVyzblh1sORaXMbckYGlDR2Sr1B8bgnnXLBPct+wru9HlSOwYE7O7GJ/ZwXQ0iX0G1JnC9hDLlfItXV7fVvExlsPCShaLUYkDNd0YbpkBrluu1V2yrODdZ2VgsA3TYrCbXR5muXHeRGgplmRd3kN44TtWtuyeQs0ItHx1sAnkW6aDSuw61hvnvabQDC5/NfoKCTjUsv2ny4Zp4KzEgG4j+C5TDXmXmcKgwaaPhH/9aB2wfBvwXyz7XT5vtm4BXlom6MBdZnXyLVsBg+1SDQ+2BWxsy1iNi4iup3B0rLB66KhUa6jWXK7WZjNHnac6UU6/64bJc53t206ZX9fCmYaQsnOARCKBeDyOtbU1JJNJyIoCSZJ4yLLMV4XtFYtFbt0f8lRaQDYn99c0+2qHJEnhDyeCiHy+wL++fxuqmockqxyonhY44zckKu1i1cMOkQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Pin selection page &quot;
+        title=&quot;MIG7 Pin selection page &quot;
+        src=&quot;/static/052_MIG_Pin_Selection_1-8a8585e84cedb31d32a9ad58d7709736-62b20.png&quot;
+        srcset=&quot;/static/052_MIG_Pin_Selection_1-8a8585e84cedb31d32a9ad58d7709736-a1f43.png 300w,
+/static/052_MIG_Pin_Selection_1-8a8585e84cedb31d32a9ad58d7709736-04dab.png 600w,
+/static/052_MIG_Pin_Selection_1-8a8585e84cedb31d32a9ad58d7709736-62b20.png 1019w&quot;
+        sizes=&quot;(max-width: 1019px) 100vw, 1019px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Pin selection page 2
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/053_MIG_Pin_Selection_2-66cc90dd7d83c3241c9ed04cb7fa3cfd-62b20.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1019px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 103.63101079489697%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAAsSAAALEgHS3X78AAACuElEQVQ4y42U208TQRTG9//WKEZI1ESNgjRB5G7UANJoCSCsCS9cFS1t2W67F9pl77stLS2l9OFzzkAbikvLw8mcObvzzfnNOTPC1OgbjI/FMDnxHpMfxhAbfYtXL1/g+bMhPBl4iKHBATx+9ACDTwcwMvy6rwmKVED6QIZe9LkVDBt5tYDD9BGOsgrkvMZ8CZKsMlO4n81pyEg57P/+C1nReTyVySKnHkMQt13ExaBjOwdFGIaJWq2G8/MGXMdBtVqF53mwbJv7pmnCdd1O3HEdFrNwWqlGCP4pwnZcXFxc4PLyki+o1+solUpwmDj5NAZBwP0wDOGyf0yLbXZWixa0bAfNZpML+r6PSqXCBWyWIfmUDYm2NyGaCsv2rFaPRjZNG41Gg4tShrSAMmkvJmGfbUA+bURiNOeCyz91zHyVMb2Yxdyy0oXcbHYjk1AU8hVBiFr9HMJ8Iol3U7uIzezj83qBCzqu1xOZZ3gjTsId5PnvSYxO72KaZflp/ZgL3guZCd5GLp1WICREFVMLEhbWbMxvmD2rfBM5DEv/IXtBiZAPMTK5jeGJLYzHU1zQdf2+yLTRbWTXDyGsbur4kshjdimHufhVUainIpFZM/dC5oIJUcPHb1qnbXavkUms1Wp1I9/R2F3IC4kUq/IOYrO/sLThd1eZCd6FzDO7jvPGZr7rhVdFoR5c/OF0bsp9qkzzNnL7ntvs7O+8y5HIfRqbI0cJtqvc6oEc1di8KJF32eqP3I53VdkLIOxtSljbVLEsyoivpnFwqOGEnWGZdX2ZvW/08visialQiqrDYC8NfbfYsVDcZnE/oJbyUTyxIGhbe0gmkxBFESsrK0ilUlA1DYqicFNVlY8aixmGwc+SjB7YdEZCLq92xgx7tQVF0fjkSJJRKBRRLpfvbbpe4FmToH5c5Br/ANnq7LEygJ36AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Pin selection page 2&quot;
+        title=&quot;MIG7 Pin selection page 2&quot;
+        src=&quot;/static/053_MIG_Pin_Selection_2-66cc90dd7d83c3241c9ed04cb7fa3cfd-62b20.png&quot;
+        srcset=&quot;/static/053_MIG_Pin_Selection_2-66cc90dd7d83c3241c9ed04cb7fa3cfd-a1f43.png 300w,
+/static/053_MIG_Pin_Selection_2-66cc90dd7d83c3241c9ed04cb7fa3cfd-04dab.png 600w,
+/static/053_MIG_Pin_Selection_2-66cc90dd7d83c3241c9ed04cb7fa3cfd-62b20.png 1019w&quot;
+        sizes=&quot;(max-width: 1019px) 100vw, 1019px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 System Signals page
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/054_MIG_System_Signals-ed71a1b40e5c68be4879f34dcd86599a-62b20.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1019px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 67.90971540726203%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAACPklEQVQ4y5WT+0/TUBTH+8ebqIHEadCIuIGARAOIMbIAcZmOtXvB2rVdX+vW9bmue/MPfD29geEPoPOHT+655577PY/eclubb5B7v4kskctu4vVGBi8z63j+7AnW154i82Ltv+DUKw19L4HrjxANxjAME4qiQlXb0HX9Fg3tdof8PmTZpzMP3W4AP/ARBAHD930Gt//Vxu6Jhd1vNoTmALphw3NdeJ7HAu6CPXbh/qJLMXfnnnfv4z4c6dg5NvDpLIAgxuj0fHQdhwRCRPEQg2GCQbw63MZOFe8OJHw8c8CLAzhuSC2pkFottAhZUdgIFPKldlvT4KQJqaooipAkCUajEcbjMWazGbgtEts76eDg3AXfjBDSHEWxiTLPo1S6BC8IEIQKGo0GE5RleQlLmtq3SYfUDRPMflaQO9HBX0ewnQBNUSLBCoRKbbmmXJYFqlDHdDrFZDJhVf1J6udeZctMcC/fZS2rmo2QWkkPTcvGJU+iQp2EU8EaOnYPi8WctfcQXL40wemvCb4TNSmBZvTYXG5uFui7HkRJpYqVJY7jYj7/i+Db/WtsH2o4PI9RFRNYtktPIUQYDogIQZgOfsREhsMh7UPW7mNwG9sCezbHFwkqTboQjVi7j1XwL7iLnxZOf2j4kpdw3eqjWr9Crd5AtVanL1wlKpBkhc3TsDpsNTsE2eneIlujv0snDNMCp1BwsVhEoVBg7y6O4we/4Kpwaca2ZqDbczAmoVVbS5P6NGtNN2GRhmV1YZo2fgPmO9aP/rPu9QAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 System Signals page&quot;
+        title=&quot;MIG7 System Signals page&quot;
+        src=&quot;/static/054_MIG_System_Signals-ed71a1b40e5c68be4879f34dcd86599a-62b20.png&quot;
+        srcset=&quot;/static/054_MIG_System_Signals-ed71a1b40e5c68be4879f34dcd86599a-a1f43.png 300w,
+/static/054_MIG_System_Signals-ed71a1b40e5c68be4879f34dcd86599a-04dab.png 600w,
+/static/054_MIG_System_Signals-ed71a1b40e5c68be4879f34dcd86599a-62b20.png 1019w&quot;
+        sizes=&quot;(max-width: 1019px) 100vw, 1019px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;MIG7 Summary
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/055_MIG_Summary-6ed64c72b6afe1eda33e222c271f77ea-836be.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 970px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 108.8659793814433%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAACXBIWXMAAAsSAAALEgHS3X78AAAC2ElEQVQ4y5VU+U8TYRDtn29I+IEUb5AjaiK3gkKUoqKEpNRgoPe1XfZod7fbY3vT4zkzVQK1rTLJtF/a7et7b958vkX/LJ4+eYiFZ4+ln1PP++fgp56dnblXz8w8gC+XVBENRaAbjrRm2jBNE+l0GpZloVKtgqvf7yOfz6NSqWBSebUGfIFTCzuB4k1//1FAsViEoigwDBOtZgu9Xg/9Xh8mAXY6nYmAzVZ7PKBl2cKOmTJ4u93GYDBAvV7H9fX1/QGrJJOBDNMQmXz2PA+FQoFkeeh2u2LBaNVJzVhAz6ui0ahTN1Aul+G6rpxb7dZNM+vRKroV+D58VrC8EcPyZhwvd9M4DpnCStM0Aq6Jfyy31WoRQ4sY1kQ2fzYW8N2nJJbWo3ixFsb6oYGvIV08zOVyMpgr9QpVkuuRDTxhZtZsNsdKFsDt/QgerQax+OaSAE1haNs2MpnMkBGBcbHkJrEcB3QHcH33J/yLJyJ77VAXhgWSnMlmxbtOZzhVlqwbBg3IlfNEwL1ABivkHwOu7MSFYYEiwxm8zYYZ5nKqeDqV4dZ+GHML30Ty6wNFGDqOIxm8nTmOCoNOK8ctw/f+KIPVrYT00kZk6CEBsoccbpYtoaVBlGko/D6V4cGXLF69TUpsNj9aN6vHYOwVs+wP+sP1mzKQO0OZXzoVD/8Em6fMscnSYJLJJEoUbmZWKpVoizz6k+5kQN6U7UP77uVAklVVFR9TqZQEnIuHYtuOrOZUwL9Xz0ONNmLcev1T8ljA31vhOMNLgafL/rGPt3t0/dxSdTwgF997PGFN08VLXdcl7Owne8nRGg14g2+b88AZjo7D2DsIYmv3BKdnUfnCq9Vh2UVougmFvDPzBZi0io5LYMUSLGJfIW/5We5avQFVM+G7Or9AIpFAMBhEKBSSMzO4b/NmpdNZ+PglnkghHImRpJzcf//TnNVoLIGsouLiMkK/VRCLp/ALZaNT1wsn9xUAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;MIG7 Summary report&quot;
+        title=&quot;MIG7 SUmmary&quot;
+        src=&quot;/static/055_MIG_Summary-6ed64c72b6afe1eda33e222c271f77ea-836be.png&quot;
+        srcset=&quot;/static/055_MIG_Summary-6ed64c72b6afe1eda33e222c271f77ea-da3bf.png 300w,
+/static/055_MIG_Summary-6ed64c72b6afe1eda33e222c271f77ea-db0a9.png 600w,
+/static/055_MIG_Summary-6ed64c72b6afe1eda33e222c271f77ea-836be.png 970w&quot;
+        sizes=&quot;(max-width: 970px) 100vw, 970px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Memory controller connections
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABvklEQVQoz31Si26jMBDk/z+vqq53zYsQwsMYbGzjB9Cbrp2QNj3pVhqtzHqH2R1np6IFHxRhTLlmQ8rnWkGMBlJ9YZAGvVCUNVivnmoRXT8i44IuDRJ6cuBC00cJM9kHlDbwYaGGCcp4NPTDho+ouaKzg3Uh1a2fsa4rsn0lkbcjLnThZd8Q6a1xw6nk2BUML4cWr4cGl6ojdWMidT4kkhjrxweWZUHGiIANGpKa2/42zkhqul5A0sjnsqZmibo3yKser+8ljleOM4mIY26EMRKhUJ4u0N7kRCN6aDPh7VTh0mm85TWKa40QbuPE8XZ5ndQxaTHqW4+xHvOy3hWSqqhoQ9Vy5NcORxr1cGFE2D5U97Tj34cSJ1KaN4LqHQrKJTfU10MIgUzTH6x1xL4mFVHh/6LpaBUmoOl1MiMaY2yAc57gkJVMoRIWFRPJVTmqe/FfxHpZd3g/tyhoJWwwD5cnF4VZZJOb6bCQS38fixXKgo8ThHbJvS3CPFONDKOn1qR3aBPZRhhCQGb98jSS8x5/aPGnRuLX8fqkOK4mvtk97W5HO2bk/vdIpvwkjCoiPDkb3d3O3xFr/l77SfgJDBFMOG8s6+IAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Memory controller connections&quot;
+        title=&quot;Memory controller connections&quot;
+        src=&quot;/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-bf66f.png&quot;
+        srcset=&quot;/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-e6e4d.png 300w,
+/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-04aa4.png 600w,
+/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-bf66f.png 1200w,
+/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-7827d.png 1800w,
+/static/056_Memory_Interface_Generator_connections-901f648a9caf28e3e2fdbe3da7a7dca5-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;311-address-map&quot;&gt;&lt;a href=&quot;#311-address-map&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3.11. Address map&lt;/h2&gt;
 &lt;p&gt;The connected AXI devices are either memory type devices or memory mapped IO devices. We have to specify the Microblaze memory map so that the AXI devices can be accessed by the bootloader and user application. Click the address editor tab.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Right click Data area, unmapped slaves. For each of the following devices select assign address: ethernetlite, gpio, uartlite, timer, quad spi, mig7.&lt;/li&gt;
 &lt;li&gt;The  &quot;Instructions&quot; mapped devices should only contain the local memory and the mig7 device. Select any other mapped devices and right click &quot;exclude&quot;. &lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Check that the Microblaze local memory sections for both data and instructions are at least 32 kB.&lt;/b&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Check that the Microblaze local memory sections for both data and instructions are at least 32 kB.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/058_Address_Editor_after-4055c13d0c0dd3cd731e0a55ab9e5201-ab292.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 919px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 62.89445048966268%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAABmElEQVQ4y62SyW7bQBBE+f9/FyTwJQks7ttIQ87CfVjubio0nVwMI4eGxFneVFd19O3HT3x/+YVbWiPJ2y9VnDd4TSv8vhWItO6h7g9Ya+G9/1DOOdzVHVVVo23as1Sr0NSN7LVtC9P3dKaCou+oyAvUdIEB0zRhWRaEEL5ckbMOeVZANQrTOJ0b+x6wzAHGBHoI9KCj/xbzPKMkEWmSioi+M6TQIL7FeNz1ASzzUtpY15VA+wmcCagfAcPwF7AoSUT+DjQGWZI9geRTQQqrskbX9eJHL7/88oBOrxeFBvM0oxCFGQY/nMDklhxA77wcYJUM2bZNVErLS4A1rHQnlZ7UajnDCrM0A9990Jq9KuSkWOF7iuq86N1IKjayYpdW2WO2hfe4Gw5wHEdaH6mTjroYEFnykBUW5InWB4jTZh+3lQIZgwD5MvvNxS12XSftO3dMBz/AFkR8sC4rGZ1/Wv5MytKJQ/z6TJmBPKTsIcu/js2nUn4CTw8ZqGja0ziFpoU/g/0xlANoL0AJ5QJM6L4AjSeTh/9XbxaP47oeyWKpAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Address map&quot;
+        title=&quot;Address Map&quot;
+        src=&quot;/static/058_Address_Editor_after-4055c13d0c0dd3cd731e0a55ab9e5201-ab292.png&quot;
+        srcset=&quot;/static/058_Address_Editor_after-4055c13d0c0dd3cd731e0a55ab9e5201-4571a.png 300w,
+/static/058_Address_Editor_after-4055c13d0c0dd3cd731e0a55ab9e5201-b98bc.png 600w,
+/static/058_Address_Editor_after-4055c13d0c0dd3cd731e0a55ab9e5201-ab292.png 919w&quot;
+        sizes=&quot;(max-width: 919px) 100vw, 919px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h1 id=&quot;4-xdc-pin-constraints&quot;&gt;&lt;a href=&quot;#4-xdc-pin-constraints&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;4. XDC pin constraints&lt;/h1&gt;
 &lt;p&gt;The XDC file specifies constraints on the physical FPGA pins. Digilent provides a &lt;a href=&quot;https://github.com/Digilent/digilent-xdc/blob/master/Nexys-4-DDR-Master.xdc&quot;&gt;XDC file for the Nexys4 DDR&lt;/a&gt;. In this tutorial the individual pin constraints are listed with each IP block. Refer to the previous sections. In general a pin constraint is defined as follows:&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
       &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    set\_property -dict {PACKAGE\_PIN K17 IOSTANDARD LVCMOS33} [get\_ports OUTPUT\_X]&lt;/code&gt;&lt;/pre&gt;
       &lt;/div&gt;
-&lt;p&gt;It was not always easy to determine the port name (eg. OUTPUT_X) by examining the block design visually. When the block design is completed and synthesized you can run the &quot;get_ports&quot; command in the TCL window. The names of all the different block design input and output pins will then be displayed. These names can then be added to the XDC file. &lt;/p&gt;
+&lt;p&gt;It was not always easy to determine the port name (eg. OUTPUT_X) by examining the block design visually. When the block design is completed and synthesized you can run the &quot;get_ports&quot; command in the TCL window. The names of all the different block design input and output ports will then be displayed. These names can then be added to the XDC file. &lt;/p&gt;
 &lt;p&gt;Some additional constraints are required to get rid of a warning:&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
       &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    set\_property CFGBVS VCCO [current\_design]
@@ -1230,32 +2401,414 @@ set\_property -dict {PACKAGE\_PIN L13 IOSTANDARD LVCMOS33} [get\_ports {QSPI\_FL
 &lt;h1 id=&quot;5-synthesize&quot;&gt;&lt;a href=&quot;#5-synthesize&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;5. Synthesize&lt;/h1&gt;
 &lt;ol&gt;
 &lt;li&gt;Right click &quot;mb_design&quot; in the sources pane. Click &quot;generate HDL wrapper&quot;, select &quot;Let Vivado manage wrapper...&quot;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/059_HDL_wrapper-025a87ede810083ba457ddb2ec1e046c-d2381.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 563px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.68028419182948%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAABHUlEQVQoz+WT2UrDUBCG8/6P5IVKLRRsq+lirGmbfSM5aROSNE1D+cwJ6I0oBrzzh4+ZYWAWzhnlZrTgdjRlMtNY6+5gVM3kabVjvtwymuooK90nywv8UOBHKUFHWZZUVYUQgqZpfkVdn5moForhCYqiIAxCklh0JOR5Ttu2XK/XQXhxgeKEGfXlgpMecB0Xc2fguR6mYWFZdt9MTtvbsuqnl8i47GKZO58bpIKkRLGDYzdujYhjzL2Fb/sc0iOpSLl0jYaoL2h4KXmW4RgutmEThREiSTidaoaqLyhX/iv914J7J/n8nPJVP+x3/JR3ohxl/LjhfvzM3cMMbeejvshT2vf+oj+rLa+dv9xYzFS9yxus3xx0M/rCXHN5ByWSmSrkV1+vAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Create HDL wrapper&quot;
+        title=&quot;Create HDL wrapper&quot;
+        src=&quot;/static/059_HDL_wrapper-025a87ede810083ba457ddb2ec1e046c-d2381.png&quot;
+        srcset=&quot;/static/059_HDL_wrapper-025a87ede810083ba457ddb2ec1e046c-961c8.png 300w,
+/static/059_HDL_wrapper-025a87ede810083ba457ddb2ec1e046c-d2381.png 563w&quot;
+        sizes=&quot;(max-width: 563px) 100vw, 563px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;ol start=&quot;2&quot;&gt;
 &lt;li&gt;Click &quot;Run synthesis&quot; in the &quot;Flow Navigator&quot;.&lt;/li&gt;
 &lt;li&gt;Click &quot;Run implementation&quot;&lt;/li&gt;
 &lt;li&gt;Click &quot;Open implemented design&quot; and select the IO ports tab. If the XDC contains no errors. It should look like the following screenshot:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/060_Implemented_Design_IO_Ports-3d08be6dec9983182493843a3330b560-0481b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 23.202416918429005%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAYAAABFA8wzAAAACXBIWXMAAAsSAAALEgHS3X78AAAAtUlEQVQY052QyW7EIBBE+f+/nAgRm30HE1sV6LGS08xhDqWim9JDBXvwHVwobNJCaod9+tImDe12Zf98V+72O3vP//cWTG4SznmkmDDGQGvtqfpU753m3jqdY4jwM59zRkoJx3Gg5EKZUgqY4IKCzjgCXtf1UuMYCD5AK02wMOHrobVfwForGP/i8N7DGjuBP2+B53kSSElNsDhbrf1qQu2mM/GtoIyHtuEjGRcRUkXM8ztywy+uZn/E05E87QAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Implemented design IO Ports&quot;
+        title=&quot;Implemented design IO ports&quot;
+        src=&quot;/static/060_Implemented_Design_IO_Ports-3d08be6dec9983182493843a3330b560-bf66f.png&quot;
+        srcset=&quot;/static/060_Implemented_Design_IO_Ports-3d08be6dec9983182493843a3330b560-e6e4d.png 300w,
+/static/060_Implemented_Design_IO_Ports-3d08be6dec9983182493843a3330b560-04aa4.png 600w,
+/static/060_Implemented_Design_IO_Ports-3d08be6dec9983182493843a3330b560-bf66f.png 1200w,
+/static/060_Implemented_Design_IO_Ports-3d08be6dec9983182493843a3330b560-0481b.png 1655w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h1 id=&quot;6-generate-bit-file&quot;&gt;&lt;a href=&quot;#6-generate-bit-file&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;6. Generate bit file&lt;/h1&gt;
-&lt;p&gt;Later on the FPGA bit stream will be flashed on the Quad SPI Flash device. In order to reduce the size of the bit stream and speed up booting the bit stream can be compressed. Turn compression on by adding this to the XDC file.&lt;/p&gt;
+&lt;p&gt;Later on the FPGA bit stream will be flashed on the Quad SPI Flash device. In order to reduce the size of the bit stream and speed up booting the bit stream can be compressed. Turn compression on by adding this to the XDC file.
+&lt;br&gt;
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]&lt;/p&gt;
 &lt;p&gt;Open the tools -&gt; settings menu. Select bit stream options under project settings. Tick the &quot;-bin_file&quot; option. Open &quot;additional settings&quot; and tick &quot;enable compression&quot;. A constraint will be added automatically to the XDC file:&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot;&gt;
-      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    set\_property BITSTREAM.GENERAL.COMPRESS TRUE [current\_design]&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
 &lt;p&gt;Run the bit stream generator.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Set the Bit stream options
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/061_bit_stream_options-611c3dfabe4f4aadd4df858828aba81d-fb9ab.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 860px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 91.62790697674417%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAAsSAAALEgHS3X78AAABxklEQVQ4y7WU227UMBCG8+pFQJHgAriC1+CCV+Cei0qo2+wp58SOUzvOeX88QzclLQtdEJG+xPbYvz2eyXgfXj/Hu7dv8N5x+fLijme4fHFxNq/cOk9KCSEE8ixH0zQYhgGVUtist8jSHLdV5biF1tp9tbNVPOfho80Nuq6F13Ud9ps9TxzHiY1t28KYGra2TP1T21rXr2venLEN249jLBjuQ5SynHejRWt/Df/GZ7i98rHZbFGW5QJVKvf9QePWeUp3+Hq1xzc/RyR6ZNUB1u1UihJGG0zT9CSMMYyn3XFVVcPULdp+YhoWlIiC+Lcifd8v+uwy+U4BELmYXSbDNlK4us6w2lVIynEmlINjZILczm3CuDvmO4zD2N1FtRAsCondLkSSFOiHaabpxhlt20XfHoMS7AIX8n4hKAqBNE5B9lMuU/o8cplShE4o3YkoLQ53gjT5XO4Fo5jzkAaOguM4ns0sSC5THh4O0+zyXwvSKwoiTm7K+n8WpEt/+PwXQUraczkpWBuN1bXP90rBUlJBuQqkXdWhk5xKI4rHLwXJ8NR/+JEgVQmqLn/i85cIHz+tkQn3K8YJ18c0SbniFEWBNE157Ds/Q1xdGfiL8gAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Bit stream options&quot;
+        title=&quot;Bit stream options&quot;
+        src=&quot;/static/061_bit_stream_options-611c3dfabe4f4aadd4df858828aba81d-fb9ab.png&quot;
+        srcset=&quot;/static/061_bit_stream_options-611c3dfabe4f4aadd4df858828aba81d-01bbf.png 300w,
+/static/061_bit_stream_options-611c3dfabe4f4aadd4df858828aba81d-81bef.png 600w,
+/static/061_bit_stream_options-611c3dfabe4f4aadd4df858828aba81d-fb9ab.png 860w&quot;
+        sizes=&quot;(max-width: 860px) 100vw, 860px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Additional bit stream options
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/062_Additional_bit_stream_options-ab571fb834f76ce11e6806f468336a98-fb9ab.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 860px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 85.81395348837209%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAAsSAAALEgHS3X78AAABkUlEQVQ4y+VUyU7DMBTMx4PEcgBRVvETiF/gAzihHrigpK2arYnj7Ek1vHlpK6hKRbliaWI7sscz48V5vDjBzfUl7m9Hgis83I1wfnqsOFvV2+1d/eHfEZxkkWDmzZDECazJkCksbGY3bSN1bnMUea61SYdxHMN+23ZouxJV7cGx1qKuazRNo/B9H+PxGK7nHowoiuCEscHr2xTvnoUbtkhl9TCIEIYRAj+Q1Vssl8tfgcKczBhM3AnSJEVeFKqyLEqxZTa2iF3F2AazQASk4lBsc67DiZ7roakbHcSfVVlJbmaVoZDaIc+6qr8RcmwkTqiMCpWQn+1BDH8RLzag+jiKlZQRdF2nKMtyk3/f9z8TksCf+wjn4ZBnECoZCRTFACqnQi6yJt5JSMskSCUOtZuJ9ZTW88F6PVhnTFVVaX+vQs3wy6bkQkpF24XKSLg+CXsJaVsVibq+X+7c5bZpNVvO2Uv41/JfCddbvkYh1y9JkoORy2XgGXXY4CPAmkfgt+CrxHlPL1M8PH/oYxLJjn8CrTsQBpjWIV0AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Additional bit stream options&quot;
+        title=&quot;Additional bit stream options&quot;
+        src=&quot;/static/062_Additional_bit_stream_options-ab571fb834f76ce11e6806f468336a98-fb9ab.png&quot;
+        srcset=&quot;/static/062_Additional_bit_stream_options-ab571fb834f76ce11e6806f468336a98-01bbf.png 300w,
+/static/062_Additional_bit_stream_options-ab571fb834f76ce11e6806f468336a98-81bef.png 600w,
+/static/062_Additional_bit_stream_options-ab571fb834f76ce11e6806f468336a98-fb9ab.png 860w&quot;
+        sizes=&quot;(max-width: 860px) 100vw, 860px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;7-commit-the-block-design-to-version-control&quot;&gt;&lt;a href=&quot;#7-commit-the-block-design-to-version-control&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;7. Commit the block design to version control&lt;/h1&gt;
 &lt;p&gt;Store the current version of the  block design inside version control:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;git add src/blockdesign/mb_design/*&lt;/li&gt;
-&lt;li&gt;check with git status that no files under src are &quot;untracked&quot;. If needed use &quot;git add&quot; to add remaining untracked files under src. Do not add these folders: basici_microblaze.cache/, basic_microblaze.hw/, basic_microblaze.runs/, basic_microblaze.xpr&lt;/li&gt;
-&lt;li&gt;git commit -am &quot;Block design done&quot;&lt;/li&gt;
+&lt;li&gt;check with git status that no files under src are &quot;untracked&quot;. If needed use &quot;git add&quot; to add remaining untracked files under src. Do not add these folders: basic_microblaze.cache/, basic_microblaze.hw/, basic_microblaze.runs/, basic_microblaze.xpr&lt;/li&gt;
+&lt;li&gt;git commit --message &quot;Block design done&quot;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h1 id=&quot;8-sdk-software-development&quot;&gt;&lt;a href=&quot;#8-sdk-software-development&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8. SDK, software development&lt;/h1&gt;
 &lt;p&gt;First export the hardware definition. Select the File menu -&gt; export -&gt; export hardware. Enable &quot;include bit stream&quot;. Choose the src/sdk/hardware folder.&lt;/p&gt;
 &lt;p&gt;Click launch &quot;SDK&quot; from the project menu. Choose the relevant src/sdk/workspace folder for as workspace. Vivado will start the SDK which is the Eclipse C/C++ development IDE. The workspace will contain the hardware definition &quot;mb_design_wrapper....&quot;. Click the &quot;system.hdf&quot; file and check that the memory map is correct.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Export hardware
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/063_export_hardware-4ea9d4d082da40f281491a6cd5ad2d26-b814d.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 669px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 46.038863976083704%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsSAAALEgHS3X78AAAA6UlEQVQoz62SvWrDMBSF9ajpkFBIQkMJlJIlQ5+iY1+hSx8hT5AlSwdFsmwrtn4deTmRVAqFkCGuBZ/Ovfo5V1xEtosHPK/m2Lyu8bJ+yrqcT/E4mwyCGGPQNi1kLXGqT1m10lkbGXMZ16OmM+EccGuE3sK4PUjf9xiDrrMIwYOUUoMeS7AjA6MMdVXHzW4wJE2UUlRlBa01RCEguEDBi584whnPhZKWIhXnKGKcWhFCyHjvM+Svu3PuX1wZjgH5feq9F431UMbBOo/0U1K7rLUgTatiYu42fP/8xtvHAV87DqUUeOxrMrwAcBuUlEuQI/sAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;SDK export hardware&quot;
+        title=&quot;SDK export hardware&quot;
+        src=&quot;/static/063_export_hardware-4ea9d4d082da40f281491a6cd5ad2d26-b814d.png&quot;
+        srcset=&quot;/static/063_export_hardware-4ea9d4d082da40f281491a6cd5ad2d26-965d8.png 300w,
+/static/063_export_hardware-4ea9d4d082da40f281491a6cd5ad2d26-3fd18.png 600w,
+/static/063_export_hardware-4ea9d4d082da40f281491a6cd5ad2d26-b814d.png 669w&quot;
+        sizes=&quot;(max-width: 669px) 100vw, 669px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Launch the SDK
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/064_launch_sdk-82cdd536d47d8f95ddc3f2313f5e1e15-8cc5a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 677px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 51.10782865583457%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAYAAAC0VX7mAAAACXBIWXMAAAsSAAALEgHS3X78AAABD0lEQVQoz62SzUrEMBSF+6gKIjIMKLoQV/oUbn0FN76CK1+gY2e00/z0N0nT9IcuerxtUdTdaAMf5yQhhxvu9e7Wx7g4X+Hm+oq4xHp1grPToz/jNXUNayyKvIBSGnmWQxUaRhsMw4BDljIv8Pq+x1I0jYFnrQWLGBhj2IcRuEgRRgmCHcNrEM1so2m/exfYkvpBSJ7D34TYBHvIVCMtLKmCV1UVnHNo23aicg0KU/8g1+5L1a879Y1C2zlQcA7OBbTWyNIMkryU8aRxnNC9QJqkiEUMIehMSEhi9FXl0HUdfbdBWZZz4Gd1/2XMWj5wbMpolsAY6rKieRtDD63m6Vng9sHH/ePb9J7TlGQ0wx98Udy+0e6XvwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Launch the SDK&quot;
+        title=&quot; Launch the Xlinx SDK&quot;
+        src=&quot;/static/064_launch_sdk-82cdd536d47d8f95ddc3f2313f5e1e15-8cc5a.png&quot;
+        srcset=&quot;/static/064_launch_sdk-82cdd536d47d8f95ddc3f2313f5e1e15-00a5f.png 300w,
+/static/064_launch_sdk-82cdd536d47d8f95ddc3f2313f5e1e15-1c352.png 600w,
+/static/064_launch_sdk-82cdd536d47d8f95ddc3f2313f5e1e15-8cc5a.png 677w&quot;
+        sizes=&quot;(max-width: 677px) 100vw, 677px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Default SDK workspace
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABpElEQVQoz42SWWvcMBSF/f9/VCl9KA0hDymhtIz3RZYXeZO8zNgzJ0cOLZ2ZQHLhYGxLn+49Oo7nHhCFIdI0he/78DwfceRDZjGVosxzSJGhkjnqUkLV9T/VVYUwiuB7HoIwgEuWk3ND13VYlgWn04KVMjLBmMcwqsJ5MrjM45sWaluvlCQJmyAwCBDHMRz7IUlidG2DeZ6wzDPmvkFfCHQyw9ECz2dcLpddsPqvhBA76K8cYzQhI47LhI0n2rLjtG1LNci5oeJo9l1KidvKb4Hbtt0tKn8/o3l5gPr5A8nDF8inb1DP3yEev96tFZ8BdlWBsa1h+g5Nw/H7HkabvcvbynhxHwJn2rAdFxzp6TyNtGSiJfR2mu48/BQw+PMLmX+AjENIpiBiNMqyhFI1qrqip/UuKQtG7e2GbeRc14UTMj/2pu2Gsix2gD1JZNnuT1EUe6yMMVdSSjF/Df8PSOKWjI5PBadvFYZhuOqw5i1b3yaOuK4r3iujNQ6Hjk1MbEATqJGl/fsjW6AeNMZxZNhPODOHt9IECqHZ6cjoDCgLTQ14BdMhRWGRxaI2AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Default SDK workspace&quot;
+        title=&quot;Default SDK workspace&quot;
+        src=&quot;/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-bf66f.png&quot;
+        srcset=&quot;/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-e6e4d.png 300w,
+/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-04aa4.png 600w,
+/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-bf66f.png 1200w,
+/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-7827d.png 1800w,
+/static/065_Xilinx_SDK-074d51e02b0395fff777b220b92de134-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;81-create-bootloader-and-bsp&quot;&gt;&lt;a href=&quot;#81-create-bootloader-and-bsp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.1. Create bootloader and BSP.&lt;/h2&gt;
 &lt;p&gt;Create a new &quot;Application project&quot; named &quot;Bootloader&quot;. In the &quot;Target software&quot; pane select &quot;Create new&quot; board support package. Name the BSP &quot;Bootloader_bsp&quot;. Click &quot;next&quot; and select the &quot;SREC SPI bootloader&quot; template. Click &quot;Finish&quot;.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/066_Xilinx_SDK_new_Application_project-76d8cc65ce3c1b9ca29a57e82837aa86-f3d54.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 613px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 124.79608482871126%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAYAAAAxFw7TAAAACXBIWXMAAAsTAAALEwEAmpwYAAACU0lEQVQ4y61Vy47TQBD0HyJOCO0BBOIhrcSJT0Ac+AkuHPgDTtw5IFbsAloWx2N7/JqxnTjOA+VUdE1iE6QkSrxEKnmmZ6Zcru6eeC/P7uDRwzOcP3+MF+dP8ezJA9y/d3cwvDRNobVGkiTIZJzlBYb8Fm2Bi+sI3mw2g7EWpaAoChTGwMo4TVIZM17CSGy1Wh0k/PQ9w4cvlRC2Lf5iOhjtdIpm0sAzRY5g5COKQqRpIuORG1PV7+XyJCzmc3jlzSW08qGCAKFS8vQRR5G8sRkEb1xXsCYXrwyyJO6R6vifeZboDWSs13PumYxr8CutKTBtJvA65mYydsHSrBetbKor6548xM27FDHOsx28Q4sk6rAd3wensLQFlAoQBCPkWer8Y2JYk6dmmvZ5VWklGQHiOEYUqt6LofDoExUxy0pUktzkmZuznOIwdOuxlNI6NnJfMa7r3iqK4tmqKkWhZDcUZZEcpA/cUMuCFsUqUGJDhrl00zHgS7xdsklMP04Fk7flYeRUcn5LD0vn1cj3+08mxom0n/rlXsBEHdMljpAyWTrslO1Fkm/H9hX2bkJRQCXOC1HMRcaZsK5gOT+KsBYiFnSHQkrGtaAOketICjxBIj1bxApZKMUfBUjlMuGzrQwWk6rHrLa8HMqejIfZ6FoSVGUa1aavGTNC7v+4wvXlBW6+XeLn1Vc0NseyqXs4wn3Z4ufT246Q84Y9fQCu9Ybee3vvw/9OeJsi3lnYVv7V0izfWYNmc7kSgVwM3ZiXALurrsTXzx9RvXuN6O0rtO/f4A8UUjuWyfRM2gAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Create application project&quot;
+        title=&quot;Create application project&quot;
+        src=&quot;/static/066_Xilinx_SDK_new_Application_project-76d8cc65ce3c1b9ca29a57e82837aa86-f3d54.png&quot;
+        srcset=&quot;/static/066_Xilinx_SDK_new_Application_project-76d8cc65ce3c1b9ca29a57e82837aa86-806b0.png 300w,
+/static/066_Xilinx_SDK_new_Application_project-76d8cc65ce3c1b9ca29a57e82837aa86-62137.png 600w,
+/static/066_Xilinx_SDK_new_Application_project-76d8cc65ce3c1b9ca29a57e82837aa86-f3d54.png 613w&quot;
+        sizes=&quot;(max-width: 613px) 100vw, 613px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h3 id=&quot;811-configure-bootloader-bsp&quot;&gt;&lt;a href=&quot;#811-configure-bootloader-bsp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.1.1. Configure Bootloader BSP&lt;/h3&gt;
 &lt;p&gt;Open the Bootloader_bsp project and open &quot;system.mss&quot;. Click &quot;Modify this BSP&apos;s Settings&quot;. Select &quot;xilisf&quot; in the navigation tree view. Set the &quot;serial_flash_family&quot; type to 5 (Spansion). Click &quot;Regenerate BSP sources&quot;. &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Open the bootloader_bsp project
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABjElEQVQoz5WT626jMBCF8/5Ptj9baVu1ScAQcMDm4gvmfjk7WNuqaVqptfQJ4RkfZg7jQ3A+IY4ipGmKMAwRBCF4GqPIOUqRoZQ5qrIgyjvKoqAzDK8vLwjCAGfSOuR5hoIC8zRgmSfsqzk9wj39QZvFcDXFxgHbMn+JFAKXy+WdA2MhMp6gEFdYXcM1GjVVJtJ9L4eua2i171v0XecZ+t4zjiOklLeC0zRhWRas64JtW32FrpIo6SMTHdootq1vrD5n27Z37gR3sc+rURVMIaAJY4zHGgtr7f9363HO/UywtQa9a+DoKXMBZwbMkmMuM6ydu8n9kWBHPu3+7FUkCYcqybfjA4bgLxYlfy/YUst969BRlVZrON1jFgkWq7CO/Y2Pd4JRxKiKxAekFMizjGasgiX/mqpAR20vNB7fIT6PjaFqdrM/rufnJ5zOZ4SM+cGNKZFzjuv1ipSndAm4P/x6vCBiCRjjlJfidIy/blkpBUOtWvqjbdt6P1camY80NJdBoKjChsQ1Eo/CP2v0RbJEFzSwAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Bootloader BSP project&quot;
+        title=&quot;Bootloader BSP project&quot;
+        src=&quot;/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-bf66f.png&quot;
+        srcset=&quot;/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-e6e4d.png 300w,
+/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-04aa4.png 600w,
+/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-bf66f.png 1200w,
+/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-7827d.png 1800w,
+/static/068_Xilinx_SDK_BSP-403940ee1de951b27ed49509a44c2e70-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Modify the Bootloader BSP
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/069_Xilinx_SDK_Modify_BSP-6f15708c82b8189ecedf9aa0b2fc27e2-f4cbb.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 961px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 72.21644120707596%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAAB4klEQVQ4y5VTPW/bQAzVP+7YqWunAkFTx9kKFN6TDgUKdOjQOUvstP6QLDmxvu4k3Z3OhjP445U8RUICI00j4IFHinp85FFe/8N7nPU+on92it6nE/ROTzD48hnn5J/3X4d3b9/As9ZCaw1jDKpKQSuNuq4JTXy73eJwOPwXvl1cwtO/vkJ8H2D1Y4DlLMF0ojEeG6iqgq0NFahgtOqglepibFuwz/neZrMhZRX4KaTAIgqRpQnSJHEJk/EfDK+vcTMaYTQcOvy+GTmf4+zzeTqZNIS73c61uF6vURYWt4sad7cGtdEOeZYSeeyKcME2/hy8/X6P9pEix2w6RRLHSIlgHgSd72JEzAWSeOnOj5Glqfv+CWEhLbVsSKWhl/pFNS8qLKRE4PukzHc2mM2amT5qu5lvc2al7UjyLDsmXFme4cKtixQCvFLcSjgPUZYF7u83/8TK1seEURi5SyqKArwBMc1uHswRhqGzURQReQkpiwcrO1tR0SeEtSoRkRpWJkihI1zGDRnFQyoW+IEryu+ZhIk5j8GCjhWSAl4hTm4VcssB3ThbJhKCVVUd0bOElmbAM1P0N5TUMvuCVoFjaQta+M4+nEWeu1x3Kdw/D5PBm/4aMIGkZbd3PtTVT6zGV/gLEzEITxwkpqgAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Modify the Bootloader BSP&quot;
+        title=&quot;Modify the Bootloader BSP&quot;
+        src=&quot;/static/069_Xilinx_SDK_Modify_BSP-6f15708c82b8189ecedf9aa0b2fc27e2-f4cbb.png&quot;
+        srcset=&quot;/static/069_Xilinx_SDK_Modify_BSP-6f15708c82b8189ecedf9aa0b2fc27e2-70335.png 300w,
+/static/069_Xilinx_SDK_Modify_BSP-6f15708c82b8189ecedf9aa0b2fc27e2-2f911.png 600w,
+/static/069_Xilinx_SDK_Modify_BSP-6f15708c82b8189ecedf9aa0b2fc27e2-f4cbb.png 961w&quot;
+        sizes=&quot;(max-width: 961px) 100vw, 961px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;li&gt;Xilisf settings
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/070_BSP_Settings_Xilisf-9fb0b5cb5ccdc2dfea988f1df58b4a79-8961a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 20.33029612756264%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAYAAACOXx+WAAAACXBIWXMAAAsSAAALEgHS3X78AAAAi0lEQVQY053JywrCMBSE4bz/i4jgXrS2KNK1O1OkNCG2xAut5uQkXY6lFvd28TEDv0i3a+ySDbI0wWGfjfL8OMtquYC4WQtPhIcu0dUarTF4NRrOGnRXBb43fxExRPQxgpQEVWdELRGG73UBV0k4VYzGPu1bTe3Xv62vSwj2HoF54GdjT6D2Cb6c8AFt9iJRaqBrfAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Xilisf settings&quot;
+        title=&quot;Xilisf settings&quot;
+        src=&quot;/static/070_BSP_Settings_Xilisf-9fb0b5cb5ccdc2dfea988f1df58b4a79-bf66f.png&quot;
+        srcset=&quot;/static/070_BSP_Settings_Xilisf-9fb0b5cb5ccdc2dfea988f1df58b4a79-e6e4d.png 300w,
+/static/070_BSP_Settings_Xilisf-9fb0b5cb5ccdc2dfea988f1df58b4a79-04aa4.png 600w,
+/static/070_BSP_Settings_Xilisf-9fb0b5cb5ccdc2dfea988f1df58b4a79-bf66f.png 1200w,
+/static/070_BSP_Settings_Xilisf-9fb0b5cb5ccdc2dfea988f1df58b4a79-8961a.png 1756w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&quot;812-configure-bootloader&quot;&gt;&lt;a href=&quot;#812-configure-bootloader&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.1.2. Configure Bootloader&lt;/h3&gt;
 &lt;p&gt;Open the &quot;Bootloader&quot; project and edit the &quot;blconfig.h&quot; file. The bootloader needs to know the address in SPI flash where the user application resides. Remove the warning and change the &quot;FLASH_IMAGE_BASEADDR&quot; to 0x003D0900. Select the linker &quot;ldscript.ld&quot; file. Set the stack size to 0x200. Check that all segments are assigned to BRAM local memory (and not the external DDR RAM as this memory will receive the user application loaded from the Flash memory). &lt;/p&gt;
 &lt;p&gt;In bootloader.c check that SPI_DEVICE_ID is set to XPAR_SPI_0_DEVICE_ID. The warning line above it can then be removed.&lt;/p&gt;
@@ -1264,25 +2817,231 @@ set\_property -dict {PACKAGE\_PIN L13 IOSTANDARD LVCMOS33} [get\_ports {QSPI\_FL
       &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;print(&quot;.&quot;)&lt;/code&gt;&lt;/pre&gt;
       &lt;/div&gt;
 &lt;p&gt;This will speedup things while still giving some insight in the bootloading progress. After saving Eclipse will rebuild the Bootloader. If all is well the Bootloader should compile without errors now.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-07402.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.927223719676554%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABV0lEQVQoz52TC4+CMBCE/f8/0OgB5dkCBSnvl8C4LbmLp3fGuMmkJDbfTmfXg2NbcBwbvufS6ZAYAp8hESGyNMElz/9VnmVgzMX5dILDHNjEOqRJjHmesa4Ltm2DLhU4aCKGNpfoqhJ1cUHf1Bj7FmNH6ntsy9VIcI4gCH50yKhLXdfYUXtVMkYpE0zThJmkfx+GAV3XYVkW3FcsxCMwR6873l0qCdjmCdauIhfkXLtf113b9hroUXaC67wESpWhbUpIKY0bpRRlxBBFETg9jdOp3b4Etm2DcegwjT0957pfimPjuigKCto2w9JgRgMrCvULKB6Bj5no0g7fBcbvALXDqqo+A+oMwzA0rqRMkRAsTdPPHVbq8hS0HkBZKrO8ruvC8zxafM+cusmV9vZbT3v415OPxyO+LMv8azQwCELTRA+A8wgRffu+j/PZpyYhSdA9DtvycQMauD9GUaqS9AAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Check bootloader linker map&quot;
+        title=&quot;Check bootloader linker map&quot;
+        src=&quot;/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-bf66f.png&quot;
+        srcset=&quot;/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-e6e4d.png 300w,
+/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-04aa4.png 600w,
+/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-bf66f.png 1200w,
+/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-7827d.png 1800w,
+/static/071_Xilinx_SDK_Bootloader_Linker_map-81a90f5bac557e2e25d99d7a0a2ae341-07402.png 1855w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h3 id=&quot;813-programming-the-fpga&quot;&gt;&lt;a href=&quot;#813-programming-the-fpga&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.1.3. Programming the FPGA&lt;/h3&gt;
-&lt;p&gt;In this step the hardware design including bootloader will be programmed into flash such that the FPGA loads it every time it boots. Configure the SPI jumper on the Nexys4 DDR development kit. This allows the FPGA to load its bit file from the SPI flash. The FPGA bit file contains the configuration of the FPGA including initial contents of the Microblaze local BRAM.  Next connect the Nexys4 DDR board via the JTAG usb connector. Start a serial terminal (eg. gtkterm) and select the port (eg. /dev/ttyUSB1) and set the baud rate to 38400 (as configured in the UARTlite block design).&lt;/p&gt;
+&lt;p&gt;In step 8.1.4. the hardware design including bootloader will be programmed into flash such that the FPGA loads it every time it boots. Configure the SPI jumper on the Nexys4 DDR development kit. This allows the FPGA to load its bit file from the SPI flash. The FPGA bit file contains the configuration of the FPGA including initial contents of the Microblaze local BRAM.  Next connect the Nexys4 DDR board via the JTAG usb connector. Start a serial terminal (eg. gtkterm) and select the port (eg. /dev/ttyUSB1) and set the baud rate to 38400 (as configured in the UARTlite block design).&lt;/p&gt;
 &lt;p&gt;Run the program FPGA command from the Xilinx menu. Select the bootloader.elf file (in the Bootloader/Debug project) in stead of &quot;bootloop&quot;. Selecting &quot;program&quot; will generate a download.bit file in the &quot;mb_design_wrapper_hw_platform_0&quot; project. &lt;/p&gt;
 &lt;p&gt;After the programming completes, in the serial terminal you should see the bootloader starting (and failing).&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/072_Bootloader_Program_FPGA-77fd52366a94b46d70d1475c5889bb84-146ca.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 58.333333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAABV0lEQVQoz62Ty04DIRSGeXAXPkA12ppUH8FnMO5duOqyJr3NlTvMMFMbm/4eMDbd1FojyZdzYIafA/yw0e0V7scjPIzvMBpeY0j9P3EzwODyAkwpBaU0vHPwvkHTNBR9yh2NWWvR9z12ux1+atvtByaTF7DlYo75bIZ8uYDiFYyoE5rySGMUOm+PEpxBYwnvEixbLalCCVEWqLIVZFUkIVWXCSs5vJZHcUpACQ5JJEGjVUqUFChJ1BiN0DYIof0VLR1RFJM0Pwm+TafI8wx1VaEqS/C6SsLxTPuuQ9eFo/REaNskyOsaZZGD5Vn2tYIQJFjshY3W6ecuhB9paTeC1+BEnM9WdBmC83SOjm40rhRFI7HaGONicTtdaE/CNNlmvV6na3+naI2Bpuq+MdRPHIwdEm0npUzfo8XYKX+d29hms8F/wryze1OeiyNDR7ukB/H6jPLpEZ/t8H4ds9J09wAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Program FPGA&quot;
+        title=&quot;Program FPGA&quot;
+        src=&quot;/static/072_Bootloader_Program_FPGA-77fd52366a94b46d70d1475c5889bb84-146ca.png&quot;
+        srcset=&quot;/static/072_Bootloader_Program_FPGA-77fd52366a94b46d70d1475c5889bb84-da9ed.png 300w,
+/static/072_Bootloader_Program_FPGA-77fd52366a94b46d70d1475c5889bb84-d8c21.png 600w,
+/static/072_Bootloader_Program_FPGA-77fd52366a94b46d70d1475c5889bb84-146ca.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h3 id=&quot;814-flashing-the-fpga-bitstream&quot;&gt;&lt;a href=&quot;#814-flashing-the-fpga-bitstream&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.1.4. Flashing the FPGA bitstream.&lt;/h3&gt;
-&lt;p&gt;Next click the &quot;Program Flash&quot; menu item in the Xilinx menu. Select the download.bit files as &quot;image file&quot;. The offset should be 0. The flash type is &quot;s25fl128sxxxxx0-spi-x1_x2_x4&quot;. Check &quot;verify after flash&quot;. And finish by clicking &quot;Program&quot;.&lt;/p&gt;
+&lt;p&gt;The previous step was used to generate a bit file. It was uploaded temporary to the FPGA. Storing the bit file in the Flash chip is a more permanent solution that allows the FPGA to load the design every time the Nexys4 board is reset. Click the &quot;Program Flash&quot; menu item in the Xilinx menu. Select the download.bit files as &quot;image file&quot;. The offset should be 0. The flash type is &quot;s25fl128sxxxxx0-spi-x1_x2_x4&quot;. Check &quot;verify after flash&quot;. And finish by clicking &quot;Program&quot;.&lt;/p&gt;
 &lt;p&gt;After flashing you can restart the Nexys4 DDR by pressing the &quot;prog&quot; button. Again the bootloader should start and fail. Note that while the FPGA can load its bit file from flash it can also still be programmed as usual using JTAG.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/073_Program_Flash_Bootloader-93f36cb9bf8408ae502a6f7df2cf9a86-4ea26.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1095px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 44.84018264840183%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsSAAALEgHS3X78AAAA+klEQVQoz6WQTU7DQAyF57iIC3ANBFRISBTBAdigrmDLhkO0aTL56fx6IpFVpIc9JFWXoSw+vbFn/Oyxerq/wer2GnfM+vEBL8/rs7m6vIDq+wSKEUSEPqWswjAMGMfxT7y9fkDttlvsiwKHrmXdoW2aiRrOGiSKi6AY2KODqso9YvCIzkCzoWkbJO9Azh6V/C/JTznR4HI8v/tOEVpXbFiV2T24k4ITk+N5us/xhJjO5kNPCFyraja05pCnlGklrrlTx1+WB0uJjKxISaEuS2g2kr15TnruLipNlu5wRpmqQMt7kyn7RP9GWWvPLpaJ8m+cg/96h/vc4AdL3JVLGH4CkwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Flash FPGA bootloader&quot;
+        title=&quot;Flash FPGA Bootloader&quot;
+        src=&quot;/static/073_Program_Flash_Bootloader-93f36cb9bf8408ae502a6f7df2cf9a86-4ea26.png&quot;
+        srcset=&quot;/static/073_Program_Flash_Bootloader-93f36cb9bf8408ae502a6f7df2cf9a86-e3552.png 300w,
+/static/073_Program_Flash_Bootloader-93f36cb9bf8408ae502a6f7df2cf9a86-10a03.png 600w,
+/static/073_Program_Flash_Bootloader-93f36cb9bf8408ae502a6f7df2cf9a86-4ea26.png 1095w&quot;
+        sizes=&quot;(max-width: 1095px) 100vw, 1095px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h2 id=&quot;82-create-user-application&quot;&gt;&lt;a href=&quot;#82-create-user-application&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.2. Create user application&lt;/h2&gt;
 &lt;p&gt;Create a new project, named TestApp. Select Create new board support package named &quot;TestApp_bsp&quot;. Click next and select the &quot;Peripheral tests&quot; template.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/074_Xilinx_SDK_Create_User_App-8d6d43c6d5867d2dbdf259a160c4fb8d-f3d54.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 613px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 124.79608482871126%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAYAAAAxFw7TAAAACXBIWXMAAAsSAAALEgHS3X78AAACT0lEQVQ4y61Vy47TMBT1J8IKIZBAIB7SSOz4A8SCn2DDgj9gxZ4FAgkJaZhpnk6cOHGSNukgujrc4zZR0bSjtkOlo9jX9vHxfVW9fngHTx4/wNnLp3h19hwvnj3C/Xt3T4bK8xxaa2RZBiNjU5Q45XfVl/h+nkANwwBbVagFZVmitBaVjPMslzHtNazYVqvVjYRffhp8+uaEsO8xYdFh2dZYNvX6ewQGObOoKyhbFgiDGZIkhkljpJe/EF+c40/fHY3fQqzqix/Q0QxRGCKOIvnOkCYJ+sX8JKi2cahsIb6yMFk6IdfpP3OT6Q1krNdz7unaBnxlZUss5h3UyDzvWm+s7Xqxkk2Nq/yXh7h5lyLaeXaEummRRCO27fvgFdZViSgKEYYBCpN7/4VB4HNy6BdHge5TTkIdC2GapkjiaPLFqVD0ExUxypGoJLktjJ8zndI49uuppNXaFvhXtE0zuYqieNY5SRsn0Y1FWSIH6QduaGRBi+IojMQNBkuppkPAS9Qu2SSmP44Fg7flw8Sr5PyWPqy9r4LZbHoy0WYxbHTpL2CgDqkST0iZTB1WyvYiybdt+xJ7N6EooBLvC1HMRdoZsDFhOT+IsBEiJvSIUlLGl6COUehEEjxDJjVLtZWAF3dyyXLor2HTHOqJjIdZ6FoC5IyG29Q1bVQ+Xki/Xy2Ha/CEN0Usl47ClsZkJmnpL+alxjeOOWt8C770Tu17e/vhfye8TRLvTOxK/tVyU+zMQbtprkQojWEcswmwuhrnMP/6Ge7DWyTv36D/+A5/AThUPCX/HU6gAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Create user application&quot;
+        title=&quot;Create user application&quot;
+        src=&quot;/static/074_Xilinx_SDK_Create_User_App-8d6d43c6d5867d2dbdf259a160c4fb8d-f3d54.png&quot;
+        srcset=&quot;/static/074_Xilinx_SDK_Create_User_App-8d6d43c6d5867d2dbdf259a160c4fb8d-806b0.png 300w,
+/static/074_Xilinx_SDK_Create_User_App-8d6d43c6d5867d2dbdf259a160c4fb8d-62137.png 600w,
+/static/074_Xilinx_SDK_Create_User_App-8d6d43c6d5867d2dbdf259a160c4fb8d-f3d54.png 613w&quot;
+        sizes=&quot;(max-width: 613px) 100vw, 613px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h3 id=&quot;821-configure-testapp-bsp&quot;&gt;&lt;a href=&quot;#821-configure-testapp-bsp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.2.1. Configure TestApp BSP&lt;/h3&gt;
 &lt;p&gt;Open the TestApp_bsp project and open &quot;system.mss&quot;. Click &quot;Modify this BSP&apos;s Settings&quot;. Enable &quot;xilisf&quot; and &quot;lwip202&quot; in the supported libraries pane. Select &quot;xilisf&quot; in the navigation tree view. Set the &quot;serial_flash_family&quot; type to 5 (Spansion). S&lt;/p&gt;
-&lt;p&gt;Click &quot;Regenerate BSP sources&quot;. Probably the build will fail. There is a bug in Vivado 2018.2 lwip202, it does not define some xadapter code required to compile using EthernetLite. There is a &lt;a href=&quot;&quot;&gt;patch&lt;/a&gt; available. The patch has been applied manually in the example repository. Be care full not to regenerate the BSP sources as this will remove the patch.&lt;/p&gt;
-&lt;p&gt;The changes can be viewed by looking at this diff:
-git diff 69b53308d4d4690ab77b53d72262df3ee429e0b d45cd8645e9563a86cef6648e0a15483d39f63f9 &apos;*.c&apos;&lt;/p&gt;
+&lt;p&gt;Click &quot;Regenerate BSP sources&quot;. Probably the build will fail. There is a bug in Vivado 2018.2 lwip202, it does not define some xadapter code required to compile using EthernetLite. There is a &lt;a href=&quot;&quot;&gt;patch&lt;/a&gt; available. The patch has been applied manually in the &lt;a href=&quot;https://github.com/dwjbosman/basic_microblaze_nexys4_ddr&quot;&gt;example GIT repository&lt;/a&gt;. Be care full not to regenerate the BSP sources as this will remove the patch.&lt;/p&gt;
+&lt;p&gt;The changes can be reviewed via this diff: &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;git diff 69b53308d4d4690ab77b53d72262df3ee429e0b d45cd8645e9563a86cef6648e0a15483d39f63f9 &apos;*.c&apos;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Set the PHY link speed to 100Mbps
+
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/075_Xilinx_SDK_Configure_lwip-d24a3ff97c163a030444dbf7b8e7d393-4fe88.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1200px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 43.25468844525106%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsSAAALEgHS3X78AAABaklEQVQoz52SSVPCQBCF8///DQTFImAQLBAvWnoglmzZ92WyUVx4dg8FHkQPHr7q6Znp12+SVm57KnpqB9rgDv3+De5HGsb6CLo+/BfK4XBAlibIswxJLFCKCnV1pkRTV6jKEhWt27ZB2/yNkmUpAt9HFEYknEIIgSRJLjEIApimCdd1SbRC09RE8yvK8XiEY9uwLAsZueTNPM9R17XMoyjCbmdKOGfRtm2x3++vIgXZoW07iONYFpwL2WEYhnRmk+AOnutRHiGllxRFIZtz4x8O+cJqtZIC3J2fy4fcIPADKbZcGjCMD8Kg9VLe98kI17AzrmNOgu8LeE8a7AcV2esU6csE4m1GcYr4eQh/PoAzG8Cda3Ae+3DGXUKV0dI7sPUu3EkPyUI7CYb04TebLdbrtXwuO2OXHNnFdruTjhzHlbnneRf4Z33v+VBqGgtR5CRQ0MgIGhEeneISGXlO8N41SiKn0ausT3wBxzWWnZE2QOcAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Configure lwip&quot;
+        title=&quot;Configure lwip&quot;
+        src=&quot;/static/075_Xilinx_SDK_Configure_lwip-d24a3ff97c163a030444dbf7b8e7d393-bf66f.png&quot;
+        srcset=&quot;/static/075_Xilinx_SDK_Configure_lwip-d24a3ff97c163a030444dbf7b8e7d393-e6e4d.png 300w,
+/static/075_Xilinx_SDK_Configure_lwip-d24a3ff97c163a030444dbf7b8e7d393-04aa4.png 600w,
+/static/075_Xilinx_SDK_Configure_lwip-d24a3ff97c163a030444dbf7b8e7d393-bf66f.png 1200w,
+/static/075_Xilinx_SDK_Configure_lwip-d24a3ff97c163a030444dbf7b8e7d393-4fe88.png 1653w&quot;
+        sizes=&quot;(max-width: 1200px) 100vw, 1200px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&quot;822-configure-the-testapp&quot;&gt;&lt;a href=&quot;#822-configure-the-testapp&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.2.2. Configure the TestApp&lt;/h3&gt;
 &lt;p&gt;The peripherial test application does not need any configuring.&lt;/p&gt;
 &lt;h3 id=&quot;823-flashing-the-user-application&quot;&gt;&lt;a href=&quot;#823-flashing-the-user-application&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.2.3. Flashing the user application&lt;/h3&gt;
-&lt;p&gt;Click the &quot;Program Flash&quot; menu item in the Xilinx menu. Select the TestApp.elf file &quot;image file&quot;. The offset should be 0x003D0900 (as configured in the bootloader). The flash type is &quot;s25fl128sxxxxx0-spi-x1_x2_x4&quot;. Tick &quot;convert elf file to bootable SREC...&quot;. Check &quot;verify after flash&quot;. And finish by clicking &quot;Program&quot;.&lt;/p&gt;
+&lt;p&gt;Click the &quot;Program Flash&quot; menu item in the Xilinx menu. Select the TestApp.elf file as &quot;image file&quot;. The offset should be 0x003D0900 (as configured in the bootloader). The flash type is &quot;s25fl128sxxxxx0-spi-x1_x2_x4&quot;. Tick &quot;convert elf file to bootable SREC...&quot;. Check &quot;verify after flash&quot;. And finish by clicking &quot;Program&quot;.&lt;/p&gt;
 &lt;p&gt;Reset the Nexys4 DDR by pressing the &quot;prog&quot; button. The bootloader should start loading and eventually run the user application. The user application will print various test messages. The RGB LED connected to the GPIO should react to one of the tests. The last tests will test the Ethernetlite interface (you&apos;ll see the Ethernet LEDs blinking twice).&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/076_Xilinx_SDK_Flash_User_App-1ec1021205e0c48e61da61178a122505-9eb38.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block; ; max-width: 1045px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 45.74162679425838%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsSAAALEgHS3X78AAABC0lEQVQoz6WRS07DMBCGfU24AJdBUAnES1URV2DPiiVLqOjDbUJefiWxkyAVRZF+PO4F0nbxacYjzcz/j9n05gqT68vAw/0tnmdPRzGbPuLi/Ays61o4a+GcQ9M0++jp2hbDMIym73vcTV7Aou0GcRRBK4mfOIbyUUkBKQSM1mHwGEiE0QpMisI/vEJboyhyGENDmoOxdRVEsO2Go/RDnK3AOUeSJEGZ9tuqsgw5LQlQXak9PqcT/e12gV9/OnLHBKnyzaQyTxPkWRqQvk5bx0IObV17y+s5BP8OpItPZMsv5Ks5CoIvDhpalQYs40vw9Sp8DFlqG3cSzBhzdDOdSUkJJ3Po91dUH2/4BwGbku8+h/7vAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;Flash the user application&quot;
+        title=&quot;Flash user application&quot;
+        src=&quot;/static/076_Xilinx_SDK_Flash_User_App-1ec1021205e0c48e61da61178a122505-9eb38.png&quot;
+        srcset=&quot;/static/076_Xilinx_SDK_Flash_User_App-1ec1021205e0c48e61da61178a122505-e4b94.png 300w,
+/static/076_Xilinx_SDK_Flash_User_App-1ec1021205e0c48e61da61178a122505-fa508.png 600w,
+/static/076_Xilinx_SDK_Flash_User_App-1ec1021205e0c48e61da61178a122505-9eb38.png 1045w&quot;
+        sizes=&quot;(max-width: 1045px) 100vw, 1045px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
 &lt;h2 id=&quot;83-committing-the-sdk-code&quot;&gt;&lt;a href=&quot;#83-committing-the-sdk-code&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8.3. Committing the SDK code&lt;/h2&gt;
 &lt;p&gt;First add .gitignore files to a number of folders to ignore logging files:&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot;&gt;
@@ -1303,10 +3062,11 @@ git diff 69b53308d4d4690ab77b53d72262df3ee429e0b d45cd8645e9563a86cef6648e0a1548
 
     src/sdk/.gitignore:
     *.jou
-    *.log
-
-
-    git add src/sdk/hardware/mb\_design\_wrapper.hdf
+    *.log&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;Then run these commands to add the SDK files to the repo.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot;&gt;
+      &lt;pre class=&quot;language-none&quot;&gt;&lt;code&gt;    git add src/sdk/hardware/mb\_design\_wrapper.hdf
     git add src/sdk/workspace/Bootloader
     git add src/sdk/workspace/Bootloader\_bsp
     git add src/sdk/workspace/TestApp
@@ -1318,11 +3078,14 @@ git diff 69b53308d4d4690ab77b53d72262df3ee429e0b d45cd8645e9563a86cef6648e0a1548
       &lt;/div&gt;
 &lt;h1 id=&quot;9-conclusion&quot;&gt;&lt;a href=&quot;#9-conclusion&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;9. Conclusion&lt;/h1&gt;
 &lt;ol&gt;
-&lt;li&gt;Creating the basic Microblaze architecture running requires many configuration steps. While writing this tutorial I had one working reference project and created a new project describing each step. The first time I ended up with a bootloader that did not fit in the BRAM. Somehow, somewhere the Microblaze cache size was set to 16 kB, instead of the required 32 kB. I suspect the block automation step to be the culprit. Luckily by checking the linker script in the SDK this was easy to find and correct.&lt;/li&gt;
+&lt;li&gt;Getting this the basic Microblaze architecture running requires many configuration steps. While writing this tutorial I had one working reference project and I created a new project to describe each step. The first time I ended up with a bootloader that did not fit in the BRAM. Somehow, somewhere the Microblaze cache size was set to 16 kB, instead of the required 32 kB. I suspect the block automation step to be the culprit. Luckily by checking the linker script in the SDK this was easy to find and correct.&lt;/li&gt;
 &lt;li&gt;When working in Linux check your Locale settings as described in the tutorial. If set wrongly the MIG7 wizard will not snow essential settings.&lt;/li&gt;
 &lt;li&gt;The Eclipse SDK crashed a few times resulting in a locked SDK which could not be restarted. Remove .lock files from the .metadata in src/sdk/workspace to get it working again. &lt;/li&gt;
+&lt;li&gt;Although lwIP is compiling I haven&apos;t had the time to do actual internet tests. The peripheral test example application however indicates the the ethernet phy is working.&lt;/li&gt;
+&lt;li&gt;Performance of the Microblaze has not been checked in this tutorial.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;The VHDL code can be found in the &lt;a href=&quot;https://github.com/dwjbosman/basic_microblaze&quot;&gt;Basic_microblaze&lt;/a&gt; repository.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[VHDL sine wave oscillator]]></title><description><![CDATA[In my last  article  a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to…]]></description><link>https://dwjbosman.github.io/vhdl-sine-wave-oscillator</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-sine-wave-oscillator</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sat, 22 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/vhdl-i-2-s-transmitter&quot;&gt;article&lt;/a&gt; a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to develop an additive synthesis engine. In this article the goal is being able to generate a sine wave.&lt;/p&gt;
+&lt;p&gt;The VHDL code can be found in the &lt;a href=&quot;https://github.com/dwjbosman/basic_microblaze_nexys4_ddr&quot;&gt;Basic_microblaze&lt;/a&gt; repository.&lt;/p&gt;
+&lt;p&gt;The next step will be to implement an AXI device that presents a memory mapped interface to the audio synthesis engine. Using the lwIP stack and some C code will then allow us to send commands to the synthesis engine via UDP.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[VHDL sine wave oscillator]]></title><description><![CDATA[In my last  article  a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to…]]></description><link>https://dwjbosman.github.io/vhdl-sine-wave-oscillator</link><guid isPermaLink="false">https://dwjbosman.github.io/vhdl-sine-wave-oscillator</guid><category><![CDATA[VHDL FPGA DSP]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sat, 22 Sep 2018 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;In my last &lt;a href=&quot;https://dwjbosman.github.io/vhdl-i-2-s-transmitter&quot;&gt;article&lt;/a&gt; a VHDL I2S transmitter was presented which allows one to playback arbitrary wave data. Eventually the goal is to develop an additive synthesis engine. In this article the goal is being able to generate a sine wave.&lt;/p&gt;
 &lt;p&gt;As a starting point I use this &lt;a href=&quot;https://github.com/jorisvr/vhdl_sincos_gen&quot;&gt;VHDL sine generator&lt;/a&gt; sub component. This generator is nicely parametrized. You can specify the number of bits in the output resolution as well as the phase input.&lt;/p&gt;
 &lt;p&gt;The additive synthesis engine which is to be developed needs to be able to control the frequency of the oscillator. I am not sure yet on the required frequency resolution. I will pick a reasonable number and keep the formulas general so that the value can be easily changed later. The challenge in the development of this oscillator is to implement the following features:&lt;/p&gt;
 &lt;ul&gt;
