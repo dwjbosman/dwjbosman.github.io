@@ -1,4 +1,193 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Tue, 06 Nov 2018 21:19:09 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Nexys4 DDR Microblaze with DDR Ram and Flash bootloader support]]></title><description><![CDATA[The goal is to develop an additive synthesis engine. The synthesizer needs a processor to implement high level functionality. In this…]]></description><link>https://dwjbosman.github.io/nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support</link><guid isPermaLink="false">https://dwjbosman.github.io/nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support</guid><category><![CDATA[Microblaze FPGA SDK]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Thu, 01 Nov 2018 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;The goal is to develop an additive synthesis engine. The synthesizer needs a processor to implement high level functionality. In this article a small step is taken by making it possible to run C/C++ code on a Microblaze processor. The idea is that once we have a general computing platform we can more easily develop high level C programs that interface with custom hardware peripherals, such as the I2S transmitter and &lt;a href=&quot;https://dwjbosman.github.io/vhdl-sine-wave-oscillator&quot;&gt;sine wave generator&lt;/a&gt; described in previous articles.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dinne's blog]]></title><description><![CDATA[A Blog about interesting software algorithms.]]></description><link>https://dwjbosman.github.io</link><image><url>https://dwjbosman.github.io/logos/logo-512.png</url><title>Dinne&apos;s blog</title><link>https://dwjbosman.github.io</link></image><generator>Professional blog of Dinne Bosman</generator><lastBuildDate>Sun, 03 Feb 2019 21:42:16 GMT</lastBuildDate><atom:link href="https://dwjbosman.github.io/rss.xml" rel="self" type="application/rss+xml"/><author><![CDATA[Dinne Bosman]]></author><copyright><![CDATA[Copyright © 2017. Dinne Bosman]]></copyright><item><title><![CDATA[Yocto linux on the Xilinx Zynq Zed board]]></title><description><![CDATA[Table of Contents Introduction Design 1. Xilinx Zynq Block Design 1.1. Export .bit file 2. Generate dts files 3. Generate fpga.bin from fpga…]]></description><link>https://dwjbosman.github.io/yocto-linux-on-the-xilinx-zynq-zed-board</link><guid isPermaLink="false">https://dwjbosman.github.io/yocto-linux-on-the-xilinx-zynq-zed-board</guid><category><![CDATA[Zynq Yocto FPGA Linux Xilinx]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Sat, 12 Jan 2019 09:00:00 GMT</pubDate><content:encoded>&lt;h2 id=&quot;table-of-contents&quot;&gt;&lt;a href=&quot;#table-of-contents&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Table of Contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#design&quot;&gt;Design&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;#1-xilinx-zynq-block-design&quot;&gt;1. Xilinx Zynq Block Design&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#11-export-bit-file&quot;&gt;1.1. Export .bit file&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#2-generate-dts-files&quot;&gt;2. Generate dts files&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#3-generate-fpgabin-from-fpgabit&quot;&gt;3. Generate fpga.bin from fpga.bit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#4-yocto-linux-image&quot;&gt;4. Yocto Linux image&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#5-configure-root-file-system&quot;&gt;5. Configure root file system&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#6-format-the-sd-card&quot;&gt;6. Format the SD card&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#7-booting&quot;&gt;7. Booting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#8-control-the-leds&quot;&gt;8. Control the LEDs.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;introduction&quot;&gt;&lt;a href=&quot;#introduction&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;In my previous article I discussed setting up a Microblaze processor which can run user applications in a bare metal environment. The advantage of using a bare metal approach is that software runs without any (undeterministic) operating system overhead. An obvious disadvantage is that you need to implement basic Operating System tasks (eg. file system access, memory management) yourself. &lt;/p&gt;
+&lt;p&gt;In the proposed synthesizer the audio engine will run in real time. The engine will run partly on a Microblaze and will be implemented partly in custom FPGA logic. Also there is the need for systems management functionality. Systems management will provide functions such as servicing an embedded website, providing firmware updates and voice patch editing. These functions can be implemented in a non Real Time environment. Even more the MIDI protocol can also be handled by a non Real Time environment as long as the latency is not too large. &lt;/p&gt;
+&lt;p&gt;The described management functions can be implemented with ease on a Linux platform. In this article I will show how to get Linux up and running on a Xilinx Zynq Zed board. There are a number of tutorials around which describe Linux on the Zed board. This tutorial adds the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use Yocto Linux&lt;/li&gt;
+&lt;li&gt;Use a device tree (dts/dtb) based upon the custom functionality implemented in the FPGA. This allows the Linux implementation to access the custom FPGA functions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In this tutorial the programmable logic (PL) will be configured to contain a GPIO block connected via AXI to the ARM chips in the Zynq programmable system (PS). Linux will run on the PS and will be able to access the GPIO block in the PL.&lt;/p&gt;
+&lt;p&gt;The Yocto Docker file (see blow) and VHDL code can be found in the &lt;a href=&quot;https://github.com/dwjbosman/yocto_zedboard.git&quot;&gt;yocto_zedboard&lt;/a&gt; repository.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/linux_board-d77103bed1247944b113e05cf7c7053e.gif&quot; alt=&quot;Yocto GPIO ZED board&quot; title=&quot;Yocto on ZED board&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;design&quot;&gt;&lt;a href=&quot;#design&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Design&lt;/h1&gt;
+&lt;p&gt;In order to get Linux running on the Zed Board, I will be using the SD Card. On the SD card there are two partitions: boot and root. For the root filesystem I will be using Ubuntu. The boot partition needs the following files:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;boot.bin : FSBL bootloader. This bootloader reads the FPGA bit file from the SD card boot partition (fpga.bin) and starts u-boot.&lt;/li&gt;
+&lt;li&gt;fpga.bin : FPGA logic fabric bitfile converted to bin format.&lt;/li&gt;
+&lt;li&gt;u-boot.img : u-boot Linux bootloader.&lt;/li&gt;
+&lt;li&gt;uEnv.txt : u-boot boot configuration.&lt;/li&gt;
+&lt;li&gt;uImage-system-top.dtb : Linux device tree,.&lt;/li&gt;
+&lt;li&gt;uImage : Yocto Linux Kernel.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yocto can provide these files based on input coming from Xilinx Vivado and the Xilinx SDK. In Vivado the functions defined in the Zynq PL are exported via a device tree (dts file). This device tree is then compiled into a device tree blob (dtb file) when Yocto builds the Linux image. The Linux kernel can then provide an interface to the custom FPGA logic. In more details the steps are as follows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Define the block design in Vivado.
+1.1. Export the bit file to the Xilinx SDK&lt;/li&gt;
+&lt;li&gt;Use the SDK to export a device tree source file (dts)  &lt;/li&gt;
+&lt;li&gt;Convert the fpga bit file to a bin file (fpga.bin)&lt;/li&gt;
+&lt;li&gt;Configure yocto to build a Linux kernel and boot files.
+4.1. Use Docker to run Yocto
+4.2. Add the meta-Xilinx layer to add support for the Zynq processor
+4.3. Add a custom layer which provides the custom device tree (dts) files&lt;/li&gt;
+&lt;li&gt;Configure the root file system, using Ubuntu&lt;/li&gt;
+&lt;li&gt;Formatting the SD card and store the required boot files&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In the following sections the steps are described in more detail: &lt;/p&gt;
+&lt;h1 id=&quot;1-xilinx-zynq-block-design&quot;&gt;&lt;a href=&quot;#1-xilinx-zynq-block-design&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;1. Xilinx Zynq Block Design&lt;/h1&gt;
+&lt;p&gt;The proof of concept consists of a GPIO block connected to the Zed board LEDs and switches. The GPIO block is connected to the PS via the AXI bus. One of the LEDs is connected to a counter which causes it to blink. The blinking LED was added so that you can see that the FPGA logic was programmed during booting. The Zynq PS needs the following features: DDR memory, UART (Linux terminal), SPI (SD card) and  Ethernet. &lt;/p&gt;
+&lt;p&gt;The block design can be found in the github project. Start Vivado (I use version 2018.2), select the tools menu and execute the tcl script inside the vivado_linux_zynq/ folder. This will create the project. Next generate the .bit file.&lt;/p&gt;
+&lt;h2 id=&quot;11-export-bit-file&quot;&gt;&lt;a href=&quot;#11-export-bit-file&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;1.1. Export .bit file&lt;/h2&gt;
+&lt;p&gt;Use the &apos;export hardware&apos; function in Vivado to hand over the hardware description to the Xilinx SDK.  In the SDK click on the  hw_platform system.hdf file and not the address of the GPIO interface: 0x41200000.&lt;/p&gt;
+&lt;h1 id=&quot;2-generate-dts-files&quot;&gt;&lt;a href=&quot;#2-generate-dts-files&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;2. Generate dts files&lt;/h1&gt;
+&lt;p&gt;In order to generate a device tree (dts) file from the hardware description a separate Xilinx tool (device-tree-xlnx) is needed. This tool can be installed as an addon into the Xilinx SDK.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;clone the &lt;a href=&quot;https://github.com/Xilinx/device-tree-xlnx&quot;&gt;device-tree-xlnx&lt;/a&gt; project.&lt;/li&gt;
+&lt;li&gt;In the Xlinix SDK open the Xilinx menu and open &apos;Repositories&apos;. &lt;/li&gt;
+&lt;li&gt;Click the &apos;new&apos; button next to the &apos;global repositories&apos; section and select the path to the checked out git repo.&lt;/li&gt;
+&lt;li&gt;Create a new Board Support Package project. In the &apos;target hardware&apos; section choose the Vivado exported wrapper. In the &apos;board support package OS&apos; drop down choose &apos;device tree&apos;.&lt;/li&gt;
+&lt;li&gt;The &apos;board support settings&apos; window will open. Here you can select various driver and device tree options. I&apos;m using kernel version 2018.3&lt;/li&gt;
+&lt;li&gt;After selecting &apos;ok&apos; a number of &apos;dts&apos; and &apos;dtsi&apos; files will be generated. The system-top.dts will be compiled into a device tree blob by Yocto. Examine the system-top.dts and find that it contains a number of includes. The included dtsi files are also required. The other files can be ignored. &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;3-generate-fpgabin-from-fpgabit&quot;&gt;&lt;a href=&quot;#3-generate-fpgabin-from-fpgabit&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;3. Generate fpga.bin from fpga.bit&lt;/h1&gt;
+&lt;p&gt;Use the &lt;a href=&quot;https://github.com/topic-embedded-products/meta-topic/blob/master/recipes-bsp/fpga/fpga-bit-to-bin/fpga-bit-to-bin.py&quot;&gt;bit to bin&lt;/a&gt; conversion script to convert the bit file to a bin file suitable for flashing on the SD card.&lt;/p&gt;
+&lt;h1 id=&quot;4-yocto-linux-image&quot;&gt;&lt;a href=&quot;#4-yocto-linux-image&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;4. Yocto Linux image&lt;/h1&gt;
+&lt;p&gt;Yocto is a framework of tools to create custom embedded Linux distributions. Yocto consists of the embedded Linux distribution Poky and the OpenEmbedded (OE) build system. Yocto consists of layers. Each layer can add new features or modify existing features. A custom layer will be added to inject the dts files from the previous step.&lt;/p&gt;
+&lt;p&gt;In order to build a Linux image with Yocto a number of prerequisite tools need to be installed. In order to keep my PC clean, Docker is used to be able to install all dependencies without affecting my normal day-to-day work. The Docker file can be found in the repository.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Clone the repository&lt;/li&gt;
+&lt;li&gt;Copy the required dts and dtsi to the &lt;pre&gt;meta-dts/recipes-kernel/linux/linux-xlnx/zedboard-zynq7/&lt;/pre&gt; folder.&lt;/li&gt;
+&lt;li&gt;If needed update the &lt;pre&gt;meta-dts/recipes-kernel/linux/linux-xlnx_%.bbappend&lt;/pre&gt; file to include the copied dts/dtsi files.&lt;/li&gt;
+&lt;li&gt;cd in to the &apos;yocto&apos; sub directory.&lt;/li&gt;
+&lt;li&gt;Create the Docker image by running &quot;make image&quot;. After this step is completed (which will take quite a long time!) the Docker image will contain the Linux image files for the Zed Board&lt;/li&gt;
+&lt;li&gt;Run the &quot;run.sh&quot; script to create and log in to a Docker container. The script mounts your home dir inside the container so that you can copy files to and from the container.&lt;/li&gt;
+&lt;li&gt;Copy the files inside /yocto/poky/build/tmp/deploy/images/zedboard-zynq7 to a folder in your home dir.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;5-configure-root-file-system&quot;&gt;&lt;a href=&quot;#5-configure-root-file-system&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;5. Configure root file system&lt;/h1&gt;
+&lt;p&gt;I followed this blog on setting up an &lt;a href=&quot;https://embeddedgreg.com/2017/06/17/creating-a-xenial-rootfs-for-zy&quot;&gt;Ubuntu Xenial rootfs&lt;/a&gt;. &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Don&apos;t follow the complete article. Skip the part on u-boot. U-boot is already provided by Yocto.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Do not forget to install sudo. &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;6-format-the-sd-card&quot;&gt;&lt;a href=&quot;#6-format-the-sd-card&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;6. Format the SD card&lt;/h1&gt;
+&lt;p&gt;Use fdisk to setup the partitions on the SD card. Setup the following partition table:&lt;/p&gt;
+&lt;pre&gt;
+Device         Boot Start      End  Sectors  Size Id Type
+/dev/mmcblk0p1 *        8    42605    42598 20,8M  c W95 FAT32 (LBA)
+/dev/mmcblk0p2      42608 13833091 13790484  6,6G 83 Linux
+&lt;/pre&gt;
+&lt;p&gt;After partioning the SD card exit fdisk and mount the partitions. Use rsync to copy the rootfs to the second partition.&lt;/p&gt;
+&lt;pre&gt;
+sudo rsync -aAXv &lt;path_to\_your\_rootfs&gt;/* /path_to_mount_point_second_partition/
+&lt;/pre&gt;
+&lt;p&gt;Copy the following files from the yocto deploy/images directory (Yocto Linux image step 4) to the SD card boot partition:&lt;/p&gt;
+&lt;pre&gt;
+boot.bin  
+u-boot.img  
+uImage  
+uImage-system-top.dtb
+&lt;/pre&gt;
+&lt;p&gt;Copy the converted fpga bit stream (step Generate fpga.bin from fpga.bit) to the boot partition:&lt;/p&gt;
+&lt;pre&gt;
+fpga.bin  
+&lt;/pre&gt;
+&lt;p&gt;Finally modify the uEnv.txt file generated by Yocto (so that it uses the new dtb file), and copy it to the boot partition:&lt;/p&gt;
+&lt;div style=&apos;overflow:auto;width:100%&apos;&gt;
+&lt;pre&gt;
+machine_name=zedboard-zynq7
+kernel_image=uImage
+kernel_load_address=0x2080000
+devicetree_image=uImage-system-top.dtb
+devicetree_load_address=0x2000000
+bootargs=console=ttyPS0,115200 root=/dev/mmcblk0p2 rw earlyprintk rootfstype=ext4 rootwait devtmpfs.mount=1
+loadkernel=fatload mmc 0 ${kernel_load_address} ${kernel_image}
+loaddtb=fatload mmc 0 ${devicetree_load_address} ${devicetree_image}
+bootkernel=run loadkernel &amp;&amp; run loaddtb &amp;&amp; bootm ${kernel_load_address} - ${devicetree_load_address}
+uenvcmd=run bootkernel
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&quot;7-booting&quot;&gt;&lt;a href=&quot;#7-booting&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;7. Booting&lt;/h1&gt;
+&lt;p&gt;After copying the files to the SD card, unmount the paritions. Plug the SD card in the ZED board, connect the UART and power up the board. Use a terminal program (eg. GTK Term) to connect. I found that the ZED board needs some time to setup the serial connection. When the serial connection is finally available part of the boot process is already underway. Press the PS-RST button to restart the ZED board; this will keep the serial connection active. You should now see be able to follow the boot process through info provided by the FSBL boot loader, U-boot and finally Linux. Once the FSBL bootloader setsup the FPGA one of the LEDS should begin to blink.&lt;/p&gt;
+&lt;p&gt;Running &apos;dmesg&apos; showed that my usb-serial adapter was configured as &apos;/dev/ttyACMO&apos;&lt;/p&gt;
+&lt;pre&gt;gtkterm --port /dev/ttyACM0 --speed 115200&lt;/pre&gt;
+&lt;p&gt;When the boot process finishes you should be able to login using the &apos;ubuntu&apos; user and the password you set up earlier. Become superuser by running &lt;/p&gt;
+&lt;pre&gt;sudo -i -u root&lt;/pre&gt;
+&lt;h1 id=&quot;8-control-the-leds&quot;&gt;&lt;a href=&quot;#8-control-the-leds&quot; aria-hidden=&quot;true&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;8. Control the LEDs.&lt;/h1&gt;
+&lt;p&gt;As noted from the system hdf file (step 1.1) the address of the GPIO interface is 0x41200000. Go to the &apos;/sys/class/gpio&apos; folder. Linux provides a GPIO interface through the sysfs system. &lt;/p&gt;
+&lt;pre&gt;
+ubuntu@localhost:/sys/class/gpio$ ls
+export  gpiochip1008  gpiochip1016  gpiochip890  unexport
+&lt;/pre&gt;
+&lt;p&gt;There are several gpio interfaces. For example the programable system (PS) also has GPIO. The FPGA GPIO will provide two interfaces. We can inspect the interfaces:&lt;/p&gt;
+&lt;pre&gt;
+ubuntu@localhost:/sys/class/gpio$ cat gpiochip1008/label
+/amba_pl/gpio@41200000
+ubuntu@localhost:/sys/class/gpio$ cat gpiochip1016/label
+/amba_pl/gpio@41200000
+&lt;/pre&gt;
+&lt;p&gt;The address corresponds to the one specify by the hdf file. To use the interfaces:&lt;/p&gt;
+&lt;pre&gt;
+#enable the first two bits of the inputs 
+echo 1008 &gt; export
+echo 1009 &gt; export
+#enable the first two bits of the outputs
+echo 1016 &gt; export
+echo 1017 &gt; export
+&lt;/pre&gt;
+&lt;p&gt;This will create a number for new IO files:&lt;/p&gt;
+&lt;div style=&apos;overflow:auto;width:100%&apos;&gt;
+&lt;pre&gt;
+root@localhost:/sys/class/gpio# ls -al
+total 0
+drwxr-xr-x  2 root root    0 Feb 11 17:05 .
+drwxr-xr-x 45 root root    0 Feb 11 16:45 ..
+--w-------  1 root root 4096 Feb 11 17:08 export
+lrwxrwxrwx  1 root root    0 Feb 11 16:53 gpio1008 -&gt; ../../devices/soc0/amba_pl/41200000.gpio/gpiochip1/gpio/gpio1008
+lrwxrwxrwx  1 root root    0 Feb 11 17:02 gpio1009 -&gt; ../../devices/soc0/amba_pl/41200000.gpio/gpiochip1/gpio/gpio1009
+lrwxrwxrwx  1 root root    0 Feb 11 16:53 gpio1016 -&gt; ../../devices/soc0/amba_pl/41200000.gpio/gpiochip0/gpio/gpio1016
+lrwxrwxrwx  1 root root    0 Feb 11 17:02 gpio1017 -&gt; ../../devices/soc0/amba_pl/41200000.gpio/gpiochip0/gpio/gpio1017
+lrwxrwxrwx  1 root root    0 Feb 11 16:45 gpiochip1008 -&gt; ../../devices/soc0/amba_pl/41200000.gpio/gpio/gpiochip1008
+lrwxrwxrwx  1 root root    0 Feb 11 16:45 gpiochip1016 -&gt; ../../devices/soc0/amba_pl/41200000.gpio/gpio/gpiochip1016
+lrwxrwxrwx  1 root root    0 Feb 11 16:45 gpiochip890 -&gt; ../../devices/soc0/amba/e000a000.gpio/gpio/gpiochip890
+--w-------  1 root root 4096 Feb 11 17:05 unexport
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Set the direction of the outputs to &apos;out&apos; (&apos;in&apos; is the default)&lt;/p&gt;
+&lt;pre&gt;
+echo out &gt; gpio1016/direction
+echo out &gt; gpio1017/direction
+&lt;/pre&gt;
+&lt;p&gt;Turn on the LEDs:&lt;/p&gt;
+&lt;pre&gt;
+echo 1 &gt; gpio1016/value
+echo 1 &gt; gpio1017/value
+&lt;/pre&gt;
+&lt;p&gt;Read out 2 switches:&lt;/p&gt;
+&lt;pre&gt;
+cat gpio1008/value
+cat gpio1009/value
+&lt;/pre&gt;</content:encoded></item><item><title><![CDATA[Nexys4 DDR Microblaze with DDR Ram and Flash bootloader support]]></title><description><![CDATA[The goal is to develop an additive synthesis engine. The synthesizer needs a processor to implement high level functionality. In this…]]></description><link>https://dwjbosman.github.io/nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support</link><guid isPermaLink="false">https://dwjbosman.github.io/nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support</guid><category><![CDATA[Microblaze FPGA SDK]]></category><dc:creator><![CDATA[Dinne Bosman]]></dc:creator><pubDate>Thu, 01 Nov 2018 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;The goal is to develop an additive synthesis engine. The synthesizer needs a processor to implement high level functionality. In this article a small step is taken by making it possible to run C/C++ code on a Microblaze processor. The idea is that once we have a general computing platform we can more easily develop high level C programs that interface with custom hardware peripherals, such as the I2S transmitter and &lt;a href=&quot;https://dwjbosman.github.io/vhdl-sine-wave-oscillator&quot;&gt;sine wave generator&lt;/a&gt; described in previous articles.&lt;/p&gt;
 &lt;p&gt;There are quite a number of tutorials about setting up a Microblaze processor. Unfortunately most of these tutorials are either out of date or they are lacking some essential information. This article shows how to get a Microblaze running on a Nexys4 DDR development kit. The designed platform has the following features:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run an user application from the on board DDR2 ram.&lt;/li&gt;

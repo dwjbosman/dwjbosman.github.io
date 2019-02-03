@@ -1,0 +1,2 @@
+webpackJsonp([0xed28d567e2ba],{466:function(t,o){t.exports={data:{allMarkdownRemark:{totalCount:1,edges:[{node:{fields:{slug:"/first-post"},excerpt:"Table of Contents First blog post First blog post I just installed Pelican for my professional blog. My intention is to blog once every 1-…",timeToRead:1,frontmatter:{title:"First Post",tags:["github","blog"],cover:"/logos/logo-1024.png",date:"2017-11-20 20:00"}}}]}},pathContext:{tag:"github"}}}});
+//# sourceMappingURL=path---tags-github-0f0291e9366f8bac9a3a.js.map
