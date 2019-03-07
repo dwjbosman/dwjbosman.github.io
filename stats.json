@@ -16,6 +16,10 @@
       "path---vhdl-sine-wave-oscillator-632d09f31d25bee4ef63.js",
       "path---vhdl-sine-wave-oscillator-632d09f31d25bee4ef63.js.map"
     ],
+    "path---tags-zynq-microblaze-yocto-linux-xilinx": [
+      "path---tags-zynq-microblaze-yocto-linux-xilinx-8766520a2bcf262f3bf6.js",
+      "path---tags-zynq-microblaze-yocto-linux-xilinx-8766520a2bcf262f3bf6.js.map"
+    ],
     "path---tags-microblaze-fpga-sdk": [
       "path---tags-microblaze-fpga-sdk-8607326204cf169adba3.js",
       "path---tags-microblaze-fpga-sdk-8607326204cf169adba3.js.map"
@@ -25,8 +29,8 @@
       "path---nexys-4-ddr-microblaze-with-ddr-ram-and-flash-bootloader-support-d47d6f83ccd4ce267433.js.map"
     ],
     "path---yocto-linux-on-the-xilinx-zynq-zed-board": [
-      "path---yocto-linux-on-the-xilinx-zynq-zed-board-4b2351010bc50c49a2b1.js",
-      "path---yocto-linux-on-the-xilinx-zynq-zed-board-4b2351010bc50c49a2b1.js.map"
+      "path---yocto-linux-on-the-xilinx-zynq-zed-board-ecb5f6d75e6a26bd6408.js",
+      "path---yocto-linux-on-the-xilinx-zynq-zed-board-ecb5f6d75e6a26bd6408.js.map"
     ],
     "path---": [
       "path----557518bd178906f8d58a.js",
@@ -41,8 +45,8 @@
       "path---tags-javascript-76247e3dc8e1bb1b251f.js.map"
     ],
     "path---lstm-neural-network-for-sequence-learning": [
-      "path---lstm-neural-network-for-sequence-learning-0f34757dbe2208b141fa.js",
-      "path---lstm-neural-network-for-sequence-learning-0f34757dbe2208b141fa.js.map"
+      "path---lstm-neural-network-for-sequence-learning-cc1ca37eeda6e2b5d43d.js",
+      "path---lstm-neural-network-for-sequence-learning-cc1ca37eeda6e2b5d43d.js.map"
     ],
     "component---src-layouts-index-jsx": [
       "component---src-layouts-index-jsx-4d85d3db704abfa04d66.js",
@@ -53,8 +57,8 @@
       "path---tags-artificial-intelligence-4fb433b9bcbe5e2d8186.js.map"
     ],
     "path---first-post": [
-      "path---first-post-39f442ccd279cd64083a.js",
-      "path---first-post-39f442ccd279cd64083a.js.map"
+      "path---first-post-d10207ac5f1b4e382748.js",
+      "path---first-post-d10207ac5f1b4e382748.js.map"
     ],
     "component---node-modules-gatsby-plugin-offline-app-shell-js": [
       "component---node-modules-gatsby-plugin-offline-app-shell-js-5c4c5a0f7af9dc69d6d7.js",
@@ -73,8 +77,8 @@
       "path---vhdl-i-2-s-transmitter-239dd80bb32eeaeefe88.js.map"
     ],
     "path---index": [
-      "path---index-afc1783958f167656ade.js",
-      "path---index-afc1783958f167656ade.js.map"
+      "path---index-b53e805ca6e7b82cdfe6.js",
+      "path---index-b53e805ca6e7b82cdfe6.js.map"
     ],
     "component---src-pages-about-jsx": [
       "component---src-pages-about-jsx-ad03a97f9d94d9bb3877.js",
@@ -103,8 +107,8 @@
       "build-js-styles.css.map"
     ],
     "path---categories-fpga": [
-      "path---categories-fpga-cbea7818d00561690c59.js",
-      "path---categories-fpga-cbea7818d00561690c59.js.map"
+      "path---categories-fpga-72585dc7aec466bb886e.js",
+      "path---categories-fpga-72585dc7aec466bb886e.js.map"
     ],
     "component---src-templates-tag-jsx": [
       "component---src-templates-tag-jsx-aaa311d3d699ffd762ea.js",
@@ -126,10 +130,14 @@
       "component---src-pages-index-jsx-5cd3e3488ba2b0d716bd.js",
       "component---src-pages-index-jsx-5cd3e3488ba2b0d716bd.js.map"
     ],
+    "path---basic-asymmetric-multi-processor-amp-setup-on-the-zedboard": [
+      "path---basic-asymmetric-multi-processor-amp-setup-on-the-zedboard-2ffab0a6140080d606c2.js",
+      "path---basic-asymmetric-multi-processor-amp-setup-on-the-zedboard-2ffab0a6140080d606c2.js.map"
+    ],
     "app": [
-      "app-fed3a4ea2758394b33ce.js",
+      "app-ead52c5184c0b3f53abb.js",
       "build-js-styles.css",
-      "app-fed3a4ea2758394b33ce.js.map",
+      "app-ead52c5184c0b3f53abb.js.map",
       "build-js-styles.css.map"
     ],
     "path---categories-jupyter": [
