@@ -10,6 +10,7 @@
 <url> <loc>https://dwjbosman.github.io/real-time-sound-synthesis-with-jupyter</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/lstm-neural-network-for-sequence-learning</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/basic-asymmetric-multi-processor-amp-setup-on-the-zedboard</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dwjbosman.github.io/chatbot-using-open-ai-gpt-2-transformer-model</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/github/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/blog/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/artificial-intelligence/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -23,10 +24,12 @@
 <url> <loc>https://dwjbosman.github.io/tags/javascript/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/tensorflow/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/tags/zynq-microblaze-yocto-linux-xilinx/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dwjbosman.github.io/tags/artificial-intelligence-open-ai-transformer-nlp/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/categories/blaat/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/categories/artificial-intelligence/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/categories/fpga/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/categories/jupyter/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dwjbosman.github.io/categories/ai/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/about/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dwjbosman.github.io/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>

@@ -1,5 +1,9 @@
 {
   "assetsByChunkName": {
+    "path---tags-artificial-intelligence-open-ai-transformer-nlp": [
+      "path---tags-artificial-intelligence-open-ai-transformer-nlp-831b395f250fc0480999.js",
+      "path---tags-artificial-intelligence-open-ai-transformer-nlp-831b395f250fc0480999.js.map"
+    ],
     "path---tags-blog": [
       "path---tags-blog-e6feb522c1ce480075a7.js",
       "path---tags-blog-e6feb522c1ce480075a7.js.map"
@@ -7,6 +11,10 @@
     "path---categories-artificial-intelligence": [
       "path---categories-artificial-intelligence-763b07ad2cc900576a6f.js",
       "path---categories-artificial-intelligence-763b07ad2cc900576a6f.js.map"
+    ],
+    "path---chatbot-using-open-ai-gpt-2-transformer-model": [
+      "path---chatbot-using-open-ai-gpt-2-transformer-model-8a19b676f8682ff24f0a.js",
+      "path---chatbot-using-open-ai-gpt-2-transformer-model-8a19b676f8682ff24f0a.js.map"
     ],
     "path---categories-blaat": [
       "path---categories-blaat-69d742714b9a4417c8d7.js",
@@ -77,8 +85,8 @@
       "path---vhdl-i-2-s-transmitter-239dd80bb32eeaeefe88.js.map"
     ],
     "path---index": [
-      "path---index-b53e805ca6e7b82cdfe6.js",
-      "path---index-b53e805ca6e7b82cdfe6.js.map"
+      "path---index-5d78475960a59c7fc7f3.js",
+      "path---index-5d78475960a59c7fc7f3.js.map"
     ],
     "component---src-pages-about-jsx": [
       "component---src-pages-about-jsx-ad03a97f9d94d9bb3877.js",
@@ -135,9 +143,9 @@
       "path---basic-asymmetric-multi-processor-amp-setup-on-the-zedboard-2ffab0a6140080d606c2.js.map"
     ],
     "app": [
-      "app-ead52c5184c0b3f53abb.js",
+      "app-a1c11e64f9bb21abf942.js",
       "build-js-styles.css",
-      "app-ead52c5184c0b3f53abb.js.map",
+      "app-a1c11e64f9bb21abf942.js.map",
       "build-js-styles.css.map"
     ],
     "path---categories-jupyter": [
@@ -151,6 +159,10 @@
     "path---tags-github": [
       "path---tags-github-a9c0a3daa8fff9302933.js",
       "path---tags-github-a9c0a3daa8fff9302933.js.map"
+    ],
+    "path---categories-ai": [
+      "path---categories-ai-f5c4c0e0e0dcfa7fcb3b.js",
+      "path---categories-ai-f5c4c0e0e0dcfa7fcb3b.js.map"
     ],
     "path---generating-text-using-an-lstm-neural-network": [
       "path---generating-text-using-an-lstm-neural-network-14023ea4cdd2b17700fd.js",
