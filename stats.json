@@ -1,5 +1,9 @@
 {
   "assetsByChunkName": {
+    "path---categories-docker": [
+      "path---categories-docker-2dd4c76bc04c18986bff.js",
+      "path---categories-docker-2dd4c76bc04c18986bff.js.map"
+    ],
     "path---tags-artificial-intelligence-open-ai-transformer-nlp": [
       "path---tags-artificial-intelligence-open-ai-transformer-nlp-831b395f250fc0480999.js",
       "path---tags-artificial-intelligence-open-ai-transformer-nlp-831b395f250fc0480999.js.map"
@@ -44,6 +48,10 @@
       "path----557518bd178906f8d58a.js",
       "path----557518bd178906f8d58a.js.map"
     ],
+    "path---tags-theia-rust-docker": [
+      "path---tags-theia-rust-docker-7b1473cfbeb5717df5d2.js",
+      "path---tags-theia-rust-docker-7b1473cfbeb5717df5d2.js.map"
+    ],
     "path---tags-lstm": [
       "path---tags-lstm-5f61e9e2ad1ddee2ebe3.js",
       "path---tags-lstm-5f61e9e2ad1ddee2ebe3.js.map"
@@ -85,8 +93,8 @@
       "path---vhdl-i-2-s-transmitter-239dd80bb32eeaeefe88.js.map"
     ],
     "path---index": [
-      "path---index-5d78475960a59c7fc7f3.js",
-      "path---index-5d78475960a59c7fc7f3.js.map"
+      "path---index-9edd5933676f0dd32206.js",
+      "path---index-9edd5933676f0dd32206.js.map"
     ],
     "component---src-pages-about-jsx": [
       "component---src-pages-about-jsx-ad03a97f9d94d9bb3877.js",
@@ -143,14 +151,18 @@
       "path---basic-asymmetric-multi-processor-amp-setup-on-the-zedboard-2ffab0a6140080d606c2.js.map"
     ],
     "app": [
-      "app-a1c11e64f9bb21abf942.js",
+      "app-d0ea58379a9ca103aecb.js",
       "build-js-styles.css",
-      "app-a1c11e64f9bb21abf942.js.map",
+      "app-d0ea58379a9ca103aecb.js.map",
       "build-js-styles.css.map"
     ],
     "path---categories-jupyter": [
       "path---categories-jupyter-826c3205e1c99413c6ef.js",
       "path---categories-jupyter-826c3205e1c99413c6ef.js.map"
+    ],
+    "path---docker-image-with-theia-ide-supporting-embedded-rust-development": [
+      "path---docker-image-with-theia-ide-supporting-embedded-rust-development-8c2491ebba6f467fdcae.js",
+      "path---docker-image-with-theia-ide-supporting-embedded-rust-development-8c2491ebba6f467fdcae.js.map"
     ],
     "path---tags-jupyter": [
       "path---tags-jupyter-b2004941289a793c8e9c.js",
